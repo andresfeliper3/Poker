@@ -12,7 +12,7 @@ public class JugadorSimulado implements Runnable {
 	private String nombre;
 	private int turnoId;
 	private int tipo;
-	private int cantidadDescarte;
+	private int cantidadDescarte, cantidadApuesta;
 	private ArrayList<Integer> descarte;
 	private Random random;
 	private ControlPoker controlPoker; //recurso compartido
@@ -39,12 +39,40 @@ public class JugadorSimulado implements Runnable {
 	//Acción que realiza al ejecutarse el hilo
 	public void run() {
 		// TODO Auto-generated method stub
- 		//Escoge la cantidad de cartas que va a descartar
- 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
- 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
-		escogerDescarte(cantidadDescarte);
-		controlPoker.turnos(turnoId, descarte, nombre);
-		System.out.println("Hilo "+ nombre +" termina "+descarte);
+ 		//Si están en ronda de apuestas
+ 		if(controlPoker.getRonda() == 0) {
+ 			
+ 			int factorAumento = 1;
+ 			//Probabilidad de aumentar: 25%
+ 			//Probabilidad de igualar: 50%	
+ 			//Probabilidad de retirarse: 25%
+ 			int probabilidad = random.nextInt(100) + 1;
+ 			//igualar
+ 			if(probabilidad <= 50) {
+ 				cantidadApuesta = controlPoker.getMaximaApuesta();
+ 				//AVISAR A CONTROL
+ 			}
+ 			//aumentar
+ 			else if(probabilidad <= 75) {
+ 				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1) + (factorAumento * 500); //turnos 1-5
+ 			} 
+ 			//retirarse
+ 			else {
+ 				//SE RETIRA
+ 				cantidadApuesta = -1;
+ 			}
+ 			controlPoker.turnos(turnoId, cantidadApuesta, nombre);
+ 		}
+ 		//Si están en ronda de descarte
+ 		else if(controlPoker.getRonda() == 1) {
+ 			//Escoge la cantidad de cartas que va a descartar
+ 	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
+ 	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
+ 			escogerDescarte(cantidadDescarte);
+ 			controlPoker.turnos(turnoId, descarte, nombre);
+ 			System.out.println("Hilo "+ nombre +" termina "+descarte);
+ 		}
+ 		
 	}
 	
 

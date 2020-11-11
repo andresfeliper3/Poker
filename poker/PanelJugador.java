@@ -31,7 +31,7 @@ public class PanelJugador extends JPanel {
 	
 	private Escucha escucha;
 	
-	public PanelJugador(String nombre, List<Carta> cartas, int apuestaInicial, boolean isHuman) {
+	public PanelJugador(String nombre, List<Carta> cartas, Integer valorApuesta, boolean isHuman) {
 		//this.setBorder(new TitledBorder(nombre));
 		setLayout(new BorderLayout());
 		this.setBackground(Color.GREEN);
@@ -45,7 +45,7 @@ public class PanelJugador extends JPanel {
 		add(mensaje, BorderLayout.SOUTH);
 		
 		//apuesta
-		this.valorApuesta = apuestaInicial;
+		this.valorApuesta = valorApuesta;
 		panelMano = new JPanel();
 		panelMano.setBackground(Color.GREEN);
 		panelApuesta = new JPanel();

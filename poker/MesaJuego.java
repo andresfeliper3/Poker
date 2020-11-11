@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -15,23 +16,22 @@ public class MesaJuego extends JPanel {
 	public static final String RUTA_CARTA_TAPADA = "/resources/cardBack.png";
 	private PanelJugador jugador1, jugador2, jugador3, jugador4, jugador5;
 	private JLabel cartaTapada;
-	
-	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, int apuestaInicial) {
-		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestaInicial);
+	private ArrayList<Integer>apuestasJugadores;
+	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
+		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestasJugadores);
 		//this.setPreferredSize(new Dimension(700, 600));
 		this.setBackground(Color.GREEN);
 		this.setBorder(new TitledBorder("Mesa"));	
 	}
 	
-	private void initGUI(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, int apuestaInicial) {
+	private void initGUI(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		
-		jugador1 = new PanelJugador(nombresJugadoresSimulados[0], manosJugadores.get(0), apuestaInicial, false);
-		jugador2 = new PanelJugador(nombresJugadoresSimulados[1], manosJugadores.get(1), apuestaInicial, false);
-		jugador3 = new PanelJugador(nombresJugadoresSimulados[2], manosJugadores.get(2), apuestaInicial,false);
-		jugador4 = new PanelJugador(nombresJugadoresSimulados[3], manosJugadores.get(3), apuestaInicial, false);
-		jugador5 = new PanelJugador(nombreJugadorHumano, manosJugadores.get(4), apuestaInicial, true);
+		jugador1 = new PanelJugador(nombresJugadoresSimulados[0], manosJugadores.get(0), apuestasJugadores.get(0), false);
+		jugador2 = new PanelJugador(nombresJugadoresSimulados[1], manosJugadores.get(1), apuestasJugadores.get(1), false);
+		jugador3 = new PanelJugador(nombresJugadoresSimulados[2], manosJugadores.get(2), apuestasJugadores.get(2),false);
+		jugador4 = new PanelJugador(nombresJugadoresSimulados[3], manosJugadores.get(3), apuestasJugadores.get(3), false);
+		jugador5 = new PanelJugador(nombreJugadorHumano, manosJugadores.get(4), apuestasJugadores.get(4), true);
 		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
