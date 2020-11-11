@@ -96,7 +96,7 @@ public class VistaGUIPoker extends JFrame {
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.VERTICAL;
 		//Primer mensaje
-		editarRegistros(0);
+		editarRegistros(0, "", -1, -1);
 		add(panelRegistros, constraints);
 		
 		//Panel de botones
@@ -122,10 +122,10 @@ public class VistaGUIPoker extends JFrame {
 		
 	}
 	
-	public void editarRegistros(int fase) {
-		switch(fase) {
+	public void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
+		if(fase == 0) {
 		//Apuesta inicial y se escoge el jugador mano 
-		case 0:
+	
 			panelRegistros.append("Todos tienen una apuesta inicial de " + apuestasJugadores.get(0) + ".\n");
 			String nombreJugadorMano;
 			//Apuesta inicial
@@ -136,8 +136,31 @@ public class VistaGUIPoker extends JFrame {
 				nombreJugadorMano = nombresJugadoresSimulados[controlPoker.getIdJugadorMano() - 1]; //-1 porque el id del jugador va de 1-4
 			}
 			panelRegistros.append("El jugador mano escogido al azar fue " + nombreJugadorMano + ".\n");
-			break;
+		
 		}
+		//Ronda de apuestas
+		else if(fase == 1) {		
+			/*Operacion
+			 * 0: igualar
+			 * 1: aumentar
+			 * 2: retirarse
+			 * */
+			switch(operacion) {
+				case 0:
+					panelRegistros.append("El jugador " + nombre + " igualó a $" + apuesta + ".\n");
+					break;
+				case 1:
+					panelRegistros.append("El jugador " + nombre + " aumentó a $" + apuesta + ".\n");
+					break;
+				case 2:
+					panelRegistros.append("El jugador " + nombre + " se retiró.\n");
+					break;
+			}
+		}
+		//Avisa que es el turno del usuario en la ronda de apuestas
+		else if(fase == 2) {
+			panelRegistros.append("Es tu turno, " + nombreJugadorHumano + ". Puedes aumentar, igualar o retirarte.\n");
+		} 
 		
 	}
 	
@@ -149,15 +172,17 @@ public class VistaGUIPoker extends JFrame {
 			//Si estamos en ronda de apuestas
 			if(controlPoker.getRonda() == 0) {
 				if(e.getSource() == aumentar) {
-					
+					//controlPoker.setApuestasJugadores(4, apuesta);
 				}
 				else if(e.getSource() == igualar) {
-					
+					controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
+					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getMaximaApuesta());
+					//Despertar hilos
+					controlPoker.turnos(5, nombreJugadorHumano, controlPoker.getMaximaApuesta(), 1);
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario pierde
-					
-				}
+					JOptionPane.showMessageDialog(panelBotones, "Perdiste");				}
 				//Descartar
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Esta opción aún no está disponible.");

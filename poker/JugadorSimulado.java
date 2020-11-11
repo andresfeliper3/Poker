@@ -16,6 +16,12 @@ public class JugadorSimulado implements Runnable {
 	private ArrayList<Integer> descarte;
 	private Random random;
 	private ControlPoker controlPoker; //recurso compartido
+	/*Operacion
+	 * 0: igualar
+	 * 1: aumentar
+	 * 2: retirarse
+	 * */
+	private int operacion;
 	
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
@@ -50,18 +56,21 @@ public class JugadorSimulado implements Runnable {
  			//igualar
  			if(probabilidad <= 50) {
  				cantidadApuesta = controlPoker.getMaximaApuesta();
+ 				operacion = 0;
  				//AVISAR A CONTROL
  			}
  			//aumentar
  			else if(probabilidad <= 75) {
  				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1) + (factorAumento * 500); //turnos 1-5
+ 				operacion = 1;
  			} 
  			//retirarse
  			else {
  				//SE RETIRA
  				cantidadApuesta = -1;
+ 				operacion = 2;
  			}
- 			controlPoker.turnos(turnoId, cantidadApuesta, nombre);
+ 			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion);
  		}
  		//Si están en ronda de descarte
  		else if(controlPoker.getRonda() == 1) {

@@ -86,11 +86,15 @@ public class PanelJugador extends JPanel {
 		panelApuesta.removeAll();
 		panelApuesta.add(apuesta);	
 	}
-	
+
 	public List<Carta> getMano() {
 		  return mano; 
 	}
 	
+	public void setValorApuesta(int valorApuesta) {
+		this.valorApuesta = valorApuesta;
+		apuesta.setText("$" + String.valueOf(valorApuesta));
+	}
  	private class Escucha extends MouseAdapter {
  		
 		@Override

@@ -61,4 +61,8 @@ public class MesaJuego extends JPanel {
 		
 		
 	}
+	
+	public PanelJugador getJugadorHumano() {
+		return jugador5;
+	}
  }

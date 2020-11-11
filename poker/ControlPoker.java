@@ -11,6 +11,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.SwingUtilities;
+
 public class ControlPoker {
 	public static final int NUMERO_CARTAS_MANO = 5;
 	public static final int TOTAL_JUGADORES = 5;
@@ -107,18 +109,18 @@ public class ControlPoker {
  	}
  	
 	//Método sincronizador de turnos
- 	public void turnos(int idJugador, int apuesta, String nombreJugador) {
+ 	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion) {
  		//Si está en la ronda de apuestas
  		if(ronda == 0) {
  			bloqueo.lock();
  	 		try {
  	 			//Mientras el jugador que entre no sea el que correponda, se duerme
- 	 			while(idJugador != turno) {
- 	 				
+ 	 			while(idJugador != turno) {		
  	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
  	 			}
- 	 			apuestasJugadores.set(idJugador - 1, apuesta);
+ 	 			setApuestasJugadores(idJugador - 1, apuesta);
+ 	 			editarRegistros(1, nombreJugador, apuesta, operacion);
  	 			aumentarTurno();
  	 			System.out.println("Turno: " + turno);
  	 			System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1) + " en total.");
@@ -129,12 +131,34 @@ public class ControlPoker {
  	 		}
  	 		finally {
  	 			bloqueo.unlock();
+ 	 			if(turno == 5) {
+ 	 				//humanoApuesta();
+ 	 				editarRegistros(2, "", -1, -1);
+ 	 			}
  	 		}
  	 	}
+ 	}
+ 	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
+ 	private void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
+ 		//Sincronizar con hilo manejador de eventos
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+			// TODO Auto-generated method stub
+				vistaPoker.editarRegistros(fase, nombre, apuesta, operacion);
+			}
+		});
+ 	}
+ 	
+ 	public void despertarHilos() {
+ 		esperarTurno.signalAll();
  	}
  	private void aumentarTurno() {
  		//Si turno es 4 o múltiplo de 4, se convierte en 5. Si turno tiene otro valor, aumenta en 1 pero sin sobrepasar al 5. 
  		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
+ 	}
+ 	public void setApuestasJugadores(int jugador, int apuesta) {
+ 		apuestasJugadores.set(jugador, apuesta);
  	}
  	public List<Integer> getApuestasJugadores() {
 		return apuestasJugadores;
@@ -147,6 +171,9 @@ public class ControlPoker {
  	}
 	public int getRonda() {
 		return ronda;
+	}
+	public int getTurno() {
+		return turno;
 	}
  	//MAIN - hilo principal
 	public static void main(String[] args) {
