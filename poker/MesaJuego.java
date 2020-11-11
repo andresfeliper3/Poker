@@ -16,21 +16,22 @@ public class MesaJuego extends JPanel {
 	private PanelJugador jugador1, jugador2, jugador3, jugador4, jugador5;
 	private JLabel cartaTapada;
 	
-	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores) {
-		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores);
+	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, int apuestaInicial) {
+		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestaInicial);
 		//this.setPreferredSize(new Dimension(700, 600));
 		this.setBackground(Color.GREEN);
 		this.setBorder(new TitledBorder("Mesa"));	
 	}
 	
-	private void initGUI(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores) {
+	private void initGUI(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, int apuestaInicial) {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
-		jugador1 = new PanelJugador(nombresJugadoresSimulados[0], manosJugadores.get(0), false);
-		jugador2 = new PanelJugador(nombresJugadoresSimulados[1], manosJugadores.get(1), false);
-		jugador3 = new PanelJugador(nombresJugadoresSimulados[2], manosJugadores.get(2), false);
-		jugador4 = new PanelJugador(nombresJugadoresSimulados[3], manosJugadores.get(3), false);
-		jugador5 = new PanelJugador(nombreJugadorHumano, manosJugadores.get(4), true);
+		
+		jugador1 = new PanelJugador(nombresJugadoresSimulados[0], manosJugadores.get(0), apuestaInicial, false);
+		jugador2 = new PanelJugador(nombresJugadoresSimulados[1], manosJugadores.get(1), apuestaInicial, false);
+		jugador3 = new PanelJugador(nombresJugadoresSimulados[2], manosJugadores.get(2), apuestaInicial,false);
+		jugador4 = new PanelJugador(nombresJugadoresSimulados[3], manosJugadores.get(3), apuestaInicial, false);
+		jugador5 = new PanelJugador(nombreJugadorHumano, manosJugadores.get(4), apuestaInicial, true);
 		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -51,14 +52,11 @@ public class MesaJuego extends JPanel {
 		constraints.gridheight = 1;
 		constraints.gridwidth = 2;
 		add(jugador5, constraints);
-		
 		cartaTapada = new JLabel(new ImageIcon(FileIO.readImageFile(this, RUTA_CARTA_TAPADA)));
-		cartaTapada.setBorder(new TitledBorder("carta tapada"));
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.gridheight = 1;
 		constraints.gridwidth = 2;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
 		add(cartaTapada, constraints);
 		
 		

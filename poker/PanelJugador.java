@@ -19,24 +19,23 @@ public class PanelJugador extends JPanel {
 	public static final int FONT_SIZE_MENSAJE = 14;
 	public static final String FONT_TYPE = Font.DIALOG;
 	public static final int FONT_STYLE = Font.BOLD;
-	private static final int WIDTH = Baraja.CARD_WIDTH * 4;
+	private static final int WIDTH = Baraja.CARD_WIDTH * 5;
 	private static final int HEIGHT = Baraja.CARD_HEIGHT + FONT_SIZE * 7;
 	
 	
 	private List<Carta> mano = new ArrayList<Carta>();
 	private JLabel nombre, mensaje, apuesta;
 	private JPanel panelMano, panelApuesta;
-	private int valorApuesta = 0;
+	private int valorApuesta;
 	private boolean isHuman;
 	
 	private Escucha escucha;
 	
-	public PanelJugador(String nombre, List<Carta> cartas, boolean isHuman) {
+	public PanelJugador(String nombre, List<Carta> cartas, int apuestaInicial, boolean isHuman) {
 		//this.setBorder(new TitledBorder(nombre));
 		setLayout(new BorderLayout());
 		this.setBackground(Color.GREEN);
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		System.out.println(nombre + "se crea con: width " + WIDTH + "y, height" + HEIGHT);
 		
 		this.nombre = new JLabel(nombre);
 		this.nombre.setFont(new Font(FONT_TYPE, FONT_STYLE, FONT_SIZE));
@@ -45,32 +44,31 @@ public class PanelJugador extends JPanel {
 		mensaje.setFont(new Font(FONT_TYPE,FONT_STYLE,FONT_SIZE_MENSAJE));
 		add(mensaje, BorderLayout.SOUTH);
 		
+		//apuesta
+		this.valorApuesta = apuestaInicial;
 		panelMano = new JPanel();
 		panelMano.setBackground(Color.GREEN);
 		panelApuesta = new JPanel();
 		panelApuesta.setBackground(Color.GREEN);
-		apuesta = new JLabel(String.valueOf(valorApuesta));
+		apuesta = new JLabel("$" + String.valueOf(valorApuesta));
 		this.isHuman = isHuman;
 		
 		//Recibe las cartas 
 		mano = cartas;
 		//Si es humano, sus cartas tienen escuchas		
 		if(isHuman) {
-			
+			escucha = new Escucha();
 			//A cada carta que está en la mano
-			
+			for(Carta carta : mano) {
+				carta.addMouseListener(escucha);
+			}	
 			mensaje.setText("Inicias... ");
 		}
-		escucha = new Escucha();
-		for(Carta carta : mano) {
-			carta.addMouseListener(escucha);
-		}
+		
 		actualizarPanelMano();
 		actualizarPanelApuesta();
 		add(panelMano, BorderLayout.CENTER);
-		add(panelApuesta, BorderLayout.EAST);
-		System.out.println("Añadiendo cartas a " + nombre + ": width " + getWidth() + ", height: " + getHeight());
-		
+		add(panelApuesta, BorderLayout.EAST);		
 	}
 	//Actualiza el JPanel donde están las cartas del jugador 
 	public void actualizarPanelMano() {

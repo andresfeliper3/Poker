@@ -24,13 +24,14 @@ public class VistaGUIPoker extends JFrame {
 	private MesaJuego mesaJuego;
 	private Titulos titulo;
 	private JButton descartar, aumentar, igualar, retirarse;
+	private int apuestaInicial;
 	
 	private Escucha escucha;
 	private ControlPoker controlPoker;
 	
-	public VistaGUIPoker(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, ControlPoker controlPoker) {
+	public VistaGUIPoker(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, int apuestaInicial, ControlPoker controlPoker) {
+		this.apuestaInicial = apuestaInicial;
 		initGUI(nombresJugadoresSimulados, manosJugadores);
-		
 		this.setTitle("Póker clásico");
 		this.pack();
 		this.setResizable(false);
@@ -73,7 +74,7 @@ public class VistaGUIPoker extends JFrame {
 		zonaDinero.setBackground(Color.yellow);
 		zonaJuego.add(zonaDinero, BorderLayout.NORTH);
 		//Mesa de juego (dentro de zonaJuego)
-		mesaJuego = new MesaJuego(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores);
+		mesaJuego = new MesaJuego(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestaInicial);
 		zonaJuego.add(mesaJuego, BorderLayout.CENTER);
 		//Zona apuesta (dentro de zonaJuego
 		zonaApuesta = new JPanel();

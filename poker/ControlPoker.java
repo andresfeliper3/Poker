@@ -17,7 +17,7 @@ public class ControlPoker {
 	//Elementos del juego
 	private Baraja baraja;
 	private List<List<Carta>> manosJugadores;
-	private int apuestaInicial; 
+	private int apuestaInicial = 500; 
 	private int apuestaActual;
 
 	//variables para el manejo de hilos
@@ -29,7 +29,7 @@ public class ControlPoker {
 	public ControlPoker() {
 		manosJugadores = new ArrayList<List<Carta>>();
 		repartirCartas();
-		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, this);
+		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, apuestaInicial, this);
 	}
 	//Reparte las cartas al inicio del juego
 	private void repartirCartas() {
