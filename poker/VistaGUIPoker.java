@@ -40,8 +40,8 @@ public class VistaGUIPoker extends JFrame {
 	}
 	
 	private void initGUI(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores) {
-		String nombreJugadorHumano = JOptionPane.showInputDialog(this, "Escribe tu nombre");
-		
+		//String nombreJugadorHumano = JOptionPane.showInputDialog(this, "Escribe tu nombre");
+		String nombreJugadorHumano = "yolas";
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		
@@ -58,7 +58,7 @@ public class VistaGUIPoker extends JFrame {
 		
 		//Zona de juego
 		zonaJuego = new JPanel(new BorderLayout());
-		zonaJuego.setPreferredSize(new Dimension(800,500));
+		//zonaJuego.setPreferredSize(new Dimension(800,500));
 		zonaJuego.setBackground(Color.WHITE);
 		zonaJuego.setBorder(new TitledBorder("Zona de juego"));
 		constraints.gridx= 0;
@@ -68,7 +68,7 @@ public class VistaGUIPoker extends JFrame {
 		add(zonaJuego, constraints);
 		//Zona dinero (dentro de zonaJuego)
 		zonaDinero = new JPanel();
-		zonaDinero.setPreferredSize(new Dimension(100,100));
+		//zonaDinero.setPreferredSize(new Dimension(100,100));
 		zonaDinero.setBorder(new TitledBorder("Dinero"));
 		zonaDinero.setBackground(Color.yellow);
 		zonaJuego.add(zonaDinero, BorderLayout.NORTH);
@@ -77,7 +77,7 @@ public class VistaGUIPoker extends JFrame {
 		zonaJuego.add(mesaJuego, BorderLayout.CENTER);
 		//Zona apuesta (dentro de zonaJuego
 		zonaApuesta = new JPanel();
-		zonaApuesta.setPreferredSize(new Dimension(100,100));
+		//zonaApuesta.setPreferredSize(new Dimension(100,100));
 		zonaApuesta.setBorder(new TitledBorder("Apuestas"));
 		zonaJuego.add(zonaApuesta, BorderLayout.SOUTH);
 		
