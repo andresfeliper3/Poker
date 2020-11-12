@@ -11,7 +11,7 @@ public class JugadorSimulado implements Runnable {
 	
 	private String nombre;
 	private int turnoId;
-	private int tipo;
+	private boolean retirado;
 	private int cantidadDescarte, cantidadApuesta;
 	private ArrayList<Integer> descarte;
 	private Random random;
@@ -40,6 +40,14 @@ public class JugadorSimulado implements Runnable {
 				descarte.add(numeroAleatorio);
 			} 
 		}
+	}
+	
+	public boolean getRetirado() {
+		return retirado;
+	}
+	
+	public void setRetirado(boolean retirado) {
+		this.retirado = retirado;
 	}
  	@Override
 	//Acción que realiza al ejecutarse el hilo

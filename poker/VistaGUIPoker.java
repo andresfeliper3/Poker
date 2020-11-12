@@ -161,7 +161,22 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 2) {
 			panelRegistros.append("Es tu turno, " + nombreJugadorHumano + ". Puedes aumentar, igualar o retirarte.\n");
 		} 
+		//Avisa que se deben igualar las apuestas
+		else if(fase == 3) {
+			panelRegistros.append("Para descartar, las apuestas deben estar igualadas.\n");
+		}
+		//Comienza la ronda descarte
+		else if(fase == 4) {
+			panelRegistros.append("Comienza la ronda de descarte.\n");
+		}
 		
+	}
+	
+	public void desactivarEscucha(JButton boton) {
+		boton.removeActionListener(escucha);
+	}
+	public void activarEscucha(JButton boton) {
+		boton.addActionListener(escucha);
 	}
 	
  	private class Escucha implements ActionListener {
@@ -192,6 +207,15 @@ public class VistaGUIPoker extends JFrame {
 				//Descartar
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Esta opción aún no está disponible.");
+				}
+				//Desactivar escuchas en ronda de apuestas 
+				if(controlPoker.getRonda() == 0) {
+					desactivarEscucha(aumentar);
+					desactivarEscucha(igualar);
+					desactivarEscucha(retirarse);
+				}
+				else if(controlPoker.getRonda() == 1) {
+					//Desactivar escuchas en ronda de descarte
 				}
 			}
 			//Ronda de descarte

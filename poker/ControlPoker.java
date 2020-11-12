@@ -24,6 +24,7 @@ public class ControlPoker {
 	private Baraja baraja;
 	private List<List<Carta>> manosJugadores;
 	private List<Integer> apuestasJugadores;
+	private List<Integer> jugadoresParaApostarMas; //Lista de posiciones de jugadores 	
 	private int apuestaInicial = 500; 
 	/*Ronda
 	 * 0: ronda de apuestas
@@ -41,6 +42,7 @@ public class ControlPoker {
 	public ControlPoker() {
 		manosJugadores = new ArrayList<List<Carta>>();
 		apuestasJugadores = new ArrayList<Integer>();
+		jugadoresParaApostarMas = new ArrayList<Integer>();
 		repartirCartas();
 		colocarApuestaInicial();
 		escogerJugadorMano();
@@ -112,7 +114,7 @@ public class ControlPoker {
  	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion, JugadorSimulado jugadorSimulado) {
  		//Si está en la ronda de apuestas
  		//contadorTurno permite que solo 5 personas jueguen
- 		if(ronda == 0 && contadorTurnos < 5) {
+ 		if(ronda == 0 && contadorTurnos < TOTAL_JUGADORES) {
  			bloqueo.lock();
  	 		try {
  	 			//Mientras el jugador que entre no sea el que correponda, se duerme
@@ -121,6 +123,7 @@ public class ControlPoker {
  	 				esperarTurno.await();
  	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
  	 				jugadorSimulado.run();
+ 	 				//return;
  	 			}
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);
@@ -139,9 +142,22 @@ public class ControlPoker {
  	 				//humanoApuesta();
  	 				editarRegistros(2, "", -1, -1);
  	 			}
+ 	 			//Revisar si todos los jugadores apostaron
+ 	 			if(contadorTurnos == TOTAL_JUGADORES) {
+ 	 				if(revisarApuestasIguales()) {
+ 	 					//PASAMOS A RONDA DE DESCARTE
+ 	 					ronda = 1;
+ 	 					editarRegistros(4, "", -1, -1);
+ 	 				}
+ 	 				else {
+	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
+ 	 					editarRegistros(3, "", -1, -1);
+ 	 				}
+ 	 			}
  	 		}
  	 	}
  	}
+ 	
  	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
  	private void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
  		//Sincronizar con hilo manejador de eventos
@@ -154,13 +170,32 @@ public class ControlPoker {
 		});
  	}
  	
+ 	//Revisar que todos los jugadores tengan las mismas apuestas. Retorna true si todas son iguales, false en caso contrario.
+ 	private boolean revisarApuestasIguales() {
+ 		jugadoresParaApostarMas.clear();
+ 		int cantidadJugadores = 0;
+ 		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
+ 			if(!(apuestasJugadores.get(jugadorIndex) == Collections.max(apuestasJugadores))) {
+ 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
+ 				jugadoresParaApostarMas.add(jugadorIndex);
+ 				cantidadJugadores++;
+ 			}
+ 		}
+ 		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
+ 		if(cantidadJugadores == 0) {
+ 			return true;
+ 		}
+ 		return false;
+ 	}
+ 	
  	private void aumentarTurno() {
  		//Si turno es 4 o múltiplo de 4, se convierte en 5. Si turno tiene otro valor, aumenta en 1 pero sin sobrepasar al 5. 
  		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
  		System.out.println("Turno aumentó a " + turno);
  	}
- 	public void setApuestasJugadores(int jugador, int apuesta) {
- 		apuestasJugadores.set(jugador, apuesta);
+ 	
+ 	public void setApuestasJugadores(int indexJugador, int apuesta) {
+ 		apuestasJugadores.set(indexJugador, apuesta);
  	}
  	public List<Integer> getApuestasJugadores() {
 		return apuestasJugadores;
