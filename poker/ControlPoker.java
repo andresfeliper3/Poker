@@ -150,9 +150,6 @@ public class ControlPoker {
 		});
  	}
  	
- 	public void despertarHilos() {
- 		esperarTurno.signalAll();
- 	}
  	private void aumentarTurno() {
  		//Si turno es 4 o múltiplo de 4, se convierte en 5. Si turno tiene otro valor, aumenta en 1 pero sin sobrepasar al 5. 
  		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
