@@ -15,6 +15,7 @@ import javax.swing.border.TitledBorder;
 public class MesaJuego extends JPanel {
 	public static final String RUTA_CARTA_TAPADA = "/resources/cardBack.png";
 	private PanelJugador jugador1, jugador2, jugador3, jugador4, jugador5;
+	private PanelJugador[] panelJugadores = {jugador1, jugador2, jugador3, jugador4, jugador5};
 	private JLabel cartaTapada;
 	private ArrayList<Integer>apuestasJugadores;
 	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
@@ -64,5 +65,8 @@ public class MesaJuego extends JPanel {
 	
 	public PanelJugador getJugadorHumano() {
 		return jugador5;
+	}
+	public PanelJugador getPanelJugador(int jugador) {
+		return panelJugadores[jugador];
 	}
  }

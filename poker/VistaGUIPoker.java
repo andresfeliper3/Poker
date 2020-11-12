@@ -172,6 +172,10 @@ public class VistaGUIPoker extends JFrame {
 		
 	}
 	
+	public void editarPanelJugador(int indexJugador, int apuesta) {
+		mesaJuego.getPanelJugador(indexJugador).setValorApuesta(apuesta);
+	}
+	
 	public void desactivarEscucha(JButton boton) {
 		boton.removeActionListener(escucha);
 	}

@@ -126,6 +126,7 @@ public class ControlPoker {
  	 				//return;
  	 			}
  	 			setApuestasJugadores(idJugador - 1, apuesta);
+ 	 			editarPanelJugador(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);
  	 			contadorTurnos++;
  	 			aumentarTurno();
@@ -170,17 +171,32 @@ public class ControlPoker {
 		});
  	}
  	
+ 	private void editarPanelJugador(int jugador, int apuesta) {
+ 		//Sincronizar con hilo manejador de eventos
+ 		SwingUtilities.invokeLater(new Runnable() {
+ 			@Override
+ 			public void run() {
+ 			// TODO Auto-generated method stub
+ 				vistaPoker.editarRegistros(fase, nombre, apuesta, operacion);
+ 			}
+ 		});
+ 	}
+ 	
  	//Revisar que todos los jugadores tengan las mismas apuestas. Retorna true si todas son iguales, false en caso contrario.
  	private boolean revisarApuestasIguales() {
  		jugadoresParaApostarMas.clear();
  		int cantidadJugadores = 0;
  		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
- 			if(!(apuestasJugadores.get(jugadorIndex) == Collections.max(apuestasJugadores))) {
- 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
- 				jugadoresParaApostarMas.add(jugadorIndex);
- 				cantidadJugadores++;
+ 			//Si el jugador apuesta 0 quiere decir que se retiró, es decir, no se va a tomar en cuenta en el juego
+ 			if(apuestasJugadores.get(jugadorIndex) != 0) {
+ 				if(!(apuestasJugadores.get(jugadorIndex) == Collections.max(apuestasJugadores))) {
+ 	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
+ 	 				jugadoresParaApostarMas.add(jugadorIndex);
+ 	 				cantidadJugadores++;
+ 	 				}
+ 	 			}
  			}
- 		}
+ 			
  		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
  		if(cantidadJugadores == 0) {
  			return true;

@@ -11,7 +11,7 @@ public class JugadorSimulado implements Runnable {
 	
 	private String nombre;
 	private int turnoId;
-	private boolean retirado;
+	private boolean retirado = false;
 	private int cantidadDescarte, cantidadApuesta;
 	private ArrayList<Integer> descarte;
 	private Random random;
@@ -74,8 +74,9 @@ public class JugadorSimulado implements Runnable {
  			//retirarse
  			else {
  				//SE RETIRA
- 				cantidadApuesta = -1;
+ 				cantidadApuesta = 0;
  				operacion = 2;
+ 				retirado = true;
  			}
  			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion, this);
  		}
