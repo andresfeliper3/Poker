@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>500</y>
+      <x>210</x>
+      <y>580</y>
       <w>150</w>
       <h>150</h>
     </coordinates>
@@ -25,8 +25,8 @@ String getPalo()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>210</x>
-      <y>500</y>
+      <x>420</x>
+      <y>580</y>
       <w>190</w>
       <h>150</h>
     </coordinates>
@@ -45,8 +45,8 @@ Carta sacarCartaAleatoria()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>330</y>
+      <x>210</x>
+      <y>410</y>
       <w>180</w>
       <h>160</h>
     </coordinates>
@@ -67,8 +67,8 @@ determinarEstadoJuego()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>410</x>
-      <y>220</y>
+      <x>620</x>
+      <y>300</y>
       <w>200</w>
       <h>160</h>
     </coordinates>
@@ -89,8 +89,8 @@ void descartar()
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>210</x>
-      <y>0</y>
+      <x>420</x>
+      <y>80</y>
       <w>170</w>
       <h>140</h>
     </coordinates>
@@ -107,23 +107,23 @@ Actualizarse</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>220</x>
-      <y>170</y>
+      <x>430</x>
+      <y>250</y>
       <w>130</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>MesaJuego
 --
 mostrar jugadores
-mostrar maso
+mostrar mazo
 actualizarse</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>400</x>
-      <y>180</y>
+      <x>610</x>
+      <y>260</y>
       <w>170</w>
       <h>30</h>
     </coordinates>
@@ -133,8 +133,8 @@ actualizarse</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>260</x>
-      <y>130</y>
+      <x>470</x>
+      <y>210</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -144,8 +144,8 @@ actualizarse</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>140</x>
-      <y>560</y>
+      <x>350</x>
+      <y>640</y>
       <w>90</w>
       <h>40</h>
     </coordinates>
@@ -155,8 +155,8 @@ actualizarse</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>540</x>
-      <y>20</y>
+      <x>750</x>
+      <y>100</y>
       <w>140</w>
       <h>70</h>
     </coordinates>
@@ -168,8 +168,8 @@ bg=red</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>500</x>
-      <y>100</y>
+      <x>710</x>
+      <y>180</y>
       <w>140</w>
       <h>70</h>
     </coordinates>
@@ -182,8 +182,8 @@ bg=blue</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>230</y>
+      <x>210</x>
+      <y>310</y>
       <w>180</w>
       <h>100</h>
     </coordinates>
@@ -199,8 +199,8 @@ actualizar juego</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>80</x>
-      <y>170</y>
+      <x>290</x>
+      <y>250</y>
       <w>160</w>
       <h>80</h>
     </coordinates>
