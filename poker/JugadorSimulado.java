@@ -46,8 +46,7 @@ public class JugadorSimulado implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
  		//Si están en ronda de apuestas
- 		if(controlPoker.getRonda() == 0) {
- 			
+ 		if(controlPoker.getRonda() == 0) {	
  			int factorAumento = 1;
  			//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
@@ -61,7 +60,7 @@ public class JugadorSimulado implements Runnable {
  			}
  			//aumentar
  			else if(probabilidad <= 75) {
- 				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1) + (factorAumento * 500); //turnos 1-5
+ 				cantidadApuesta = controlPoker.getMaximaApuesta() + (factorAumento * 500); //turnos 1-5
  				operacion = 1;
  			} 
  			//retirarse
@@ -70,7 +69,7 @@ public class JugadorSimulado implements Runnable {
  				cantidadApuesta = -1;
  				operacion = 2;
  			}
- 			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion);
+ 			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion, this);
  		}
  		//Si están en ronda de descarte
  		else if(controlPoker.getRonda() == 1) {

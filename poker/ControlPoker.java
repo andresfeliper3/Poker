@@ -17,7 +17,7 @@ public class ControlPoker {
 	public static final int NUMERO_CARTAS_MANO = 5;
 	public static final int TOTAL_JUGADORES = 5;
 	public static final String[] NOMBRE_JUGADORES = {"Duque","Dilan", "Petrosky", "Kaku"};
-	
+	private JugadorSimulado jugador1, jugador2, jugador3, jugador4;
 	//Vista GUI
 	private VistaGUIPoker vistaPoker;
 	//Elementos del juego
@@ -78,10 +78,10 @@ public class ControlPoker {
 	}
  	//Inicia los hilos de los jugadores simulados
  	private void iniciarJugadoresSimulados() {
- 		JugadorSimulado jugador1 = new JugadorSimulado(NOMBRE_JUGADORES[0], 1, this);
- 		JugadorSimulado jugador2 = new JugadorSimulado(NOMBRE_JUGADORES[1], 2, this);
- 		JugadorSimulado jugador3 = new JugadorSimulado(NOMBRE_JUGADORES[2], 3, this);
- 		JugadorSimulado jugador4 = new JugadorSimulado(NOMBRE_JUGADORES[3], 4, this);
+ 		jugador1 = new JugadorSimulado(NOMBRE_JUGADORES[0], 1, this);
+ 		jugador2 = new JugadorSimulado(NOMBRE_JUGADORES[1], 2, this);
+ 		jugador3 = new JugadorSimulado(NOMBRE_JUGADORES[2], 3, this);
+ 		jugador4 = new JugadorSimulado(NOMBRE_JUGADORES[3], 4, this);
  		
  		ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
  		ejecutorHilos.execute(jugador1);
@@ -109,7 +109,7 @@ public class ControlPoker {
  	}
  	int contadorTurnos = 0;
 	//Método sincronizador de turnos
- 	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion) {
+ 	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion, JugadorSimulado jugadorSimulado) {
  		//Si está en la ronda de apuestas
  		//contadorTurno permite que solo 5 personas jueguen
  		if(ronda == 0 && contadorTurnos < 5) {
@@ -119,6 +119,7 @@ public class ControlPoker {
  	 			while(idJugador != turno) {		
  	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
+ 	 				jugadorSimulado.run();
  	 			}
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);

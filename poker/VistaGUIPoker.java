@@ -177,14 +177,14 @@ public class VistaGUIPoker extends JFrame {
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(nuevaApuesta);
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, nuevaApuesta, 1);
+					controlPoker.turnos(5, nombreJugadorHumano, nuevaApuesta, 1, null);
 				}
 				else if(e.getSource() == igualar) {
 					controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getMaximaApuesta());
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, controlPoker.getMaximaApuesta(), 0);
+					controlPoker.turnos(5, nombreJugadorHumano, controlPoker.getMaximaApuesta(), 0, null);
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario pierde
