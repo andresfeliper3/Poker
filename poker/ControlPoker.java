@@ -18,6 +18,7 @@ public class ControlPoker {
 	public static final int TOTAL_JUGADORES = 5;
 	public static final String[] NOMBRE_JUGADORES = {"Duque","Dilan", "Petrosky", "Kaku"};
 	private JugadorSimulado jugador1, jugador2, jugador3, jugador4;
+	private JugadorSimulado[] jugadoresSimulados = {jugador1, jugador2, jugador3, jugador4};
 	//Vista GUI
 	private VistaGUIPoker vistaPoker;
 	//Elementos del juego
@@ -26,6 +27,7 @@ public class ControlPoker {
 	private List<Integer> apuestasJugadores;
 	private List<Integer> jugadoresParaApostarMas; //Lista de posiciones de jugadores 	
 	private int apuestaInicial = 500; 
+	private boolean humanoRetirado = false;
 	/*Ronda
 	 * 0: ronda de apuestas
 	 * 1: ronda de descarte
@@ -125,6 +127,7 @@ public class ControlPoker {
  	 				jugadorSimulado.run();
  	 				//return;
  	 			}
+ 	 			System.out.println("Este es el idJugador " + idJugador);
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarPanelJugador(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);
@@ -166,6 +169,7 @@ public class ControlPoker {
 			@Override
 			public void run() {
 			// TODO Auto-generated method stub
+				System.out.println("Editar Registros");
 				vistaPoker.editarRegistros(fase, nombre, apuesta, operacion);
 			}
 		});
@@ -177,7 +181,8 @@ public class ControlPoker {
  			@Override
  			public void run() {
  			// TODO Auto-generated method stub
- 				vistaPoker.editarRegistros(fase, nombre, apuesta, operacion);
+ 				System.out.println("Editar PanelJugador");
+ 				vistaPoker.editarPanelJugador(jugador, apuesta);
  			}
  		});
  	}
@@ -185,10 +190,11 @@ public class ControlPoker {
  	//Revisar que todos los jugadores tengan las mismas apuestas. Retorna true si todas son iguales, false en caso contrario.
  	private boolean revisarApuestasIguales() {
  		jugadoresParaApostarMas.clear();
+ 		boolean[] jugadoresRetirados = {jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(), jugador4.getRetirado(), humanoRetirado};
  		int cantidadJugadores = 0;
  		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
  			//Si el jugador apuesta 0 quiere decir que se retiró, es decir, no se va a tomar en cuenta en el juego
- 			if(apuestasJugadores.get(jugadorIndex) != 0) {
+ 			if(!jugadoresRetirados[jugadorIndex]) {
  				if(!(apuestasJugadores.get(jugadorIndex) == Collections.max(apuestasJugadores))) {
  	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
  	 				jugadoresParaApostarMas.add(jugadorIndex);

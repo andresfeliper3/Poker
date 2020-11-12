@@ -73,8 +73,8 @@ public class JugadorSimulado implements Runnable {
  			} 
  			//retirarse
  			else {
- 				//SE RETIRA
- 				cantidadApuesta = 0;
+ 				//SE RETIR
+ 				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  				operacion = 2;
  				retirado = true;
  			}

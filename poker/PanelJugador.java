@@ -81,7 +81,7 @@ public class PanelJugador extends JPanel {
 		}	
 	}	
 	
-	//Actualiza el JPanel donde está la apuesta del jugadior
+	//Actualiza el JPanel donde está la apuesta del jugador
 	public void actualizarPanelApuesta() {
 		panelApuesta.removeAll();
 		panelApuesta.add(apuesta);	
@@ -90,7 +90,9 @@ public class PanelJugador extends JPanel {
 	public List<Carta> getMano() {
 		  return mano; 
 	}
-	
+	public String getNombre() {
+		return nombre.getText();
+	}
 	public void setValorApuesta(int valorApuesta) {
 		this.valorApuesta = valorApuesta;
 		apuesta.setText("$" + String.valueOf(valorApuesta));

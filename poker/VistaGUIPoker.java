@@ -173,7 +173,7 @@ public class VistaGUIPoker extends JFrame {
 	}
 	
 	public void editarPanelJugador(int indexJugador, int apuesta) {
-		mesaJuego.getPanelJugador(indexJugador).setValorApuesta(apuesta);
+		mesaJuego.setPanelJugador(indexJugador, apuesta);
 	}
 	
 	public void desactivarEscucha(JButton boton) {
@@ -192,14 +192,14 @@ public class VistaGUIPoker extends JFrame {
 			if(controlPoker.getRonda() == 0) {
 				if(e.getSource() == aumentar) {
 					int nuevaApuesta = controlPoker.getMaximaApuesta() + 500;
-					controlPoker.setApuestasJugadores(4, nuevaApuesta);
+					//controlPoker.setApuestasJugadores(4, nuevaApuesta);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(nuevaApuesta);
 					//Despertar hilos
 					controlPoker.turnos(5, nombreJugadorHumano, nuevaApuesta, 1, null);
 				}
 				else if(e.getSource() == igualar) {
-					controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
+					//controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getMaximaApuesta());
 					//Despertar hilos

@@ -15,7 +15,7 @@ import javax.swing.border.TitledBorder;
 public class MesaJuego extends JPanel {
 	public static final String RUTA_CARTA_TAPADA = "/resources/cardBack.png";
 	private PanelJugador jugador1, jugador2, jugador3, jugador4, jugador5;
-	private PanelJugador[] panelJugadores = {jugador1, jugador2, jugador3, jugador4, jugador5};
+	private PanelJugador[] panelJugadores = new PanelJugador[5];
 	private JLabel cartaTapada;
 	private ArrayList<Integer>apuestasJugadores;
 	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
@@ -33,6 +33,12 @@ public class MesaJuego extends JPanel {
 		jugador3 = new PanelJugador(nombresJugadoresSimulados[2], manosJugadores.get(2), apuestasJugadores.get(2),false);
 		jugador4 = new PanelJugador(nombresJugadoresSimulados[3], manosJugadores.get(3), apuestasJugadores.get(3), false);
 		jugador5 = new PanelJugador(nombreJugadorHumano, manosJugadores.get(4), apuestasJugadores.get(4), true);
+		panelJugadores[0] = jugador1;
+		panelJugadores[1] = jugador2;
+		panelJugadores[2] = jugador3;
+		panelJugadores[3] = jugador4;
+		panelJugadores[4] = jugador5;
+		
 		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -66,7 +72,9 @@ public class MesaJuego extends JPanel {
 	public PanelJugador getJugadorHumano() {
 		return jugador5;
 	}
-	public PanelJugador getPanelJugador(int jugador) {
-		return panelJugadores[jugador];
+	public void setPanelJugador(int jugador, int apuesta) {
+		System.out.println("JUGADOR NUMERO " + jugador);
+		System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
+		panelJugadores[jugador].setValorApuesta(apuesta);
 	}
  }
