@@ -172,7 +172,7 @@ public class VistaGUIPoker extends JFrame {
 			//Si estamos en ronda de apuestas
 			if(controlPoker.getRonda() == 0) {
 				if(e.getSource() == aumentar) {
-					int nuevaApuesta = controlPoker.getApuestasJugadores().get(4) + 500;
+					int nuevaApuesta = controlPoker.getMaximaApuesta() + 500;
 					controlPoker.setApuestasJugadores(4, nuevaApuesta);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(nuevaApuesta);

@@ -119,6 +119,7 @@ public class ControlPoker {
  	 			while(idJugador != turno) {		
  	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
+ 	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
  	 				jugadorSimulado.run();
  	 			}
  	 			setApuestasJugadores(idJugador - 1, apuesta);
