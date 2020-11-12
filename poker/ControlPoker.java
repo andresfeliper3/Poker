@@ -107,11 +107,12 @@ public class ControlPoker {
  		}
  		
  	}
- 	
+ 	int contadorTurnos = 0;
 	//Método sincronizador de turnos
  	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion) {
  		//Si está en la ronda de apuestas
- 		if(ronda == 0) {
+ 		//contadorTurno permite que solo 5 personas jueguen
+ 		if(ronda == 0 && contadorTurnos < 5) {
  			bloqueo.lock();
  	 		try {
  	 			//Mientras el jugador que entre no sea el que correponda, se duerme
@@ -121,6 +122,7 @@ public class ControlPoker {
  	 			}
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);
+ 	 			contadorTurnos++;
  	 			aumentarTurno();
  	 			System.out.println("Turno: " + turno);
  	 			System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1) + " en total.");
@@ -153,6 +155,7 @@ public class ControlPoker {
  	private void aumentarTurno() {
  		//Si turno es 4 o múltiplo de 4, se convierte en 5. Si turno tiene otro valor, aumenta en 1 pero sin sobrepasar al 5. 
  		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
+ 		System.out.println("Turno aumentó a " + turno);
  	}
  	public void setApuestasJugadores(int jugador, int apuesta) {
  		apuestasJugadores.set(jugador, apuesta);
