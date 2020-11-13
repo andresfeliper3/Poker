@@ -167,8 +167,10 @@ public class ControlPoker {
 	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
  	 					editarRegistros(3, "", -1, -1);
  	 					ronda = 1;
+ 	 					JOptionPane.showMessageDialog(null, "Comienza la ronda " + ronda);
  	 					aumentarTurnosRondaIgualacion();
  	 					rondaIgualarApuestas();
+ 	 				
  	 				}
  	 			}
  	 		}
@@ -185,7 +187,7 @@ public class ControlPoker {
  				}
  				setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarPanelJugador(idJugador - 1, apuesta);
- 	 			editarRegistros(1, nombreJugador, apuesta, operacion);
+ 	 			editarRegistros(4, nombreJugador, apuesta, operacion);
  	 			contadorIgualacion++;
  	 			System.out.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de " + apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
  	 			aumentarTurnosRondaIgualacion();
@@ -197,10 +199,12 @@ public class ControlPoker {
  			finally {
  				bloqueo.unlock();
  				if(contadorIgualacion == jugadoresParaApostarMas.size()) {
+ 					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas " + jugadoresParaApostarMas.size());
  					if(revisarApuestasIguales()) {
  		 				//PASAMOS A RONDA DE DESCARTE
+ 						JOptionPane.showMessageDialog(null, "Después de igualación, las apuestas están iguales");
  		 				ronda = 2;
- 		 				editarRegistros(4, "", -1, -1);
+ 		 				editarRegistros(5, "", -1, -1);
  		 			}
  	 				else {
  	 					JOptionPane.showMessageDialog(null, "Las apuestas deberían estar iguales y no lo están.");
@@ -265,23 +269,18 @@ public class ControlPoker {
  		jugadoresParaApostarMas.clear();
  		boolean[] jugadoresRetirados = {jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(), jugador4.getRetirado(), humanoRetirado};
  		boolean iguales = true;
- 		for(int i = 0; i < apuestasJugadores.size(); i++) {
- 			System.out.println("Lista apuestas: " + apuestasJugadores.get(i) + " en la posición " + i);
- 		}
  		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
  			//Si el jugador está retirado no se toma en cuenta
  			if(!jugadoresRetirados[jugadorIndex]) {
- 				System.out.println("Index " + jugadorIndex);			
  				if(!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))/* && jugadorIndex != 4*/) {
  	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
- 					System.out.println("Apuestas con index: " + apuestasJugadores.get(jugadorIndex) + ", y referencia: " + Collections.max(apuestasJugadores));
- 	 				jugadoresParaApostarMas.add(jugadorIndex);	
- 	 				System.out.println("FALSIFICANDO, max es " + Collections.max(apuestasJugadores) + ". Index es " + jugadorIndex);		
+ 	 				jugadoresParaApostarMas.add(jugadorIndex);		
+ 	 				System.out.println("Añado a apostarMas al jugador con index " + jugadorIndex);
  	 				iguales = false;
- 	 				break;
  	 			}
  	 		}
  		}	
+ 		System.out.println("jugadoresParaApostarMas adquiere size de " + jugadoresParaApostarMas.size());
  		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
  		if(iguales /*&& (apuestasJugadores.get(4) == Collections.max(apuestasJugadores))*/) {
  			System.out.println("Las apuestas están iguales");

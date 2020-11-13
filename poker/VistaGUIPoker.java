@@ -229,9 +229,11 @@ public class VistaGUIPoker extends JFrame {
 				}
 				//Desactivar escuchas en ronda de apuestas 
 				if(controlPoker.getRonda() == 0) {
+					/*
 					desactivarEscucha(aumentar);
 					desactivarEscucha(igualar);
 					desactivarEscucha(retirarse);
+					*/
 				}
 				else if(controlPoker.getRonda() == 2) {
 					//Desactivar escuchas en ronda de descarte
@@ -243,7 +245,7 @@ public class VistaGUIPoker extends JFrame {
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(panelBotones, "Esta opción ya no está dispnible");
+					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está dispnible");
 				}
 			}
 		}
