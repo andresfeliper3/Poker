@@ -126,7 +126,7 @@ public class VistaGUIPoker extends JFrame {
 		if(fase == 0) {
 		//Apuesta inicial y se escoge el jugador mano 
 	
-			panelRegistros.append("Todos tienen una apuesta inicial de " + apuestasJugadores.get(0) + ".\n");
+			panelRegistros.append("Todos tienen una apuesta inicial de $" + apuestasJugadores.get(0) + ".\n");
 			String nombreJugadorMano;
 			//Apuesta inicial
 			if(controlPoker.getIdJugadorMano() == 5) {
@@ -170,7 +170,7 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 4) {
 			//El jugador iguala
 			if(operacion == 0) {
-				panelRegistros.append("El jugador " + nombre + " igualó a $ " + apuesta + ".\n");
+				panelRegistros.append("El jugador " + nombre + " igualó a $" + apuesta + ".\n");
 			}
 			//El jugador se retira
 			else if(operacion == 2) {
@@ -178,7 +178,7 @@ public class VistaGUIPoker extends JFrame {
 			} 
 			//El jugador aumenta. NO DEBERÍA HACER ESTO
 			else if(operacion == 1) {
-				JOptionPane.showConfirmDialog(panelBotones, "El jugador " + nombre + " no debería poder aumentar");
+				JOptionPane.showMessageDialog(panelBotones, "El jugador " + nombre + " no debería poder aumentar");
 			}
 		}
 		//Comienza la ronda descarte
@@ -253,6 +253,13 @@ public class VistaGUIPoker extends JFrame {
 				}
 				else if(e.getSource() == retirarse) {
 					JOptionPane.showMessageDialog(panelBotones, "Jugador " + nombreJugadorHumano + " se retira y pierde.");
+				}
+				else if(e.getSource() == aumentar) {
+					JOptionPane.showMessageDialog(panelBotones, "Esta opción ya no está disponible");
+				}
+				//descartar
+				else {
+					JOptionPane.showMessageDialog(panelBotones, "Todavía no puede descartar cartar");
 				}
 			}
 			//Ronda de descarte

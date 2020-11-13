@@ -220,7 +220,7 @@ public class ControlPoker {
  		 				ronda = 2;
  		 			}
  	 				else {
- 	 					JOptionPane.showMessageDialog(null, "Las apuestas deberían estar iguales y no lo están.");
+ 	 					JOptionPane.showMessageDialog(null, "ERROR: Las apuestas deberían estar iguales y no lo están. Reinicie");
  	 				}
  				}
  			}
@@ -253,9 +253,6 @@ public class ControlPoker {
  			posicionJugador++;
  		}
  		System.out.println("turno2 está aumentado a " + turno);
- 		if(turno == 5) {
- 			JOptionPane.showMessageDialog(null, "Es el turno del usuario de igualar o retirarse.");
- 		}
  	}
  	//Ejecutar los hilos en la ronda de igualación de apuestas
  	private void rondaIgualarApuestas() {	
