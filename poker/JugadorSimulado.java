@@ -54,14 +54,14 @@ public class JugadorSimulado implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
  		//Si están en ronda de apuestas
+ 		//Probabilidad de aumentar: 25%
+		//Probabilidad de igualar: 50%	
+		//Probabilidad de retirarse: 25%
+			int probabilidad = random.nextInt(100) + 1;
  		if(controlPoker.getRonda() == 0) {	
  			int factorAumento = 1;
- 			//Probabilidad de aumentar: 25%
- 			//Probabilidad de igualar: 50%	
- 			//Probabilidad de retirarse: 25%
- 			int probabilidad = random.nextInt(100) + 1;
  			//igualar
- 			if(probabilidad <= 50) {
+ 			if(probabilidad <= 100) {
  				cantidadApuesta = controlPoker.getMaximaApuesta();
  				operacion = 0;
  				//AVISAR A CONTROL
@@ -73,7 +73,23 @@ public class JugadorSimulado implements Runnable {
  			} 
  			//retirarse
  			else {
- 				//SE RETIR
+ 				//SE RETIRA
+ 				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
+ 				operacion = 2;
+ 				retirado = true;
+ 			}
+ 			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion, this);
+ 		}
+ 		//Ronda de igualación de apuestas
+ 		else if(controlPoker.getRonda() == 1) {
+ 			System.out.println("Entra a igualación del jugador " + nombre);
+ 			//igualar
+ 			if(probabilidad <= 70) {
+ 				cantidadApuesta = controlPoker.getMaximaApuesta();
+ 				operacion = 0;
+ 			} 
+ 			//retirarse
+ 			else {
  				cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  				operacion = 2;
  				retirado = true;
@@ -86,7 +102,7 @@ public class JugadorSimulado implements Runnable {
  	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  			escogerDescarte(cantidadDescarte);
- 			controlPoker.turnos(turnoId, descarte, nombre);
+ 			//controlPoker.turnos(turnoId, descarte, nombre);
  			System.out.println("Hilo "+ nombre +" termina "+descarte);
  		}
  		

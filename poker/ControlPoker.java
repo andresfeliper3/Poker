@@ -11,6 +11,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class ControlPoker {
@@ -18,7 +19,7 @@ public class ControlPoker {
 	public static final int TOTAL_JUGADORES = 5;
 	public static final String[] NOMBRE_JUGADORES = {"Duque","Dilan", "Petrosky", "Kaku"};
 	private JugadorSimulado jugador1, jugador2, jugador3, jugador4;
-	private JugadorSimulado[] jugadoresSimulados = {jugador1, jugador2, jugador3, jugador4};
+	private JugadorSimulado[] jugadoresSimulados = new JugadorSimulado[TOTAL_JUGADORES - 1];
 	//Vista GUI
 	private VistaGUIPoker vistaPoker;
 	//Elementos del juego
@@ -50,6 +51,8 @@ public class ControlPoker {
 		colocarApuestaInicial();
 		escogerJugadorMano();
 		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, apuestasJugadores, this);
+		
+		
 	}
 	//Reparte las cartas al inicio del juego
 	private void repartirCartas() {
@@ -83,19 +86,24 @@ public class ControlPoker {
 	}
  	//Inicia los hilos de los jugadores simulados
  	private void iniciarJugadoresSimulados() {
+ 		//Jugadores simulados
  		jugador1 = new JugadorSimulado(NOMBRE_JUGADORES[0], 1, this);
  		jugador2 = new JugadorSimulado(NOMBRE_JUGADORES[1], 2, this);
  		jugador3 = new JugadorSimulado(NOMBRE_JUGADORES[2], 3, this);
  		jugador4 = new JugadorSimulado(NOMBRE_JUGADORES[3], 4, this);
- 		
+ 		jugadoresSimulados[0] = jugador1;
+ 		jugadoresSimulados[1] = jugador2;
+ 		jugadoresSimulados[2] = jugador3;
+ 		jugadoresSimulados[3] = jugador4;
  		ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
- 		ejecutorHilos.execute(jugador1);
- 		ejecutorHilos.execute(jugador2);	
- 		ejecutorHilos.execute(jugador3);
- 		ejecutorHilos.execute(jugador4);
+ 		for(JugadorSimulado jugador : jugadoresSimulados) {
+ 			ejecutorHilos.execute(jugador);
+ 		}
+ 		
  		ejecutorHilos.shutdown();
  	}
  	//Método sincronizador de turnos
+ 	/*
  	public void turnos(int idJugador, List<Integer> descarte, String nombreJugador) {
  		//Si está en la ronda de descarte
  		if(ronda == 2) {
@@ -111,8 +119,9 @@ public class ControlPoker {
  	 		}
  		}
  		
- 	}
+ 	}*/
  	int contadorTurnos = 0;
+ 	int contadorIgualacion = 0;
 	//Método sincronizador de turnos
  	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion, JugadorSimulado jugadorSimulado) {
  		//Si está en la ronda de apuestas
@@ -151,20 +160,82 @@ public class ControlPoker {
  	 			if(contadorTurnos == TOTAL_JUGADORES) {
  	 				if(revisarApuestasIguales()) {
  	 					//PASAMOS A RONDA DE DESCARTE
+ 	 					editarRegistros(5, "", -1, -1);
  	 					ronda = 2;
- 	 					editarRegistros(4, "", -1, -1);
  	 				}
  	 				else {
 	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
  	 					editarRegistros(3, "", -1, -1);
  	 					ronda = 1;
+ 	 					aumentarTurnosRondaIgualacion();
+ 	 					rondaIgualarApuestas();
  	 				}
  	 			}
  	 		}
  	 	}
+ 		//Si estamos en la ronda de igualación de apuestas
+ 		else if(ronda == 1) {
+ 			try {
+ 				bloqueo.lock();
+ 				System.out.println("Turno es " + turno);
+ 				System.out.println("IdJugador es " + idJugador);
+ 				while(idJugador != turno) {
+ 					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir");
+ 					esperarTurno.await();
+ 				}
+ 				setApuestasJugadores(idJugador - 1, apuesta);
+ 	 			editarPanelJugador(idJugador - 1, apuesta);
+ 	 			editarRegistros(1, nombreJugador, apuesta, operacion);
+ 	 			contadorIgualacion++;
+ 	 			System.out.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de " + apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
+ 	 			aumentarTurnosRondaIgualacion();
+ 	 			esperarTurno.signalAll();
+ 			} 
+ 			catch(InterruptedException e) {
+ 				e.printStackTrace();
+ 			} 
+ 			finally {
+ 				bloqueo.unlock();
+ 				if(contadorIgualacion == jugadoresParaApostarMas.size()) {
+ 					if(revisarApuestasIguales()) {
+ 		 				//PASAMOS A RONDA DE DESCARTE
+ 		 				ronda = 2;
+ 		 				editarRegistros(4, "", -1, -1);
+ 		 			}
+ 	 				else {
+ 	 					JOptionPane.showMessageDialog(null, "Las apuestas deberían estar iguales y no lo están.");
+ 	 				}
+ 				}
+ 			}
+ 		}
  	}
- 	
- 	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
+ 	int posicionJugador = 0;
+ 	//Función para manejar los turnos en la ronda de igualación, donde solo participamn los jugadores que deben igualar o retirarse.
+ 	private void aumentarTurnosRondaIgualacion() {
+ 		//Turno está entre 1 y los jugadores que deben igualar o retirarse
+ 		turno = jugadoresParaApostarMas.get(posicionJugador) + 1;
+ 		if(posicionJugador < jugadoresParaApostarMas.size() - 1) {
+ 			posicionJugador++;
+ 		}
+ 		System.out.println("turno2 está aumentado a " + turno);
+ 		if(turno == 5) {
+ 			JOptionPane.showMessageDialog(null, "Es el turno del usuario de igualar o retirarse.");
+ 		}
+ 	}
+ 	//Ejecutar los hilos en la ronda de igualación de apuestas
+ 	private void rondaIgualarApuestas() {	
+ 		System.out.println("Entró a igualar apuestas");
+ 		//ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
+ 		for(int i = 0; i < jugadoresParaApostarMas.size(); i++) {
+ 			//No activa al jugador humano, porque no es un hilo
+ 			if(jugadoresParaApostarMas.get(i) != 4) {
+ 				jugadoresSimulados[jugadoresParaApostarMas.get(i)].run();
+ 			}
+ 			
+ 		}
+ 		//ejecutorHilos.shutdown();
+ 	}
+  	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
  	private void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
  		//Sincronizar con hilo manejador de eventos
 		SwingUtilities.invokeLater(new Runnable() {
@@ -193,23 +264,32 @@ public class ControlPoker {
  	private boolean revisarApuestasIguales() {
  		jugadoresParaApostarMas.clear();
  		boolean[] jugadoresRetirados = {jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(), jugador4.getRetirado(), humanoRetirado};
- 		int cantidadJugadores = 0;
- 		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
- 			//Si el jugador apuesta 0 quiere decir que se retiró, es decir, no se va a tomar en cuenta en el juego
- 			if(!jugadoresRetirados[jugadorIndex]) {
- 				if(!(apuestasJugadores.get(jugadorIndex) == Collections.max(apuestasJugadores))) {
- 	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
- 	 				jugadoresParaApostarMas.add(jugadorIndex);
- 	 				cantidadJugadores++;
- 	 				}
- 	 			}
- 			}
- 			
- 		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
- 		if(cantidadJugadores == 0) {
- 			return true;
+ 		boolean iguales = true;
+ 		for(int i = 0; i < apuestasJugadores.size(); i++) {
+ 			System.out.println("Lista apuestas: " + apuestasJugadores.get(i) + " en la posición " + i);
  		}
- 		return false;
+ 		for(int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
+ 			//Si el jugador está retirado no se toma en cuenta
+ 			if(!jugadoresRetirados[jugadorIndex]) {
+ 				System.out.println("Index " + jugadorIndex);			
+ 				if(!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))/* && jugadorIndex != 4*/) {
+ 	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
+ 					System.out.println("Apuestas con index: " + apuestasJugadores.get(jugadorIndex) + ", y referencia: " + Collections.max(apuestasJugadores));
+ 	 				jugadoresParaApostarMas.add(jugadorIndex);	
+ 	 				System.out.println("FALSIFICANDO, max es " + Collections.max(apuestasJugadores) + ". Index es " + jugadorIndex);		
+ 	 				iguales = false;
+ 	 				break;
+ 	 			}
+ 	 		}
+ 		}	
+ 		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
+ 		if(iguales /*&& (apuestasJugadores.get(4) == Collections.max(apuestasJugadores))*/) {
+ 			System.out.println("Las apuestas están iguales");
+ 		
+ 		} else {
+ 			System.out.println("Las apuestas NO están iguales");
+ 		}
+ 		return iguales;
  	}
  	
  	private void aumentarTurno() {

@@ -73,8 +73,8 @@ public class MesaJuego extends JPanel {
 		return jugador5;
 	}
 	public void setPanelJugador(int jugador, int apuesta) {
-		System.out.println("JUGADOR NUMERO " + jugador);
-		System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
+		System.out.println("Mesa de juego, JUGADOR NUMERO " + jugador);
+		//System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
 		panelJugadores[jugador].setValorApuesta(apuesta);
 	}
  }

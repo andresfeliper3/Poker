@@ -165,8 +165,23 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 3) {
 			panelRegistros.append("Para descartar, las apuestas deben estar igualadas.\n");
 		}
-		//Comienza la ronda descarte
+		//Ronda de igualación de apuestas
 		else if(fase == 4) {
+			//El jugador iguala
+			if(operacion == 0) {
+				panelRegistros.append("El jugador " + nombre + " igualó a $ " + apuesta + ".\n");
+			}
+			//El jugador se retira
+			else if(operacion == 2) {
+				panelRegistros.append("El jugador " + nombre + " se retiró.\n");
+			} 
+			//El jugador aumenta. NO DEBERÍA HACER ESTO
+			else if(operacion == 1) {
+				JOptionPane.showConfirmDialog(panelBotones, "El jugador " + nombre + " no debería poder aumentar");
+			}
+		}
+		//Comienza la ronda descarte
+		else if(fase == 5) {
 			panelRegistros.append("Comienza la ronda de descarte.\n");
 		}
 		
