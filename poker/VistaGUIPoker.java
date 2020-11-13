@@ -164,6 +164,7 @@ public class VistaGUIPoker extends JFrame {
 		//Avisa que se deben igualar las apuestas
 		else if(fase == 3) {
 			panelRegistros.append("Para descartar, las apuestas deben estar igualadas.\n");
+			panelRegistros.append("Comienza la ronda de igualación.\n");
 		}
 		//Ronda de igualación de apuestas
 		else if(fase == 4) {
@@ -183,6 +184,10 @@ public class VistaGUIPoker extends JFrame {
 		//Comienza la ronda descarte
 		else if(fase == 5) {
 			panelRegistros.append("Comienza la ronda de descarte.\n");
+		}
+		//Mensaje a jugador humano en ronda de igualación
+		else if(fase == 6) {
+			panelRegistros.append("Es tu turno " + nombreJugadorHumano + ". Puedes igualar o retirarte");
 		}
 		
 	}
