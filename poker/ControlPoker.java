@@ -43,8 +43,9 @@ public class ControlPoker {
 	private Lock bloqueo = new ReentrantLock(); //manejo de sincronizacion
 	private Condition esperarTurno = bloqueo.newCondition(); //manejo de sincronizacion	
 	private Condition esperarIgualacion = bloqueo.newCondition();
-	
+	private ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
 	private Random random;
+	
 	public ControlPoker() {
 		manosJugadores = new ArrayList<List<Carta>>();
 		apuestasJugadores = new ArrayList<Integer>();
@@ -101,7 +102,7 @@ public class ControlPoker {
  		jugadoresSimulados[1] = jugador2;
  		jugadoresSimulados[2] = jugador3;
  		jugadoresSimulados[3] = jugador4;
- 		ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
+ 		
  		for(JugadorSimulado jugador : jugadoresSimulados) {
  			ejecutorHilos.execute(jugador);
  		}
@@ -243,7 +244,7 @@ public class ControlPoker {
  	//Ejecutar los hilos en la ronda de igualación de apuestas
  	private void rondaIgualarApuestas() {	
  		System.out.println("Entró a igualar apuestas");
- 		ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
+ 		//ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
  		for(int i = 0; i < jugadoresParaApostarMas.size(); i++) {
  			//No activa al jugador humano, porque no es un hilo
  			if(jugadoresParaApostarMas.get(i) != 4) {
