@@ -130,7 +130,7 @@ public class ControlPoker {
  	
  	int contadorIgualacion = 0;
 	//Método sincronizador de turnos
- 	public void turnos(int idJugador, String nombreJugador, int apuesta, int operacion, JugadorSimulado jugadorSimulado) {
+ 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado) {
  		//Si está en la ronda de apuestas
  		//contadorTurno permite que solo 5 personas jueguen
  		if(ronda == 0 && contadorTurnos < TOTAL_JUGADORES) {
@@ -141,9 +141,9 @@ public class ControlPoker {
  	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
  	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
- 	 				jugadorSimulado.run();
- 	 				//return;
+ 	 				//jugadorSimulado.run();
  	 			}
+ 	 			int apuesta = calcularApuesta(idJugador, operacion);
  	 			System.out.println("Este es el idJugador " + idJugador);
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarPanelJugador(idJugador - 1, apuesta);
@@ -165,8 +165,7 @@ public class ControlPoker {
  	 			}
  	 			System.out.println("Contador de turnos es " + contadorTurnos + " y total jugadores es " + TOTAL_JUGADORES);
  	 			//Revisar si todos los jugadores apostaron
- 	 			if(contadorTurnos == TOTAL_JUGADORES) {
- 	 				
+ 	 			if(contadorTurnos == TOTAL_JUGADORES) {			
  	 				if(revisarApuestasIguales()) {
  	 					//PASAMOS A RONDA DE DESCARTE
  	 					editarRegistros(5, "", -1, -1);
@@ -196,6 +195,7 @@ public class ControlPoker {
  					esperarIgualacion.await();
  					//jugadorSimulado.run();
  				}
+ 				int apuesta = calcularApuesta(idJugador, operacion);
  				setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarPanelJugador(idJugador - 1, apuesta);
  	 			editarRegistros(4, nombreJugador, apuesta, operacion);
@@ -227,6 +227,24 @@ public class ControlPoker {
  				}
  			}
  		}
+ 	}
+ 	
+ 	//Calcula el valor de la apuesta basándose en la operación dada por el jugador con identificado idJugador
+ 	private int calcularApuesta(int idJugador, int operacion) {
+ 		//igualar
+ 		if(operacion == 0) {
+ 			return getMaximaApuesta();
+ 		}
+ 		//aumentar
+ 		else if(operacion == 1) {
+ 			return getMaximaApuesta() + 500;
+ 		}
+ 		//retirarse
+ 		else if(operacion == 2) {
+ 			return apuestasJugadores.get(idJugador - 1);
+ 		}
+ 		//Error
+		return -1;
  	}
  	int posicionJugador = 0;
  	//Función para manejar los turnos en la ronda de igualación, donde solo participamn los jugadores que deben igualar o retirarse.

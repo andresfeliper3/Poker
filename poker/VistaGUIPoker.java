@@ -211,19 +211,18 @@ public class VistaGUIPoker extends JFrame {
 			//Si estamos en ronda de apuestas
 			if(controlPoker.getRonda() == 0) {
 				if(e.getSource() == aumentar) {
-					int nuevaApuesta = controlPoker.getMaximaApuesta() + 500;
-					//controlPoker.setApuestasJugadores(4, nuevaApuesta);
-					//Pintar
-					mesaJuego.getJugadorHumano().setValorApuesta(nuevaApuesta);
+					//controlPoker.setApuestasJugadores(4, nuevaApuesta);			
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, nuevaApuesta, 1, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 1, null);
+					//Pintar
+					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == igualar) {
 					//controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
-					//Pintar
-					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getMaximaApuesta());
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, controlPoker.getMaximaApuesta(), 0, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 0, null);
+					//Pintar
+					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario pierde
