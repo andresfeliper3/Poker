@@ -141,7 +141,6 @@ public class ControlPoker {
  	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
  	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
- 	 				//jugadorSimulado.run();
  	 			}
  	 			int apuesta = calcularApuesta(idJugador, operacion);
  	 			System.out.println("Este es el idJugador " + idJugador);
@@ -208,7 +207,7 @@ public class ControlPoker {
  			} 
  			finally {
  				bloqueo.unlock();
- 				if(turno == 5) {
+ 				if(turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
  	 				//Avisar que puede igualar o retirarse
  	 				editarRegistros(6, "", -1, -1);
  	 			}
@@ -217,9 +216,8 @@ public class ControlPoker {
  					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas " + jugadoresParaApostarMas.size());
  					if(revisarApuestasIguales()) {
  		 				//PASAMOS A RONDA DE DESCARTE
- 						JOptionPane.showMessageDialog(null, "Después de igualación, las apuestas están iguales");
+ 						editarRegistros(5, "", -1, -1);
  		 				ronda = 2;
- 		 				editarRegistros(5, "", -1, -1);
  		 			}
  	 				else {
  	 					JOptionPane.showMessageDialog(null, "Las apuestas deberían estar iguales y no lo están.");
@@ -309,7 +307,7 @@ public class ControlPoker {
  			//Si el jugador está retirado no se toma en cuenta
  			if(!jugadoresRetirados[jugadorIndex]) {
  				System.out.println("El jugador " + jugadorIndex + " con apuesta " + apuestasJugadores.get(jugadorIndex) + " y apuesta max es " + Collections.max(apuestasJugadores));
- 				if(!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))/* && jugadorIndex != 4*/) {
+ 				if(!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))) {
  	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
  	 				jugadoresParaApostarMas.add(jugadorIndex);		
  	 				iguales = false;
@@ -318,7 +316,7 @@ public class ControlPoker {
  		}	
  		System.out.println("jugadoresParaApostarMas adquiere size de " + jugadoresParaApostarMas.size());
  		//Si cantidadJugadores nunca aumentó, todas las apuestas son iguales
- 		if(iguales /*&& (apuestasJugadores.get(4) == Collections.max(apuestasJugadores))*/) {
+ 		if(iguales) {
  			System.out.println("Las apuestas están iguales");
  		
  		} else {
