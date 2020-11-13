@@ -218,12 +218,12 @@ public class VistaGUIPoker extends JFrame {
 					desactivarEscucha(igualar);
 					desactivarEscucha(retirarse);
 				}
-				else if(controlPoker.getRonda() == 1) {
+				else if(controlPoker.getRonda() == 2) {
 					//Desactivar escuchas en ronda de descarte
 				}
 			}
 			//Ronda de descarte
-			else if(controlPoker.getRonda() == 1) {
+			else if(controlPoker.getRonda() == 2) {
 				if(e.getSource() == descartar) {
 					
 				}

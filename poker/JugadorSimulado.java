@@ -81,7 +81,7 @@ public class JugadorSimulado implements Runnable {
  			controlPoker.turnos(turnoId, nombre, cantidadApuesta, operacion, this);
  		}
  		//Si están en ronda de descarte
- 		else if(controlPoker.getRonda() == 1) {
+ 		else if(controlPoker.getRonda() == 2) {
  			//Escoge la cantidad de cartas que va a descartar
  	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida

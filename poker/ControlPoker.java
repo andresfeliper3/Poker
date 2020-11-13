@@ -30,8 +30,9 @@ public class ControlPoker {
 	private boolean humanoRetirado = false;
 	/*Ronda
 	 * 0: ronda de apuestas
-	 * 1: ronda de descarte
-	 * 2: ronda de definición*/
+	 * 1: ronda de revisión
+	 * 2: ronda de descarte
+	 * 3: ronda de definición*/
 	private int ronda = 0;
 	private int jugadorManoAleatorio; 
 	//variables para el manejo de hilos
@@ -97,7 +98,7 @@ public class ControlPoker {
  	//Método sincronizador de turnos
  	public void turnos(int idJugador, List<Integer> descarte, String nombreJugador) {
  		//Si está en la ronda de descarte
- 		if(ronda == 1) {
+ 		if(ronda == 2) {
  			bloqueo.lock();
  	 		try {
  	 			
@@ -150,12 +151,13 @@ public class ControlPoker {
  	 			if(contadorTurnos == TOTAL_JUGADORES) {
  	 				if(revisarApuestasIguales()) {
  	 					//PASAMOS A RONDA DE DESCARTE
- 	 					ronda = 1;
+ 	 					ronda = 2;
  	 					editarRegistros(4, "", -1, -1);
  	 				}
  	 				else {
 	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
  	 					editarRegistros(3, "", -1, -1);
+ 	 					ronda = 1;
  	 				}
  	 			}
  	 		}
