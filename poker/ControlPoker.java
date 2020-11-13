@@ -83,7 +83,7 @@ public class ControlPoker {
 	//Escoge al azar al jugador mano (inicial) escogiendo el turno
  	private void escogerJugadorMano() {
  		random = new Random();
-		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
 		iniciarJugadoresSimulados();
 		//Decirle al jugador lo que debe hacer si es el jugador mano
@@ -107,7 +107,7 @@ public class ControlPoker {
  			ejecutorHilos.execute(jugador);
  		}
  		
- 		ejecutorHilos.shutdown();
+ 		//ejecutorHilos.shutdown();
  	}
  	//Método sincronizador de turnos
  	/*
@@ -148,10 +148,10 @@ public class ControlPoker {
  	 			setApuestasJugadores(idJugador - 1, apuesta);
  	 			editarPanelJugador(idJugador - 1, apuesta);
  	 			editarRegistros(1, nombreJugador, apuesta, operacion);
- 	 			contadorTurnos++;
- 	 			aumentarTurno();
  	 			System.out.println("Turno: " + turno);
  	 			System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1) + " en total.");
+ 	 			contadorTurnos++;
+ 	 			aumentarTurno();		
  	 			esperarTurno.signalAll();
  	 		} 
  	 		catch(InterruptedException e) {
@@ -165,7 +165,7 @@ public class ControlPoker {
  	 			}
  	 			System.out.println("Contador de turnos es " + contadorTurnos + " y total jugadores es " + TOTAL_JUGADORES);
  	 			//Revisar si todos los jugadores apostaron
- 	 			if(contadorTurnos == TOTAL_JUGADORES) {			
+ 	 			if(contadorTurnos == TOTAL_JUGADORES) {					
  	 				if(revisarApuestasIguales()) {
  	 					//PASAMOS A RONDA DE DESCARTE
  	 					editarRegistros(5, "", -1, -1);
@@ -174,12 +174,11 @@ public class ControlPoker {
  	 				else {
 	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
  	 					//Comienza ronda igualación
- 	 					editarRegistros(3, "", -1, -1);
- 	 					/*
+ 	 					editarRegistros(3, "", -1, -1);			
  	 					ronda = 1;
  	 					aumentarTurnosRondaIgualacion();
  	 					rondaIgualarApuestas();
- 	 					*/ 				
+ 	 								
  	 				}
  	 			}
  	 		}
@@ -188,8 +187,8 @@ public class ControlPoker {
  		else if(ronda == 1) {
  			try {
  				bloqueo.lock();
- 				System.out.println("Turno es " + turno);
- 				System.out.println("IdJugador es " + idJugador);
+ 				System.out.println("Igualacion, Turno es " + turno);
+ 				System.out.println("igualacion, IdJugador es " + idJugador);
  				while(idJugador != turno) {
  					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir");
  					esperarIgualacion.await();
@@ -210,9 +209,10 @@ public class ControlPoker {
  			finally {
  				bloqueo.unlock();
  				if(turno == 5) {
- 	 				//humanoApuesta();
+ 	 				//Avisar que puede igualar o retirarse
  	 				editarRegistros(6, "", -1, -1);
  	 			}
+ 				//Si todos los que debían igualar, ya igualaron
  				if(contadorIgualacion == jugadoresParaApostarMas.size()) {
  					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas " + jugadoresParaApostarMas.size());
  					if(revisarApuestasIguales()) {
@@ -262,17 +262,18 @@ public class ControlPoker {
  	//Ejecutar los hilos en la ronda de igualación de apuestas
  	private void rondaIgualarApuestas() {	
  		System.out.println("Entró a igualar apuestas");
+ 		System.out.println("El size de jugadoresParaApostarMas es " + jugadoresParaApostarMas.size());
  		//ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
- 		for(int i = 0; i < jugadoresParaApostarMas.size(); i++) {
+ 		for(int i = 0; i < jugadoresSimulados.length; i++) {
  			//No activa al jugador humano, porque no es un hilo
- 			if(jugadoresParaApostarMas.get(i) != 4) {
- 				System.out.println("Prende el hilo del jugador " + jugadoresParaApostarMas.get(i));
- 				//jugadoresSimulados[jugadoresParaApostarMas.get(i)].run();
- 				ejecutorHilos.execute(jugadoresSimulados[jugadoresParaApostarMas.get(i)]);
- 			}
  			
+ 			if(i != 4) {
+ 				System.out.println("Prende el hilo del jugador " + i);
+ 				//jugadoresSimulados[jugadoresParaApostarMas.get(i)].run();
+ 				ejecutorHilos.execute(jugadoresSimulados[i]/*jugadoresParaApostarMas.get(i)]*/);
+ 			}
  		}
- 		//ejecutorHilos.shutdown();
+ 		ejecutorHilos.shutdown();
  	}
   	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
  	private void editarRegistros(int fase, String nombre, int apuesta, int operacion) {

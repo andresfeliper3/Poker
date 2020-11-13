@@ -187,7 +187,7 @@ public class VistaGUIPoker extends JFrame {
 		}
 		//Mensaje a jugador humano en ronda de igualación
 		else if(fase == 6) {
-			panelRegistros.append("Es tu turno " + nombreJugadorHumano + ". Puedes igualar o retirarte");
+			panelRegistros.append("Es tu turno " + nombreJugadorHumano + ". Puedes igualar o retirarte.\n");
 		}
 		
 	}
@@ -243,13 +243,25 @@ public class VistaGUIPoker extends JFrame {
 					//Desactivar escuchas en ronda de descarte
 				}
 			}
+			//Ronda de igualación
+			else if(controlPoker.getRonda() == 1) {
+				if(e.getSource() == igualar) {
+					//Despertar hilos
+					controlPoker.turnos(5, nombreJugadorHumano, 0, null);
+					//Pintar
+					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
+				}
+				else if(e.getSource() == retirarse) {
+					JOptionPane.showMessageDialog(panelBotones, "Jugador " + nombreJugadorHumano + " se retira y pierde.");
+				}
+			}
 			//Ronda de descarte
 			else if(controlPoker.getRonda() == 2) {
 				if(e.getSource() == descartar) {
 					
 				}
 				else {
-					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está dispnible");
+					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está disponible");
 				}
 			}
 		}
