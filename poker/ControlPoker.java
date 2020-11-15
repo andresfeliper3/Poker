@@ -32,7 +32,7 @@ public class ControlPoker {
 	private int contadorTurnos = 0;
 	/*Ronda
 	 * 0: ronda de apuestas
-	 * 1: ronda de revisión
+	 * 1: ronda de igualación
 	 * 2: ronda de descarte
 	 * 3: ronda de definición*/
 	private int ronda = 0;
@@ -107,26 +107,9 @@ public class ControlPoker {
  			ejecutorHilos.execute(jugador);
  		}
  		
- 		//ejecutorHilos.shutdown();
+ 		ejecutorHilos.shutdown();
  	}
- 	//Método sincronizador de turnos
- 	/*
- 	public void turnos(int idJugador, List<Integer> descarte, String nombreJugador) {
- 		//Si está en la ronda de descarte
- 		if(ronda == 2) {
- 			bloqueo.lock();
- 	 		try {
- 	 			
- 	 		} 
- 	 		catch(InterruptedException e) {
- 	 			e.printStackTrace();
- 	 		}
- 	 		finally {
- 	 		bloqueo.unlock();
- 	 		}
- 		}
- 		
- 	}*/
+
  	
  	int contadorIgualacion = 0;
 	//Método sincronizador de turnos
@@ -176,7 +159,7 @@ public class ControlPoker {
  	 					editarRegistros(3, "", -1, -1);			
  	 					ronda = 1;
  	 					aumentarTurnosRondaIgualacion();
- 	 					rondaIgualarApuestas();
+ 	 				//	rondaIgualarApuestas();
  	 								
  	 				}
  	 			}
@@ -254,22 +237,7 @@ public class ControlPoker {
  		}
  		System.out.println("turno2 está aumentado a " + turno);
  	}
- 	//Ejecutar los hilos en la ronda de igualación de apuestas
- 	private void rondaIgualarApuestas() {	
- 		System.out.println("Entró a igualar apuestas");
- 		System.out.println("El size de jugadoresParaApostarMas es " + jugadoresParaApostarMas.size());
- 		//ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
- 		for(int i = 0; i < jugadoresSimulados.length; i++) {
- 			//No activa al jugador humano, porque no es un hilo
- 			
- 			if(i != 4) {
- 				System.out.println("Prende el hilo del jugador " + i);
- 				//jugadoresSimulados[jugadoresParaApostarMas.get(i)].run();
- 				ejecutorHilos.execute(jugadoresSimulados[i]/*jugadoresParaApostarMas.get(i)]*/);
- 			}
- 		}
- 		ejecutorHilos.shutdown();
- 	}
+ 
   	//Método que sincroniza los cambios en componente gráficos con el hilo manejador de eventos
  	private void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
  		//Sincronizar con hilo manejador de eventos
