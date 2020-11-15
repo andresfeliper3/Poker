@@ -125,22 +125,28 @@ public class ControlPoker {
  	 				esperarTurno.await();
  	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
  	 			}
- 	 			int apuesta = calcularApuesta(idJugador, operacion);
- 	 			System.out.println("Este es el idJugador " + idJugador);
- 	 			setApuestasJugadores(idJugador - 1, apuesta);
- 	 			editarPanelJugador(idJugador - 1, apuesta);
- 	 			editarRegistros(1, nombreJugador, apuesta, operacion);
- 	 			System.out.println("Turno: " + turno);
- 	 			System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1) + " en total.");
+ 	 			
+ 	 			if(contadorTurnos < TOTAL_JUGADORES) {
+ 	 				int apuesta = calcularApuesta(idJugador, operacion);
+ 	 	 			System.out.println("Este es el idJugador " + idJugador);
+ 	 	 			setApuestasJugadores(idJugador - 1, apuesta);
+ 	 	 			editarPanelJugador(idJugador - 1, apuesta);
+ 	 	 			editarRegistros(1, nombreJugador, apuesta, operacion);
+ 	 	 			System.out.println("Turno: " + turno);
+ 	 	 			System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1) + " en total.");
+ 	 	 			System.out.println("ContadorTurnos aumentó a " + contadorTurnos);
+ 	 	 			aumentarTurno();	
+ 	 	 			 				
+ 	 			}	
  	 			contadorTurnos++;
- 	 			aumentarTurno();		
  	 			esperarTurno.signalAll();
  	 		} 
  	 		catch(InterruptedException e) {
  	 			e.printStackTrace();
  	 		}
  	 		finally {
- 	 			bloqueo.unlock();
+ 	 			
+ 	 			//Turno de usuario y no está repitiendo turno adicional ilegal
  	 			if(turno == 5 && contadorTurnos < TOTAL_JUGADORES) {
  	 				//humanoApuesta();
  	 				editarRegistros(2, "", -1, -1);
@@ -156,6 +162,7 @@ public class ControlPoker {
  	 				else {
 	 					//REVISAR QUIENES SON DIFERENTES Y 	SEGUIR UNA RONDA DE APUESTAS CON ELLOS
  	 					//Comienza ronda igualación
+ 	 					System.out.println("REVISAR EDITAR: idJugador es " + idJugador);
  	 					editarRegistros(3, "", -1, -1);			
  	 					ronda = 1;
  	 					//aumentarTurnosRondaIgualacion();
@@ -163,6 +170,7 @@ public class ControlPoker {
  	 								
  	 				}
  	 			}
+ 	 			bloqueo.unlock();
  	 		}
  	 	}
  		//Si estamos en la ronda de igualación de apuestas.
