@@ -48,6 +48,7 @@ public class ControlPoker {
 	private Lock bloqueo = new ReentrantLock(); //manejo de sincronizacion
 	private Condition esperarTurno = bloqueo.newCondition(); //manejo de sincronizacion	
 	private Condition esperarIgualacion = bloqueo.newCondition();
+	private Condition esperarDescarte = bloqueo.newCondition();
 	private ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); //PROBAR OTRO
 	private Random random;
 	
@@ -179,8 +180,8 @@ public class ControlPoker {
  	 	}
  		//Si estamos en la ronda de igualación de apuestas.
  		else if(ronda == 1) {
- 			try {
- 				bloqueo.lock();
+ 			bloqueo.lock();
+ 			try {	
  				System.out.println("Igualacion, Turno es " + turno);
  				System.out.println("igualacion, IdJugador es " + idJugador);
  				while(idJugador != turno) {
@@ -200,7 +201,7 @@ public class ControlPoker {
  				e.printStackTrace();
  			} 
  			finally {
- 				bloqueo.unlock();
+ 				
  				if(turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
  	 				//Avisar que puede igualar o retirarse
  	 				editarRegistros(6, "", -1, -1);
@@ -212,16 +213,17 @@ public class ControlPoker {
  		 				//PASAMOS A RONDA DE DESCARTE
  						editarRegistros(5, "", -1, -1);
  		 				ronda = 2;
- 		 				turno=jugadorManoAleatorio;
+ 		 				turno = jugadorManoAleatorio;
  		 			}
  	 				else {
  	 					JOptionPane.showMessageDialog(null, "ERROR: Las apuestas deberían estar iguales y no lo están. Reinicie");
  	 				}
  				}
+ 				bloqueo.unlock();
  			}
  		}
  		//Si estamos en la ronda de descartes
- 		else if(ronda ==2) {
+ 		else if(ronda == 2) {
  			System.out.println("Ronda de descartessssssssssssssssssssssssssssssssssssssssssssss");
  			//bloquear la clase
  			bloqueo.lock();
@@ -230,12 +232,12 @@ public class ControlPoker {
  				while(idJugador!=turno) {
  					System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a esperar turno");
  					
- 					esperarTurno.await();
+ 					esperarDescarte.await();
  				}
  				System.out.println("Soy "+ nombreJugador + " voy a descartar " +operacion + ", es el turno: " + turno);
  				descarte[turno-1]=operacion; //operación = cartas pedidas
  				turno++;
- 				esperarTurno.signalAll();
+ 				esperarDescarte.signalAll();
  			}catch(InterruptedException e) {
  				e.printStackTrace();
  			}finally {

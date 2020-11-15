@@ -55,7 +55,7 @@ public class JugadorSimulado implements Runnable {
 		// TODO Auto-generated method stub
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
- 		while(controlPoker.getRonda() < 2) {
+ 		while(controlPoker.getRonda() < 3) {
  			//Si están en ronda de apuestas
  	 		//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
@@ -103,6 +103,7 @@ public class JugadorSimulado implements Runnable {
  	 		//Si están en ronda de descarte
  	 		else if(controlPoker.getRonda() == 2) {
  	 			//Escoge la cantidad de cartas que va a descartar
+ 	 			System.out.println("Ronda 2 de jugador simulado " + nombre);
  	 	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  	 			//escogerDescarte(cantidadDescarte);
