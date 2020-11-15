@@ -68,10 +68,53 @@ public class MesaJuego extends JPanel {
 		
 		
 	}
-	
+	//actualiza la mesa con el estado actual del juego
+		public void mesaActualizar(List<List<Carta>> manosJugadores, int ganador) {
+			//determinarResultado(manosJugadores);
+			if(ganador==0) {
+				jugador1.recibirCartas(manosJugadores.get(0),"Ganaste");
+				jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+				jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+				jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+				jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+			}else {
+				if(ganador==1) {
+					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+					jugador2.recibirCartas(manosJugadores.get(1),"Ganaste");
+					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+				}else  if(ganador==2){
+					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+					jugador3.recibirCartas(manosJugadores.get(2),"Ganaste");
+					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+				}else if(ganador==3) {
+					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+					jugador4.recibirCartas(manosJugadores.get(3),"Ganaste");
+					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+					
+				}else {
+					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+					jugador5.recibirCartas(manosJugadores.get(4),"Ganaste");
+				}
+			}
+		}
 	public PanelJugador getJugadorHumano() {
 		return jugador5;
 	}
+	
+	//Retorna la mano del jugador usuario
+	public List<Carta> getManoHumano(){
+		return jugador5.getMano();
+	}
+	
 	public void setPanelJugador(int jugador, int apuesta) {
 		System.out.println("Mesa de juego, JUGADOR NUMERO " + jugador);
 		//System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
