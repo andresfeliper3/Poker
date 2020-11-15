@@ -105,10 +105,12 @@ public class JugadorSimulado implements Runnable {
  	 			//Escoge la cantidad de cartas que va a descartar
  	 	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
- 	 			escogerDescarte(cantidadDescarte);
+ 	 			//escogerDescarte(cantidadDescarte);
+ 	 	 		controlPoker.turnos(turnoId,nombre, cantidadDescarte,this);
+ 	 	 		}
  	 			//controlPoker.turnos(turnoId, descarte, nombre);
  	 			System.out.println("Hilo "+ nombre +" termina "+descarte);
- 	 		}
+ 	 		
  	 		
  		}
  	}	

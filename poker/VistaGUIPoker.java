@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import java.util.List;
@@ -157,7 +158,7 @@ public class VistaGUIPoker extends JFrame {
 					break;
 			}
 		}
-		//Avisa que es el turno del usuario en la ronda de apuestas
+		//Avisa que es el turno del usuario en la ronda de Descartes
 		else if(fase == 2) {
 			panelRegistros.append("Es tu turno, " + nombreJugadorHumano + ". Puedes aumentar, igualar o retirarte.\n");
 		} 
@@ -189,6 +190,22 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 6) {
 			panelRegistros.append("Es tu turno " + nombreJugadorHumano + ". Puedes igualar o retirarte.\n");
 		}
+		
+	}
+	
+	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador) {
+		//debe llamarse cuanto el control tenga las nuevas manos y el resultado
+		mesaJuego.mesaActualizar(manosJugadores,ganador);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				//otraRonda.setVisible(true);
+			}
+			
+		});
+		
 		
 	}
 	
@@ -265,7 +282,7 @@ public class VistaGUIPoker extends JFrame {
 			//Ronda de descarte
 			else if(controlPoker.getRonda() == 2) {
 				if(e.getSource() == descartar) {
-					
+					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
 				}
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está disponible");

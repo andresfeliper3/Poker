@@ -7,10 +7,12 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 public class PanelJugador extends JPanel {
@@ -86,10 +88,52 @@ public class PanelJugador extends JPanel {
 		panelApuesta.removeAll();
 		panelApuesta.add(apuesta);	
 	}
+	  public void recibirCartas(List<Carta> nuevasCartas, String texto) {
+		  SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mano=nuevasCartas;
+				actualizarPanelMano();
+				mensaje.setText(texto);
+				panelMano.revalidate();	
+			    panelMano.repaint();
+			}
+			   
+		   });
+	   }
 
 	public List<Carta> getMano() {
 		  return mano; 
 	}
+	
+	public void desactivarEscuchas() {
+		   SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for(Carta carta : mano) {
+					carta.removeMouseListener(escucha);
+				}
+			}		   
+		   });
+	   }
+	   
+	 public void activarEscuchas() {
+		   SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				for(Carta carta : mano) {
+					carta.addMouseListener(escucha);
+				}
+			}		   
+		   });   
+	   }
+	   
 	public String getNombre() {
 		return nombre.getText();
 	}
@@ -97,14 +141,32 @@ public class PanelJugador extends JPanel {
 		this.valorApuesta = valorApuesta;
 		apuesta.setText("$" + String.valueOf(valorApuesta));
 	}
+	//elimina de la mesa de juego, la carta seleccionada
+	   private void eliminarCarta(Carta cartaEliminar) { 
+		   mano = Collections.synchronizedList(mano);
+		   synchronized (mano){
+			   for(int i=0;i<mano.size();i++) {
+				 if(cartaEliminar.getValor()==mano.get(i).getValor() && cartaEliminar.getPalo()==mano.get(i).getPalo() ) {
+					 mano.remove(i);
+				 }   
+			   }
+			   
+		   }
+	   }
  	private class Escucha extends MouseAdapter {
  		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
-			Carta carta = (Carta)e.getSource();
-			System.out.println("Presionaste la carta: " + carta.toString());
-			System.out.println("Las dimensiones de " + nombre.getText() + " son: width " + getWidth() + ", height " + getHeight());
+			Carta cartaEliminar = (Carta)e.getSource();
+			
+			eliminarCarta(cartaEliminar);
+			actualizarPanelMano();
+			panelMano.revalidate();
+			panelMano.repaint();
+			
+			System.out.println("Presionaste la carta: " + cartaEliminar.toString());
+			System.out.println("Descartó " + nombre.getText() + " son: width " + getWidth() + ", height " + getHeight());
 		}	
 	}
 }
