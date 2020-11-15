@@ -34,7 +34,8 @@ public class ControlPoker {
 	 * 0: ronda de apuestas
 	 * 1: ronda de igualación
 	 * 2: ronda de descarte
-	 * 3: ronda de definición*/
+	 * 3: ronda de apuestas 2
+	 * 4: ronda de definición*/
 	private int ronda = 0;
 	private int jugadorManoAleatorio; 
 	//variables para el manejo de hilos
