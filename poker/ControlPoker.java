@@ -165,7 +165,7 @@ public class ControlPoker {
  	 			}
  	 		}
  	 	}
- 		//Si estamos en la ronda de igualación de apuestas
+ 		//Si estamos en la ronda de igualación de apuestas.
  		else if(ronda == 1) {
  			try {
  				bloqueo.lock();
