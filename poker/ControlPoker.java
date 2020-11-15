@@ -146,7 +146,6 @@ public class ControlPoker {
  	 			e.printStackTrace();
  	 		}
  	 		finally {
- 	 			
  	 			//Turno de usuario y no está repitiendo turno adicional ilegal
  	 			if(turno == 5 && contadorTurnos < TOTAL_JUGADORES) {
  	 				//humanoApuesta();
@@ -165,9 +164,9 @@ public class ControlPoker {
  	 					//Comienza ronda igualación
  	 					System.out.println("REVISAR EDITAR: idJugador es " + idJugador);
  	 					editarRegistros(3, "", -1, -1);			
+ 	 					//Paso a ronda de igualación
  	 					ronda = 1;
- 	 					//aumentarTurnosRondaIgualacion();
- 	 				//	rondaIgualarApuestas();
+ 	 					aumentarTurnosRondaIgualacion();
  	 								
  	 				}
  	 			}
@@ -183,7 +182,6 @@ public class ControlPoker {
  				while(idJugador != turno) {
  					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir");
  					esperarIgualacion.await();
- 					//jugadorSimulado.run();
  				}
  				int apuesta = calcularApuesta(idJugador, operacion);
  				setApuestasJugadores(idJugador - 1, apuesta);

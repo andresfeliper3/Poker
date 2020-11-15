@@ -55,12 +55,12 @@ public class JugadorSimulado implements Runnable {
 		// TODO Auto-generated method stub
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
- 		while(controlPoker.getRonda() < 1) {
+ 		while(controlPoker.getRonda() < 2) {
  			//Si están en ronda de apuestas
  	 		//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
  			//Probabilidad de retirarse: 25%
- 				int probabilidad = random.nextInt(100) + 1;
+ 			int probabilidad = random.nextInt(100) + 1;
  	 		if(controlPoker.getRonda() == 0) {	
  	 			int factorAumento = 1;
  	 			//igualar
@@ -85,7 +85,7 @@ public class JugadorSimulado implements Runnable {
  	 		}
  	 		//Ronda de igualación de apuestas
  	 		else if(controlPoker.getRonda() == 1) {
- 	 			System.out.println("Entra a igualación del jugador " + nombre);
+ 	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
  	 			//igualar
  	 			if(probabilidad <= 70) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
