@@ -44,7 +44,7 @@ public class ControlPoker {
 	private int jugadorManoAleatorio; 
 	//variables para el manejo de hilos
 	private int turno; //variable de control de turno hilos, 1-5
-	private int[] descarte = new int[TOTAL_JUGADORES-1]; //AÚN NO SÉ PARA QUÉ ES XD
+	private int[] descarte = new int[TOTAL_JUGADORES-1];
 	private Lock bloqueo = new ReentrantLock(); //manejo de sincronizacion
 	private Condition esperarTurno = bloqueo.newCondition(); //manejo de sincronizacion	
 	private Condition esperarIgualacion = bloqueo.newCondition();
@@ -89,7 +89,7 @@ public class ControlPoker {
 	//Escoge al azar al jugador mano (inicial) escogiendo el turno
  	private void escogerJugadorMano() {
  		random = new Random();
-		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
 		iniciarJugadoresSimulados();
 		//Decirle al jugador lo que debe hacer si es el jugador mano
@@ -118,6 +118,7 @@ public class ControlPoker {
 
  	
  	int contadorIgualacion = 0;
+ 	int contadorDescarte = 0;
 	//Método sincronizador de turnos
  	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado) {
  		//Si está en la ronda de apuestas
@@ -169,7 +170,6 @@ public class ControlPoker {
  	 					//Comienza ronda igualación
  	 					System.out.println("REVISAR EDITAR: idJugador es " + idJugador);
  	 					editarRegistros(3, "", -1, -1);			
-
  	 					//Paso a ronda de igualación
  	 					ronda = 1;
  	 					aumentarTurnosRondaIgualacion();				
@@ -201,7 +201,7 @@ public class ControlPoker {
  				e.printStackTrace();
  			} 
  			finally {
- 				
+ 				//Mostrar en registro que le toca al usuario
  				if(turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
  	 				//Avisar que puede igualar o retirarse
  	 				editarRegistros(6, "", -1, -1);
@@ -214,6 +214,7 @@ public class ControlPoker {
  						editarRegistros(5, "", -1, -1);
  		 				ronda = 2;
  		 				turno = jugadorManoAleatorio;
+ 		 				System.out.println("La ronda ahora es " + ronda + " y el turno es para " + turno);
  		 			}
  	 				else {
  	 					JOptionPane.showMessageDialog(null, "ERROR: Las apuestas deberían estar iguales y no lo están. Reinicie");
@@ -229,20 +230,20 @@ public class ControlPoker {
  			bloqueo.lock();
  			try{
  				//Validar condición de ejecución para el hilo
- 				while(idJugador!=turno) {
- 					System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a esperar turno");
- 					
+ 				while(idJugador!= turno) {
+ 					System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");				
  					esperarDescarte.await();
  				}
  				System.out.println("Soy "+ nombreJugador + " voy a descartar " +operacion + ", es el turno: " + turno);
- 				descarte[turno-1]=operacion; //operación = cartas pedidas
- 				turno++;
+ 				descarte[turno - 2] = operacion; //operación = cartas pedidas
+ 				contadorDescarte++;
+ 				aumentarTurno();
  				esperarDescarte.signalAll();
  			}catch(InterruptedException e) {
  				e.printStackTrace();
  			}finally {
  				bloqueo.unlock();
- 				if(turno==5) {
+ 				if(contadorDescarte == TOTAL_JUGADORES) {
  					darCartas();
  				}
  			}
@@ -296,13 +297,12 @@ public class ControlPoker {
 	//Calcula cuántas cartas debe darle a cada jugador luego del descarte
 	private void asignarCartas(List<Carta> manoJugador) {
 		// TODO Auto-generated method stub
-		
+		//Si le faltan cartad
 		if(manoJugador.size()<5) {
 			int numeroCartas = ControlPoker.NUMERO_CARTAS_MANO - manoJugador.size(); //Número de cartas que debe pedir
 			 System.out.println(" NECESITO " + numeroCartas + "PORQUE SOLO TENGO: "+ manoJugador.size());
 			for(int i=0; i < numeroCartas ;i++) {
 				manoJugador.add(baraja.getCarta());
-
 			}
 		}
 	}

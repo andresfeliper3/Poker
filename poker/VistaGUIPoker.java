@@ -283,6 +283,7 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 2) {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
+					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null);
 				}
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está disponible");
