@@ -158,7 +158,7 @@ public class ControlPoker {
  	 					//Comienza ronda igualación
  	 					editarRegistros(3, "", -1, -1);			
  	 					ronda = 1;
- 	 					aumentarTurnosRondaIgualacion();
+ 	 					//aumentarTurnosRondaIgualacion();
  	 				//	rondaIgualarApuestas();
  	 								
  	 				}

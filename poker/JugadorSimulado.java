@@ -55,7 +55,7 @@ public class JugadorSimulado implements Runnable {
 		// TODO Auto-generated method stub
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
- 		while(controlPoker.getRonda() < 2) {
+ 		while(controlPoker.getRonda() < 1) {
  			//Si están en ronda de apuestas
  	 		//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
