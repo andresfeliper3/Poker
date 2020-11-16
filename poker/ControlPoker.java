@@ -147,12 +147,7 @@ public class ControlPoker {
  	 			}	
  	 			contadorTurnos++;
  	 			esperarTurno.signalAll();
- 	 		} 
- 	 		catch(InterruptedException e) {
- 	 			e.printStackTrace();
- 	 		}
- 	 		finally {
- 	 			//Turno de usuario y no está repitiendo turno adicional ilegal
+ 	 		//Turno de usuario y no está repitiendo turno adicional ilegal
  	 			if(turno == 5 && contadorTurnos < TOTAL_JUGADORES) {
  	 				//humanoApuesta();
  	 				editarRegistros(2, "", -1, -1);
@@ -162,6 +157,7 @@ public class ControlPoker {
  	 			if(contadorTurnos == TOTAL_JUGADORES) {					
  	 				if(revisarApuestasIguales()) {
  	 					//PASAMOS A RONDA DE DESCARTE
+ 	 					System.out.println("pasamos a ronda de descarte");
  	 					editarRegistros(5, "", -1, -1);
  	 					ronda = 2;
  	 				}
@@ -175,6 +171,12 @@ public class ControlPoker {
  	 					aumentarTurnosRondaIgualacion();				
  	 				}
  	 			}
+ 	 		} 
+ 	 		catch(InterruptedException e) {
+ 	 			e.printStackTrace();
+ 	 		}
+ 	 		finally {
+ 	 			
  	 			bloqueo.unlock();
  	 		}
  	 	}
@@ -225,6 +227,7 @@ public class ControlPoker {
  			}
  		}
  		//Si estamos en la ronda de descartes
+ 		/*
  		else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) {
  			System.out.println("Ronda de descartessssssssssssssssssssssssssssssssssssssssssssss");
  			//bloquear la clase
@@ -248,8 +251,9 @@ public class ControlPoker {
  				if(contadorDescarte == TOTAL_JUGADORES) {
  					darCartas();
  				}
- 			}
+ 			}	
  		}
+ 		*/
  	}
  	
  	private void darCartas() {
@@ -375,6 +379,7 @@ public class ControlPoker {
  				System.out.println("El jugador " + jugadorIndex + " con apuesta " + apuestasJugadores.get(jugadorIndex) + " y apuesta max es " + Collections.max(apuestasJugadores));
  				if(!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))) {
  	 				//Se añade el índice (número de jugador) de la apuesta en apuestasJugadores que es diferente
+ 					System.out.println("Se añade a jugadoresParaApostarMas a jugador " + jugadorIndex + ", con apuesta de " + apuestasJugadores.get(jugadorIndex) + " y max " + Collections.max(apuestasJugadores));
  	 				jugadoresParaApostarMas.add(jugadorIndex);		
  	 				iguales = false;
  	 			}

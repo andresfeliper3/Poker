@@ -102,6 +102,7 @@ public class JugadorSimulado implements Runnable {
  	 		}
  	 		//TODAVÍA NO ESTÁ ENTRANDO AQUÍ
  	 		//Si están en ronda de descarte
+ 	 		/*/
  	 		else if(controlPoker.getRonda() == 2) {
  	 			//Escoge la cantidad de cartas que va a descartar
  	 			System.out.println("Ronda 2 de jugador simulado " + nombre);
@@ -111,7 +112,7 @@ public class JugadorSimulado implements Runnable {
  	 	 		controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
  	 	 	}
  	 		System.out.println("Hilo "+ nombre +" termina "+descarte);
- 	 		
+ 	 		*/
  	 		
  		}
  	}	
