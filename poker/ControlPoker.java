@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 public class ControlPoker {
 	public static final int NUMERO_CARTAS_MANO = 5;
 	public static final int TOTAL_JUGADORES = 5;
-	public static final String[] NOMBRE_JUGADORES = {"Duque","Dilan", "Petrosky", "Kaku"};
+	public static final String[] NOMBRE_JUGADORES = {"Duque","Uribe", "Petrosky", "Kaku"};
 	private JugadorSimulado jugador1, jugador2, jugador3, jugador4;
 	private JugadorSimulado[] jugadoresSimulados = new JugadorSimulado[TOTAL_JUGADORES - 1];
 	//Vista GUI
@@ -44,7 +44,7 @@ public class ControlPoker {
 	private int jugadorManoAleatorio; 
 	//variables para el manejo de hilos
 	private int turno; //variable de control de turno hilos, 1-5
-	private int[] descarte = new int[TOTAL_JUGADORES-1];
+	private int[] descarte = new int[TOTAL_JUGADORES];
 	private Lock bloqueo = new ReentrantLock(); //manejo de sincronizacion
 	private Condition esperarTurno = bloqueo.newCondition(); //manejo de sincronizacion	
 	private Condition esperarIgualacion = bloqueo.newCondition();
@@ -89,7 +89,7 @@ public class ControlPoker {
 	//Escoge al azar al jugador mano (inicial) escogiendo el turno
  	private void escogerJugadorMano() {
  		random = new Random();
-		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
 		iniciarJugadoresSimulados();
 		//Decirle al jugador lo que debe hacer si es el jugador mano
@@ -128,7 +128,7 @@ public class ControlPoker {
  	 		try {
  	 			//Mientras el jugador que entre no sea el que correponda, se duerme
  	 			while(idJugador != turno) {		
- 	 				System.out.println("Jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
+ 	 				System.out.println("En apuestas jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno");
  	 				esperarTurno.await();
  	 				//Se vuelve a llamar al método run para que el jugador simulado tome su decisión con las apuestas recientes
  	 			}
@@ -201,6 +201,7 @@ public class ControlPoker {
  				e.printStackTrace();
  			} 
  			finally {
+ 				bloqueo.unlock();
  				//Mostrar en registro que le toca al usuario
  				if(turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
  	 				//Avisar que puede igualar o retirarse
@@ -212,36 +213,37 @@ public class ControlPoker {
  					if(revisarApuestasIguales()) {
  		 				//PASAMOS A RONDA DE DESCARTE
  						editarRegistros(5, "", -1, -1);
- 		 				ronda = 2;
  		 				turno = jugadorManoAleatorio;
+ 		 				ronda = 2;
  		 				System.out.println("La ronda ahora es " + ronda + " y el turno es para " + turno);
  		 			}
  	 				else {
  	 					JOptionPane.showMessageDialog(null, "ERROR: Las apuestas deberían estar iguales y no lo están. Reinicie");
  	 				}
  				}
- 				bloqueo.unlock();
+ 				
  			}
  		}
  		//Si estamos en la ronda de descartes
- 		else if(ronda == 2) {
+ 		else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) {
  			System.out.println("Ronda de descartessssssssssssssssssssssssssssssssssssssssssssss");
  			//bloquear la clase
  			bloqueo.lock();
  			try{
  				//Validar condición de ejecución para el hilo
+ 				System.out.println("Ronda 2: idJugador " + idJugador + " y turno " + turno);
  				while(idJugador!= turno) {
  					System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");				
  					esperarDescarte.await();
  				}
  				System.out.println("Soy "+ nombreJugador + " voy a descartar " +operacion + ", es el turno: " + turno);
- 				descarte[turno - 2] = operacion; //operación = cartas pedidas
+ 				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
  				contadorDescarte++;
  				aumentarTurno();
  				esperarDescarte.signalAll();
  			}catch(InterruptedException e) {
  				e.printStackTrace();
- 			}finally {
+ 			}finally {	
  				bloqueo.unlock();
  				if(contadorDescarte == TOTAL_JUGADORES) {
  					darCartas();
@@ -253,29 +255,30 @@ public class ControlPoker {
  	private void darCartas() {
 		// TODO Auto-generated method stub
 		// Cartas para los jugadores Simulados
-		for(int i=0;i<4;i++) { 
+ 		System.out.println("Entró a darCartas");
+		for(int i = 0;i < TOTAL_JUGADORES;i++) { 
 
-				 if(descarte[i]==5) {
+				 if(descarte[i] == 5) {
 					 
 					manosJugadores.get(i).clear(); //Borra el mazo
 					 
-				 }else if(descarte[i]==4) {
+				 }else if(descarte[i] == 4) {
 					 
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 					 
-				 }else if(descarte[i]==3) {
+				 }else if(descarte[i] == 3) {
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 					 
-				 }else if(descarte[i]==2) {
+				 }else if(descarte[i] == 2) {
 					 manosJugadores.get(i).remove(0);
 					 manosJugadores.get(i).remove(0);
 
-				 }else if(descarte[i]==1) {
+				 }else if(descarte[i] == 1) {
 					 manosJugadores.get(i).remove(0);;
 				 }
 				 asignarCartas(manosJugadores.get(i));
