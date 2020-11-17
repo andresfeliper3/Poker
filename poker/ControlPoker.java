@@ -31,6 +31,7 @@ public class ControlPoker {
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
 	private boolean jugar = true;
+	private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
 	 * ronda de apuestas 2 4: ronda de definición 3: segunda ronda de apuestas 4:
@@ -220,29 +221,53 @@ public class ControlPoker {
 								"ERROR: Las apuestas deberían estar iguales y no lo están. Reinicie");
 					}
 				}			
-			}		
+			}
+			//Ronda Descartes
+			else if(ronda==2 && contadorDescarte <TOTAL_JUGADORES) {
+				System.out.println("Ronda de descartes");
+				System.out.println("Ronda 2: idJugador " + idJugador +" y turno " + turno);
+				while(idJugador!= turno) {
+					  System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");
+					  esperarDescarte.await(); 
+				} 
+				System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
+				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
+				contadorDescarte++; aumentarTurno();
+				esperarDescarte.signalAll();
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
 			bloqueo.unlock();
+			if(contadorDescarte==TOTAL_JUGADORES) {
+				darCartas();
+			}
 		}
 	}
 
 	// Si estamos en la ronda de descartes
 	/*
-	 * else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) { System.out.
-	 * println("Ronda de descartessssssssssssssssssssssssssssssssssssssssssssss");
-	 * //bloquear la clase bloqueo.lock(); try{ //Validar condición de ejecución
-	 * para el hilo System.out.println("Ronda 2: idJugador " + idJugador +
-	 * " y turno " + turno); while(idJugador!= turno) {
-	 * System.out.println("Jugador "
-	 * +nombreJugador+" intenta entrar y es mandado a MIMIRRR");
-	 * esperarDescarte.await(); } System.out.println("Soy "+ nombreJugador +
-	 * " voy a descartar " +operacion + ", es el turno: " + turno);
+	 * else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) { 
+	 * System.out.println("Ronda de descartes");
+	 * //bloquear la clase 
+	 * try{ //Validar condición de ejecución para el hilo 
+	 * System.out.println("Ronda 2: idJugador " + idJugador +" y turno " + turno); 
+	 * while(idJugador!= turno) {
+	 * System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");
+	 * esperarDescarte.await(); 
+	 * } 
+	 * 
+	 * System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
 	 * descarte[idJugador - 1] = operacion; //operación = cartas pedidas
-	 * contadorDescarte++; aumentarTurno(); esperarDescarte.signalAll();
-	 * }catch(InterruptedException e) { e.printStackTrace(); }finally {
-	 * bloqueo.unlock(); if(contadorDescarte == TOTAL_JUGADORES) { darCartas(); } }
+	 * contadorDescarte++; aumentarTurno(); 
+	 * esperarDescarte.signalAll();
+	 * }catch(InterruptedException e) { 
+	 * 		e.printStackTrace(); 
+	 * }
+	 * finally {
+	 * bloqueo.unlock(); 
+	 * if(contadorDescarte == TOTAL_JUGADORES) { 
+	 * 		darCartas(); } }
 	 * }
 	 */
 	
