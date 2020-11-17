@@ -22,7 +22,8 @@ public class JugadorSimulado implements Runnable {
 	 * 2: retirarse
 	 * */
 	private int operacion;
-	private boolean enRondaDeApuestas = true;
+	private boolean jugar = true;
+	private boolean enRondaDeApuestas = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
@@ -56,15 +57,33 @@ public class JugadorSimulado implements Runnable {
 		// TODO Auto-generated method stub
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
- 		while(controlPoker.getJugar()) {
+ 		while(jugar) {
  			//System.out.println("En ronda " + controlPoker.getRonda() + " entra el jugador simulado " + nombre);
  			//Si están en ronda de apuestas
  	 		//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
  			//Probabilidad de retirarse: 25%
  			int probabilidad = random.nextInt(100) + 1;
- 	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
- 	 			int factorAumento = 1;
+ 			
+ 	 		if(controlPoker.getRonda() == 1) {
+ 	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
+ 	 			System.out.println("ronda " + controlPoker.getRonda());
+ 	 			//igualar
+ 	 			if(probabilidad <= 70) {
+ 	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
+ 	 				operacion = 0;
+ 	 			} 
+ 	 			//retirarse
+ 	 			else {
+ 	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
+ 	 				operacion = 2;
+ 	 				retirado = true;
+ 	 			}
+ 	 			controlPoker.turnos(turnoId, nombre, operacion, this);
+ 	 			jugar = false;
+ 	 		}
+ 	 		//Ronda de igualación de apuestas
+ 	 		else if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
  	 			//igualar
  	 			if(probabilidad <= 50) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
@@ -88,38 +107,24 @@ public class JugadorSimulado implements Runnable {
  	 			System.out.println("Antes de ejecutar turnos, jugador " + nombre);
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
  	 			System.out.println("Después de ejecutar turnos, jugador" + nombre);
+ 	 			
  	 		}
- 	 		//Ronda de igualación de apuestas
- 	 		else if(controlPoker.getRonda() == 1) {
- 	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
- 	 			//igualar
- 	 			if(probabilidad <= 70) {
- 	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
- 	 				operacion = 0;
- 	 			} 
- 	 			//retirarse
- 	 			else {
- 	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
- 	 				operacion = 2;
- 	 				retirado = true;
- 	 			}
- 	 			controlPoker.turnos(turnoId, nombre, operacion, this);
- 	 		}
- 	 		//TODAVÍA NO ESTÁ ENTRANDO AQUÍ
- 	 		//Si están en ronda de descarte
- 	 		/*/
- 	 		else if(controlPoker.getRonda() == 2) {
- 	 			//Escoge la cantidad de cartas que va a descartar
- 	 			System.out.println("Ronda 2 de jugador simulado " + nombre);
- 	 	 		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
- 	 	 		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
- 	 			//escogerDescarte(cantidadDescarte);
- 	 	 		controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
- 	 	 	}
- 	 		System.out.println("Hilo "+ nombre +" termina "+descarte);
- 	 		*/
  	 		
- 		}
+ 		} 
  	}	
 
 }
+
+//TODAVÍA NO ESTÁ ENTRANDO AQUÍ
+	//Si están en ronda de descarte
+	/*/
+	else if(controlPoker.getRonda() == 2) {
+		//Escoge la cantidad de cartas que va a descartar
+		System.out.println("Ronda 2 de jugador simulado " + nombre);
+		cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
+		//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
+		//escogerDescarte(cantidadDescarte);
+		controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
+	}
+	System.out.println("Hilo "+ nombre +" termina "+descarte);
+	*/
