@@ -25,7 +25,7 @@ public class JugadorSimulado implements Runnable {
 	private boolean jugar = true;
 	private boolean enRondaDeApuestas = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	private boolean enRondaDeIgualacion = true; //Controla que un jugador no entre dos veces seguidas a turnos.
-	
+	private boolean enRondaDeDescarte = true;
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
 		this.turnoId = turnoId;
@@ -59,7 +59,7 @@ public class JugadorSimulado implements Runnable {
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
  		while(jugar) {
- 			System.out.println("En ronda " + controlPoker.getRonda() + " entra el jugador simulado " + nombre);
+ 			//System.out.println("En ronda " + controlPoker.getRonda() + " entra el jugador simulado " + nombre);
  			//Si están en ronda de apuestas
  	 		//Probabilidad de aumentar: 25%
  			//Probabilidad de igualar: 50%	
@@ -108,19 +108,22 @@ public class JugadorSimulado implements Runnable {
  	 				operacion = 2;
  	 				retirado = true;
  	 			}
- 	 			enRondaDeIgualacion=false;
+ 	 			enRondaDeIgualacion = false;
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
- 	 			jugar = false;
+ 	 			
  	 		}
  	 		//Ronda de descartes
- 	 		else if(controlPoker.getRonda() == 2) {
+ 	 		else if(controlPoker.getRonda() == 2 && enRondaDeDescarte) {
  	 			//Escoge la cantidad de cartas que va a descartar
- 	 			System.out.println("Ronda 2 de jugador simulado " + nombre);
+ 	 			System.out.println("Run: Ronda 2 de jugador simulado " + nombre);
  	 			cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 			//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  	 			//escogerDescarte(cantidadDescarte);
+ 	 			enRondaDeDescarte = false;
+ 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
  	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
- 	 			jugar=false;
+ 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
+ 	 			jugar = false;
  	 		}
  	 		
  	 		

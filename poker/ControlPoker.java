@@ -30,7 +30,6 @@ public class ControlPoker {
 	private int apuestaInicial = 500;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
-	private boolean jugar = true;
 	private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -139,7 +138,7 @@ public class ControlPoker {
 
 				if (contadorTurnos < TOTAL_JUGADORES) {
 					int apuesta = calcularApuesta(idJugador, operacion);
-					System.out.println("Este es el idJugador " + idJugador);
+					System.out.println("Apuestas: Este es el idJugador " + idJugador);
 					setApuestasJugadores(idJugador - 1, apuesta);
 					editarPanelJugador(idJugador - 1, apuesta);
 					editarRegistros(1, nombreJugador, apuesta, operacion);
@@ -158,7 +157,7 @@ public class ControlPoker {
 					editarRegistros(2, "", -1, -1);
 				}
 				System.out.println(
-						"Contador de turnos es " + contadorTurnos + " y 	|	 " + TOTAL_JUGADORES);
+						"Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
 				if (contadorTurnos == TOTAL_JUGADORES) {
 					if (revisarApuestasIguales()) {
@@ -173,20 +172,20 @@ public class ControlPoker {
 						editarRegistros(3, "", -1, -1);
 						// Paso a ronda de igualación
 						ronda = 1;
-						jugar = false;
 						aumentarTurnosRondaIgualacion();
 					}
 				}
 			}
 			// Si estamos en la ronda de igualación de apuestas.
-			else if (ronda == 1) {
+			else if (ronda == 1 /*&& contadorIgualacion < jugadoresParaApostarMas.size()*/ && jugadoresParaApostarMas.contains(idJugador -1)) {
 				System.out.println("Igualacion, Turno es " + turno);
 				System.out.println("igualacion, IdJugador es " + idJugador);
 				while (idJugador != turno) {
 					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir");
+					System.out.println("IdJugador " + idJugador + ", turno " + turno);
 					esperarIgualacion.await();
 				}
-				if(contadorIgualacion < jugadoresParaApostarMas.size()) {
+				//if(contadorIgualacion < jugadoresParaApostarMas.size()) {
 					int apuesta = calcularApuesta(idJugador, operacion);
 					setApuestasJugadores(idJugador - 1, apuesta);
 					editarPanelJugador(idJugador - 1, apuesta);
@@ -194,10 +193,8 @@ public class ControlPoker {
 					aumentarTurnosRondaIgualacion();
 					System.out.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de "
 							+ apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
-				}
-				
-				contadorIgualacion++;
-				
+				//}		
+				contadorIgualacion++;	
 				esperarIgualacion.signalAll();
 				
 				// Mostrar en registro que le toca al usuario
@@ -213,8 +210,7 @@ public class ControlPoker {
 						// PASAMOS A RONDA DE DESCARTE
 						editarRegistros(5, "", -1, -1);
 						turno = jugadorManoAleatorio;
-						ronda = 2;
-						jugar = false;
+						ronda = 2;		
 						System.out.println("La ronda ahora es " + ronda + " y el turno es para " + turno);
 					} else {
 						JOptionPane.showMessageDialog(null,
@@ -223,24 +219,29 @@ public class ControlPoker {
 				}			
 			}
 			//Ronda Descartes
-			else if(ronda==2 && contadorDescarte <TOTAL_JUGADORES) {
+			else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) {
 				System.out.println("Ronda de descartes");
 				System.out.println("Ronda 2: idJugador " + idJugador +" y turno " + turno);
-				while(idJugador!= turno) {
-					  System.out.println("Jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");
+				while(idJugador != turno) {
+					  System.out.println("En descarte jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");
 					  esperarDescarte.await(); 
 				} 
 				System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
 				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
 				contadorDescarte++; 
+				System.out.println("contadorDescarte aumentó a " + contadorDescarte);
 				aumentarTurno();
+				System.out.println("En descarte, turno aumenta a " + turno);
 				esperarDescarte.signalAll();
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
+			System.out.println("BLOQUEO UNLOCK");
 			bloqueo.unlock();
-			if(contadorDescarte==TOTAL_JUGADORES) {
+			System.out.println("ContadorDescarte es " + contadorDescarte + " y total jugadores es " + TOTAL_JUGADORES);	
+			if(contadorDescarte == TOTAL_JUGADORES) {
+				System.out.println("Próximo a ejecutar darCartas");
 				darCartas();
 			}
 		}
@@ -443,9 +444,7 @@ public class ControlPoker {
 		manosJugadores.add(manoJugadorHumano); // se agrega la mano nueva
 
 	}
-	public boolean getJugar() {
-		return jugar;
-	}
+
 	public void setApuestasJugadores(int indexJugador, int apuesta) {
 		apuestasJugadores.set(indexJugador, apuesta);
 	}
