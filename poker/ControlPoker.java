@@ -232,7 +232,8 @@ public class ControlPoker {
 				} 
 				System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
 				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
-				contadorDescarte++; aumentarTurno();
+				contadorDescarte++; 
+				aumentarTurno();
 				esperarDescarte.signalAll();
 			}
 		} catch (InterruptedException e) {

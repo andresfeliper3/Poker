@@ -24,6 +24,7 @@ public class JugadorSimulado implements Runnable {
 	private int operacion;
 	private boolean jugar = true;
 	private boolean enRondaDeApuestas = true; //Controla que un jugador no entre dos veces seguidas a turnos.
+	private boolean enRondaDeIgualacion = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
@@ -93,7 +94,7 @@ public class JugadorSimulado implements Runnable {
  	
  	 		}
  	 		//Ronda de igualacion
- 	 		else if(controlPoker.getRonda() == 1) {
+ 	 		else if(controlPoker.getRonda() == 1 && enRondaDeIgualacion) {
  	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
  	 			System.out.println("ronda " + controlPoker.getRonda());
  	 			//igualar
@@ -107,6 +108,7 @@ public class JugadorSimulado implements Runnable {
  	 				operacion = 2;
  	 				retirado = true;
  	 			}
+ 	 			enRondaDeIgualacion=false;
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
  	 			jugar = false;
  	 		}
