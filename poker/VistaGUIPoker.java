@@ -245,7 +245,16 @@ public class VistaGUIPoker extends JFrame {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
 					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
-					JOptionPane.showMessageDialog(panelBotones, "Perdiste");				}
+					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
+					//Pregunta si el usuario quiere seguir jugando
+					if(option == JOptionPane.YES_OPTION) {
+						//reiniciar juego
+						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
+					}
+					else if(option == JOptionPane.NO_OPTION) {
+						System.exit(0);
+					}
+				}
 				//Descartar
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Esta opción aún no está disponible.");
