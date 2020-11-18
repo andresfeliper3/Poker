@@ -281,26 +281,30 @@ public class ControlPoker {
 		for (int i = 0; i < TOTAL_JUGADORES; i++) {
 
 			if (descarte[i] == 5) {
-
+				System.out.println("HOLA ENTRÉ A QUITAR 5 CARTAS y es el turno" + turno);
 				manosJugadores.get(i).clear(); // Borra el mazo
 
 			} else if (descarte[i] == 4) {
-
+				System.out.println("HOLA ENTRÉ A QUITAR 4 CARTAS y es el turno " + turno);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 3) {
+				System.out.println("HOLA ENTRÉ A QUITAR 3 CARTAS y es el turno " + turno);
+				System.out.println("EL TAMAÑO DEL MAZO ES " + manosJugadores.size());
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 2) {
+				System.out.println("HOLA ENTRÉ A QUITAR 2 CARTAS y es el turno " + turno);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 1) {
+				System.out.println("HOLA ENTRÉ A QUITAR 1 CARTAS y es el turno " + turno);
 				manosJugadores.get(i).remove(0);
 				;
 			}

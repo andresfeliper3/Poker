@@ -148,6 +148,7 @@ public class PanelJugador extends JPanel {
 			   for(int i=0;i<mano.size();i++) {
 				 if(cartaEliminar.getValor()==mano.get(i).getValor() && cartaEliminar.getPalo()==mano.get(i).getPalo() ) {
 					 mano.remove(i);
+					 //System.out.println("Actualmente mi mazo es de tamaño: " + mano.size());
 				 }   
 			   }
 			   

@@ -112,6 +112,7 @@ public class MesaJuego extends JPanel {
 	
 	//Retorna la mano del jugador usuario
 	public List<Carta> getManoHumano(){
+		 System.out.println("Actualmente mi mazo es de tamaño: " + jugador5.getMano());
 		return jugador5.getMano();
 	}
 	
