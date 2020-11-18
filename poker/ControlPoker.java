@@ -30,7 +30,7 @@ public class ControlPoker {
 	private int apuestaInicial = 500;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
-	private boolean modoIgualacion = false;
+	//private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
 	 * ronda de apuestas 2 4: ronda de definición 3: segunda ronda de apuestas 4:
@@ -470,6 +470,14 @@ public class ControlPoker {
 
 	public int getTurno() {
 		return turno;
+	}
+
+	public boolean isHumanoRetirado() {
+		return humanoRetirado;
+	}
+
+	public void setHumanoRetirado(boolean humanoRetirado) {
+		this.humanoRetirado = humanoRetirado;
 	}
 
 	// MAIN - hilo principal

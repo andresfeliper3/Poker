@@ -242,7 +242,9 @@ public class VistaGUIPoker extends JFrame {
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == retirarse) {
-					//El usuario pierde
+					//El usuario se retira y pierde
+					controlPoker.setHumanoRetirado(true);
+					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
 					JOptionPane.showMessageDialog(panelBotones, "Perdiste");				}
 				//Descartar
 				else {
