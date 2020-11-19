@@ -297,7 +297,7 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 2) {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
-					System.out.println(nombreJugadorHumano + " llama a turnos desde botón descarte");
+					System.out.println(nombreJugadorHumano + " llama a turnos desde botón descarte y quiere descartar" + ControlPoker.NUMERO_CARTAS_MANO + " " +mesaJuego.getManoHumano().size() );
 					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null);
 				}
 				else {

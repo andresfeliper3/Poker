@@ -278,7 +278,7 @@ public class ControlPoker {
 		// TODO Auto-generated method stub
 		// Cartas para los jugadores Simulados
 		System.out.println("Entró a darCartas");
-		for (int i = 0; i < TOTAL_JUGADORES; i++) {
+		for (int i = 0; i < TOTAL_JUGADORES-1; i++) {
 
 			if (descarte[i] == 5) {
 				System.out.println("HOLA ENTRÉ A QUITAR 5 CARTAS y es el turno" + turno);
