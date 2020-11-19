@@ -123,6 +123,8 @@ public class ControlPoker {
 	// Método sincronizador de turnos
 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado) {
 		// Si está en la ronda de apuestas
+		boolean[] jugadoresRetirados = { jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(),
+				jugador4.getRetirado(), humanoRetirado };
 		bloqueo.lock();
 		try {
 			// contadorTurno permite que solo 5 personas jueguen
@@ -219,7 +221,7 @@ public class ControlPoker {
 				}			
 			}
 			//Ronda Descartes
-			else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) {
+			else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES && !jugadoresRetirados[idJugador - 1]) {
 				System.out.println("Ronda de descartes");
 				System.out.println("Ronda 2: idJugador " + idJugador +" y turno " + turno);
 				while(idJugador != turno) {
