@@ -229,10 +229,15 @@ public class ControlPoker {
 				System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
 				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
 				contadorDescarte++; 
+				editarRegistros(7, nombreJugador, -1, operacion);
 				System.out.println("contadorDescarte aumentó a " + contadorDescarte);
 				aumentarTurno();
 				System.out.println("En descarte, turno aumenta a " + turno);
 				esperarDescarte.signalAll();
+				//Mensaje al usuario indicándole que le toca descartar
+				if(turno == 5) {
+					editarRegistros(8, "", -1, -1);
+				}
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

@@ -179,7 +179,7 @@ public class VistaGUIPoker extends JFrame {
 			} 
 			//El jugador aumenta. NO DEBERÍA HACER ESTO
 			else if(operacion == 1) {
-				JOptionPane.showMessageDialog(panelBotones, "El jugador " + nombre + " no debería poder aumentar");
+				JOptionPane.showMessageDialog(panelBotones, "El jugador " + nombre + " no debería poder aumentar.\n");
 			}
 		}
 		//Comienza la ronda descarte
@@ -190,7 +190,15 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 6) {
 			panelRegistros.append("Es tu turno " + nombreJugadorHumano + ". Puedes igualar o retirarte.\n");
 		}
-		
+		//Mensajes en ronda de descarte
+		else if(fase == 7) {
+			panelRegistros.append("El jugador " + nombre + " descartó " + operacion + " cartas.\n");
+		}
+		//Mensaje a usuairo en ronda de descarte
+		else if(fase == 8) {
+			panelRegistros.append("Es tu turno de descartar.\nHaz click en las cartas que quieres descartar y \nluego haz click en el botón Descartar.\n");
+			
+		}
 	}
 	
 	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador) {
