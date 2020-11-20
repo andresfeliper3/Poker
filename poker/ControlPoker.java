@@ -53,11 +53,30 @@ public class ControlPoker {
 		manosJugadores = new ArrayList<List<Carta>>();
 		apuestasJugadores = new ArrayList<Integer>();
 		jugadoresParaApostarMas = new ArrayList<Integer>();
-		repartirCartas();
 		colocarApuestaInicial();
+		repartirCartas();
 		escogerJugadorMano();
+		//Inician los hilos
+		iniciarJugadoresSimulados();
 		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, apuestasJugadores, this);
 
+	}
+	//Reinicia el juego si el usuario así lo desea
+	public void reiniciarJuego() {
+		//Quita los retirados
+		humanoRetirado = false;
+		for(JugadorSimulado jugador : jugadoresSimulados) {
+			jugador.setRetirado(false);
+		}
+		//Coloca condiciones iniciales
+		manosJugadores.clear();
+		apuestasJugadores.clear();
+		jugadoresParaApostarMas.clear();
+		colocarApuestaInicial();
+		repartirCartas();
+		escogerJugadorMano();
+		
+		
 	}
 
 	// Reparte las cartas al inicio del juego
@@ -91,7 +110,7 @@ public class ControlPoker {
 		random = new Random();
 		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
-		iniciarJugadoresSimulados();
+		
 		// Decirle al jugador lo que debe hacer si es el jugador mano
 		if (turno == 5) {
 			editarRegistros(2, "", -1, -1);
@@ -464,6 +483,9 @@ public class ControlPoker {
 		return apuestasJugadores;
 	}
 
+	public List<List<Carta>> getManosJugadores() {
+		return manosJugadores;
+	}
 	public int getMaximaApuesta() {
 		return Collections.max(apuestasJugadores);
 	}

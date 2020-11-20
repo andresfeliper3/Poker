@@ -26,6 +26,7 @@ public class VistaGUIPoker extends JFrame {
 	private Titulos titulo;
 	private JButton descartar, aumentar, igualar, retirarse;
 	private List<Integer> apuestasJugadores;
+	private List<List<Carta>> manosJugadores;
 	private String nombreJugadorHumano;
 	private String[] nombresJugadoresSimulados;
 	
@@ -34,6 +35,7 @@ public class VistaGUIPoker extends JFrame {
 	
 	public VistaGUIPoker(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores, ControlPoker controlPoker) {
 		this.apuestasJugadores = apuestasJugadores;
+		this.manosJugadores = manosJugadores;
 		this.controlPoker = controlPoker;
 		initGUI(nombresJugadoresSimulados, manosJugadores, apuestasJugadores);
 		this.setTitle("Póker clásico");
@@ -216,6 +218,16 @@ public class VistaGUIPoker extends JFrame {
 		
 		
 	}
+	//Reinicia las condiciones iniciales de la vista GUI con los nuevos datos generados por el controlPoker
+	private void reiniciarVistaGUIPoker() { 
+		//Cambiar apuestas y manos
+		apuestasJugadores = controlPoker.getApuestasJugadores();
+		manosJugadores = controlPoker.getManosJugadores();
+		//Pasar apuestasJugadores y manosJugadores a mesaJuego
+		mesaJuego.reiniciarPanelJugadores(manosJugadores, apuestasJugadores);
+		//Vaciar panel de registros
+		panelRegistros.setText("");
+	}
 	
 	public void editarPanelJugador(int indexJugador, int apuesta) {
 		mesaJuego.setPanelJugador(indexJugador, apuesta);
@@ -258,6 +270,8 @@ public class VistaGUIPoker extends JFrame {
 					if(option == JOptionPane.YES_OPTION) {
 						//reiniciar juego
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
+						controlPoker.reiniciarJuego();
+						reiniciarVistaGUIPoker();
 					}
 					else if(option == JOptionPane.NO_OPTION) {
 						System.exit(0);
@@ -291,7 +305,17 @@ public class VistaGUIPoker extends JFrame {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
 					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
-					JOptionPane.showMessageDialog(panelBotones, "Jugador " + nombreJugadorHumano + " se retira y pierde.");
+					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
+					//Pregunta si el usuario quiere seguir jugando
+					if(option == JOptionPane.YES_OPTION) {
+						//reiniciar juego
+						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
+						controlPoker.reiniciarJuego();
+						reiniciarVistaGUIPoker();
+					}
+					else if(option == JOptionPane.NO_OPTION) {
+						System.exit(0);
+					}
 				}
 				else if(e.getSource() == aumentar) {
 					JOptionPane.showMessageDialog(panelBotones, "Esta opción ya no está disponible");
@@ -301,8 +325,8 @@ public class VistaGUIPoker extends JFrame {
 					JOptionPane.showMessageDialog(panelBotones, "Todavía no puede descartar cartar");
 				}
 			}
-			//Ronda de descarte
-			else if(controlPoker.getRonda() == 2) {
+			//Ronda de descarte. Se revisa que el jugador humano no se haya retirado para realiza esta acción
+			else if(controlPoker.getRonda() == 2 && !controlPoker.isHumanoRetirado()) {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
 					System.out.println(nombreJugadorHumano + " llama a turnos desde botón descarte y quiere descartar" + ControlPoker.NUMERO_CARTAS_MANO + " " +mesaJuego.getManoHumano().size() );

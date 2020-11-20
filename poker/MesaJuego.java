@@ -121,4 +121,18 @@ public class MesaJuego extends JPanel {
 		//System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
 		panelJugadores[jugador].setValorApuesta(apuesta);
 	}
+	
+	public void reiniciarPanelJugadores(List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
+		//Reiniciar todos los panelJugadores
+		for(int i = 0; i < panelJugadores.length; i++) {
+			//Reiniciar manos
+			panelJugadores[i].recibirCartas(manosJugadores.get(i), "Nueva Ronda");
+			//Reiniciar apuestas
+			panelJugadores[i].setValorApuesta(apuestasJugadores.get(i));
+			panelJugadores[i].actualizarPanelApuesta();
+		}
+		
+		
+		
+	}
  }

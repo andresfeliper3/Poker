@@ -72,6 +72,7 @@ public class PanelJugador extends JPanel {
 		add(panelMano, BorderLayout.CENTER);
 		add(panelApuesta, BorderLayout.EAST);		
 	}
+	
 	//Actualiza el JPanel donde están las cartas del jugador 
 	public void actualizarPanelMano() {
 		panelMano.removeAll();
