@@ -30,6 +30,8 @@ public class ControlPoker {
 	private int apuestaInicial = 500;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
+	//Se guardan los puntajes obtenidos por cada jugador
+	private ArrayList<Integer> puntajesFinales;
 	//private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -353,7 +355,7 @@ public class ControlPoker {
 	// Funcion que determina el ganador
 	private int determinarGanador() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Collections.min(puntajesFinales);
 	}
 
 	// Calcula cuántas cartas debe darle a cada jugador luego del descarte
