@@ -240,17 +240,23 @@ public class ControlPoker {
 				}			
 			}
 			//Ronda Descartes
-			else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES && !jugadoresRetirados[idJugador - 1]) {
+			else if(ronda == 2 && contadorDescarte < TOTAL_JUGADORES) {
 				System.out.println("Ronda de descartes");
 				System.out.println("Ronda 2: idJugador " + idJugador +" y turno " + turno);
 				while(idJugador != turno) {
 					  System.out.println("En descarte jugador "+nombreJugador+" intenta entrar y es mandado a MIMIRRR");
 					  esperarDescarte.await(); 
 				} 
-				System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
-				descarte[idJugador - 1] = operacion; //operación = cartas pedidas
-				contadorDescarte++; 
-				editarRegistros(7, nombreJugador, -1, operacion);
+				System.out.println("El retirado del jugador " + nombreJugador + " con id " + idJugador + " es: " + jugadoresRetirados[idJugador - 1]);
+				if(!jugadoresRetirados[idJugador - 1]) {
+					System.out.println("Soy "+ nombreJugador +" voy a descartar " +operacion + ", es el turno: " + turno);
+					descarte[idJugador - 1] = operacion; //operación = cartas pedidas
+					editarRegistros(7, nombreJugador, -1, operacion);
+				}
+				else {
+					descarte[idJugador - 1] = 0; //operación = cartas pedidas
+				}
+				contadorDescarte++; 	
 				System.out.println("contadorDescarte aumentó a " + contadorDescarte);
 				aumentarTurno();
 				System.out.println("En descarte, turno aumenta a " + turno);
