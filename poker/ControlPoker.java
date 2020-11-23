@@ -111,6 +111,7 @@ public class ControlPoker {
 		return manoJugador;
 	}
 
+	
 	// Escoge al azar al jugador mano (inicial) escogiendo el turno
 	private void escogerJugadorMano() {
 		random = new Random();
