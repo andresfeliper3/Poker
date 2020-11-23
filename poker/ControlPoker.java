@@ -305,6 +305,10 @@ public class ControlPoker {
 						jugadoresParaApostarMas.clear();
 						posicionJugador =0;
 						editarRegistros(9, nombreJugador, -1, operacion);//Mensaje: Iniciar la segunda ronda de apuestas
+						//Mensaje para el usuario
+						if(turno == 5) {
+							editarRegistros(2, "" ,-1, -1);
+						}
 					}
 			}
 		} catch (InterruptedException e) {
