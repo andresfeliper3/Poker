@@ -21,8 +21,8 @@ public class Crupier {
 	private Baraja baraja = new Baraja();
 
 	private List<Carta> mazo1 = new ArrayList<Carta>();
-
-
+	private int valorParaGanar = 0; 
+	
 	private Carta estaCarta;
 
 	public Crupier() {

@@ -393,6 +393,7 @@ public class ControlPoker {
 		for(int i=0;i<TOTAL_JUGADORES;i++) {
 			
 			puntaje = crupier.ejecutar(manosJugadores.get(i));
+			
 			puntajesFinales.add(puntaje);
 			System.out.println("PRIMERO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 		}
@@ -413,7 +414,12 @@ public class ControlPoker {
 		//Analizar el ganador por puntaje mínimo no por carta más alta
 		if(!decisionPorCartaMasAlta) {
 			 mayorPuntaje = Collections.min(puntajesFinales);
-			 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+			 if(Collections.frequency(puntajesFinales, mayorPuntaje) == 1) {
+				 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+			 }
+			 else {
+				 //REVISAR LA EL ARRAYLIST DADO POR CRUPIER CON VALORES NUMÉRICOS QUE HACEN QUE EL MAZO DE CADA JUGADOR TENGA UNA JUGADA ESPECIAL
+			 }
 		}
 		//Analizar quien tenga mejor juego
 		else if(decisionPorCartaMasAlta) {
@@ -427,7 +433,7 @@ public class ControlPoker {
 				}
 				//agregar a la lista  de puntajesFinales los valores máximos de cada mazo de cada jugador
 				for(int j=0;j<TOTAL_JUGADORES;j++) {
-					puntaje = Collections.min(valoresCartasJugadores);
+					puntaje = Collections.max(valoresCartasJugadores);
 					puntajesFinales.add(puntaje);
 					System.out.println("SEGUNDO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 				}
