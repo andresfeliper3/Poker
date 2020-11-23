@@ -12,9 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class VistaGUIPoker extends JFrame {
 	private List<List<Carta>> manosJugadores;
 	private String nombreJugadorHumano;
 	private String[] nombresJugadoresSimulados;
+	private JScrollPane scroll;
 	
 	private Escucha escucha;
 	private ControlPoker controlPoker;
@@ -93,17 +96,26 @@ public class VistaGUIPoker extends JFrame {
 		zonaJuego.add(zonaApuesta, BorderLayout.SOUTH);
 		
 		//Panel de registros
+		scroll = new JScrollPane();
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBorder(new TitledBorder("Registros del juego"));
 		panelRegistros = new JTextArea();
+		panelRegistros.setBounds(20,20,600,400);
 		panelRegistros.setEditable(false);
+		panelRegistros.setBorder(new LineBorder(Color.BLACK));
 		panelRegistros.setPreferredSize(new Dimension(300,450));
-		panelRegistros.setBorder(new TitledBorder("Registros del juego"));
+		scroll.setBounds(20,20,600,400);
+		scroll.getViewport().setBackground(Color.WHITE);
+		scroll.getViewport().add(panelRegistros);
+
+		
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.VERTICAL;
 		//Primer mensaje
 		editarRegistros(0, "", -1, -1);
-		add(panelRegistros, constraints);
+		add(scroll, constraints);
 		
 		//Panel de botones
 		panelBotones = new JPanel();
