@@ -113,7 +113,7 @@ public class ControlPoker {
 	// Escoge al azar al jugador mano (inicial) escogiendo el turno
 	private void escogerJugadorMano() {
 		random = new Random();
-		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
 		
 		// Decirle al jugador lo que debe hacer si es el jugador mano
@@ -191,7 +191,7 @@ public class ControlPoker {
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
 						ronda = 3;	
 						determinarGanador();
-					}else if (revisarApuestasIguales()&& contadorDescarte ==0) {
+					}else if (revisarApuestasIguales() && contadorDescarte ==0) {
 						// PASAMOS A RONDA DE DESCARTE
 						System.out.println("pasamos a ronda de descarte");
 						editarRegistros(5, "", -1, -1);
@@ -204,6 +204,11 @@ public class ControlPoker {
 						// Paso a ronda de igualación
 						ronda = 1;
 						aumentarTurnosRondaIgualacion();
+						// Mostrar en registro que le toca al usuario
+						if (turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
+							// Avisar que puede igualar o retirarse
+							editarRegistros(6, "", -1, -1);
+						}
 					}
 				}
 			}
@@ -246,6 +251,11 @@ public class ControlPoker {
 						// PASAMOS A RONDA DE DESCARTE
 						editarRegistros(5, "", -1, -1);
 						turno = jugadorManoAleatorio;
+						//Mensaje al usuario indicándole que le toca descartar
+						if(turno == 5) {
+							System.out.println("le toca a YOLAS DESCARTAR ");
+							editarRegistros(8, "", -1, -1);
+						}
 						ronda = 2;		
 						System.out.println("La ronda ahora es " + ronda + " y el turno es para " + turno);
 					}else {
