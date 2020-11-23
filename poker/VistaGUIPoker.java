@@ -91,7 +91,6 @@ public class VistaGUIPoker extends JFrame {
 		zonaJuego.add(mesaJuego, BorderLayout.CENTER);
 		//Zona apuesta (dentro de zonaJuego
 		zonaApuesta = new JPanel();
-		//zonaApuesta.setPreferredSize(new Dimension(100,100));
 		zonaApuesta.setBorder(new TitledBorder("Apuestas"));
 		zonaJuego.add(zonaApuesta, BorderLayout.SOUTH);
 		
