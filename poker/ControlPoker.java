@@ -191,7 +191,7 @@ public class ControlPoker {
 				System.out.println(
 						"Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
-				if (contadorTurnos == TOTAL_JUGADORES || jugadoresEnjuego == contadorTurnos) {
+				if (contadorTurnos == TOTAL_JUGADORES) {
 					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
