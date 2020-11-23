@@ -114,7 +114,7 @@ public class ControlPoker {
 	// Escoge al azar al jugador mano (inicial) escogiendo el turno
 	private void escogerJugadorMano() {
 		random = new Random();
-		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
 		
 		// Decirle al jugador lo que debe hacer si es el jugador mano

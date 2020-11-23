@@ -94,18 +94,20 @@ public class VistaGUIPoker extends JFrame {
 		zonaApuesta.setBorder(new TitledBorder("Apuestas"));
 		zonaJuego.add(zonaApuesta, BorderLayout.SOUTH);
 		
-		//Panel de registros
-		scroll = new JScrollPane();
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setBorder(new TitledBorder("Registros del juego"));
+		
+		
 		panelRegistros = new JTextArea();
 		panelRegistros.setBounds(20,20,600,400);
 		panelRegistros.setEditable(false);
 		panelRegistros.setBorder(new LineBorder(Color.BLACK));
 		panelRegistros.setPreferredSize(new Dimension(300,450));
-		scroll.setBounds(20,20,600,400);
-		scroll.getViewport().setBackground(Color.WHITE);
-		scroll.getViewport().add(panelRegistros);
+		//Panel de registros
+		scroll = new JScrollPane(panelRegistros);
+		//scroll.setBounds(20,20,600,400);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBorder(new TitledBorder("Registros del juego"));
+		//scroll.getViewport().setBackground(Color.WHITE);
+		//scroll.getViewport().add(panelRegistros);
 
 		
 		constraints.gridx = 1;
