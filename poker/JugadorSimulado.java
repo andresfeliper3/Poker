@@ -125,9 +125,9 @@ public class JugadorSimulado implements Runnable {
  	 			//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  	 			//escogerDescarte(cantidadDescarte);
  	 			enRondaDeDescarte = false;
- 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
+ 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2 el jugador " + nombre);
  	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
- 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
+ 	 			System.out.println("Después de llamar a turnos en RUN ronda 2 el jugador " + nombre);
  	 			enRondaDeApuestas=true;
  	 			enRondaDeDescarte=false;
  	 			
