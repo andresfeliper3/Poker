@@ -191,7 +191,7 @@ public class ControlPoker {
 				System.out.println(
 						"Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
-				if (contadorTurnos == TOTAL_JUGADORES || jugadoresEnjuego == contadorTurnos) {
+				if (contadorTurnos == TOTAL_JUGADORES) {
 					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
@@ -335,30 +335,29 @@ public class ControlPoker {
 		for (int i = 0; i < TOTAL_JUGADORES-1; i++) {
 
 			if (descarte[i] == 5) {
-				System.out.println("HOLA ENTRÉ A QUITAR 5 CARTAS y es el turno" + turno);
+
 				manosJugadores.get(i).clear(); // Borra el mazo
 
 			} else if (descarte[i] == 4) {
-				System.out.println("HOLA ENTRÉ A QUITAR 4 CARTAS y es el turno " + turno);
+
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 3) {
-				System.out.println("HOLA ENTRÉ A QUITAR 3 CARTAS y es el turno " + turno);
-				System.out.println("EL TAMAÑO DEL MAZO ES " + manosJugadores.size());
+
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 2) {
-				System.out.println("HOLA ENTRÉ A QUITAR 2 CARTAS y es el turno " + turno);
+	
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 1) {
-				System.out.println("HOLA ENTRÉ A QUITAR 1 CARTAS y es el turno " + turno);
+	
 				manosJugadores.get(i).remove(0);
 				;
 			}
@@ -382,21 +381,59 @@ public class ControlPoker {
 		// TODO Auto-generated method stub
 		System.out.println("Entró a determinarGanador");
 		crupier = new Crupier();
+		int posicionGanador=0;
+		int mayorPuntaje=0;
+		int puntaje=0;
 		
 		for(int i=0;i<TOTAL_JUGADORES;i++) {
-			System.out.println("el mazo de la posición: " + i + ", tiene una tolta de cartas: " + manosJugadores.get(i).size());
-			int puntaje = crupier.ejecutar(manosJugadores.get(i));
+			
+			puntaje = crupier.ejecutar(manosJugadores.get(i));
 			puntajesFinales.add(puntaje);
-			System.out.println("En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
+			System.out.println("PRIMERO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 		}
-		int mayorpuntaje = Collections.min(puntajesFinales);
-		int posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
-		
+
+		//imprimir en consola los puntajes de los jugadores
 		for(int i=0;i<puntajesFinales.size();i++) {
 			System.out.println("Puntos del jugador: "+ i +", " + puntajesFinales.get(i) + "\n");
 		}
 		
-		editarRegistros(11,"",posicionGanador,mayorpuntaje);
+		//Determina si hay que definir el ganador por puntaje de la carta más alta
+		boolean decisionPorCartaMasAlta = true;
+		for(int i=0;i<puntajesFinales.size();i++) {
+			if(puntajesFinales.get(i)!=10) {
+				decisionPorCartaMasAlta = false;
+				break;
+			}
+		}
+		//Analizar el ganador por puntaje mínimo no por carta más alta
+		if(!decisionPorCartaMasAlta) {
+			 mayorPuntaje = Collections.min(puntajesFinales);
+			 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+		}
+		//Analizar quien tenga mejor juego
+		else if(decisionPorCartaMasAlta) {
+			puntajesFinales.clear();
+			
+			for(int i=0;i<TOTAL_JUGADORES;i++) {
+				//Obtener los valores numéricos de los mazos de la posición i
+				ArrayList<Integer> valoresCartasJugadores = new ArrayList<Integer>();
+				for (Carta carta : manosJugadores.get(i)) {
+					valoresCartasJugadores.add(carta.getValorNumerico());
+				}
+				//agregar a la lista  de puntajesFinales los valores máximos de cada mazo de cada jugador
+				for(int j=0;j<TOTAL_JUGADORES;j++) {
+					puntaje = Collections.min(valoresCartasJugadores);
+					puntajesFinales.add(puntaje);
+					System.out.println("SEGUNDO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
+				}
+			}
+			
+			mayorPuntaje = Collections.max(puntajesFinales);
+			posicionGanador = puntajesFinales.indexOf(mayorPuntaje);
+		}
+		
+		//Editar registro
+		editarRegistros(11,"",posicionGanador,mayorPuntaje);
 		
 	}
 

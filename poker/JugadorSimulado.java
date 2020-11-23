@@ -77,7 +77,7 @@ public class JugadorSimulado implements Runnable {
  	 				//AVISAR A CONTROL
  	 			}
  	 			//aumentar
- 	 			else if(probabilidad <= 55) {
+ 	 			else if(probabilidad <= 90) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta() + (factorAumento * 500); //turnos 1-5
  	 				operacion = 1;
  	 			} 
@@ -102,7 +102,7 @@ public class JugadorSimulado implements Runnable {
  	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
  	 			System.out.println("ronda " + controlPoker.getRonda());
  	 			//igualar
- 	 			if(probabilidad <= 70) {
+ 	 			if(probabilidad <= 90) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 				operacion = 0;
  	 			} 
