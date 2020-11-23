@@ -33,7 +33,7 @@ public class ControlPoker {
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
 	private int posicionJugador = 0;
-
+	private boolean variablePrueba = true;
 	//private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -186,10 +186,12 @@ public class ControlPoker {
 						"Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
 				if (contadorTurnos == TOTAL_JUGADORES) {
-					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES) {
+					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
-						ronda = 3;	
+						variablePrueba = false;
+						ronda = 3;
+						
 						determinarGanador();
 					}else if (revisarApuestasIguales() && contadorDescarte ==0) {
 						// PASAMOS A RONDA DE DESCARTE
@@ -242,9 +244,10 @@ public class ControlPoker {
 				if (contadorIgualacion == jugadoresParaApostarMas.size()) {
 					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas "
 							+ jugadoresParaApostarMas.size());
-					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES) {
+					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
+						variablePrueba = false;
 						ronda = 3;	
 						determinarGanador();
 					}else if (revisarApuestasIguales()&& contadorDescarte ==0) {
@@ -363,14 +366,14 @@ public class ControlPoker {
 	}
 
 	// Funcion que determina el ganador
-	private void determinarGanador() {
+	private	 void determinarGanador() {
 		// TODO Auto-generated method stub
-
+		System.out.println("Entró a determinarGanador");
 		crupier = new Crupier();
 		
 		for(int i=0;i<TOTAL_JUGADORES;i++) {
 			System.out.println("el mazo de la posición: " + i + ", tiene una tolta de cartas: " + manosJugadores.get(i).size());
-			int puntaje = crupier.ejecutar((ArrayList<Carta>) manosJugadores.get(i));
+			int puntaje = crupier.ejecutar(manosJugadores.get(i));
 			puntajesFinales.add(puntaje);
 			System.out.println("En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 		}

@@ -71,7 +71,7 @@ public class JugadorSimulado implements Runnable {
  	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
  	 			//igualar
  	 			
- 	 			if(probabilidad <= 50) {
+ 	 			if(probabilidad <= 100) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 				operacion = 0;
  	 				//AVISAR A CONTROL
@@ -131,6 +131,7 @@ public class JugadorSimulado implements Runnable {
  	 			
  	 		}
  	 		else if(controlPoker.getRonda() == 3) {
+ 	 			System.out.println("MATANDOOOOO AL HILO " + nombre);
  	 			jugar = false;
  	 		}
  	 		
