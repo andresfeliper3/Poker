@@ -35,6 +35,7 @@ public class ControlPoker {
 	private int posicionJugador = 0;
 	private boolean variablePrueba = true;
 	private boolean [] jugadoresRetiradosAuxiliar = new boolean[TOTAL_JUGADORES];
+	private int jugadoresEnjuego = 5;
 	//private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -190,7 +191,7 @@ public class ControlPoker {
 				System.out.println(
 						"Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
-				if (contadorTurnos == TOTAL_JUGADORES) {
+				if (contadorTurnos == TOTAL_JUGADORES || jugadoresEnjuego == contadorTurnos) {
 					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
@@ -311,7 +312,6 @@ public class ControlPoker {
 						ronda=0;
 						contadorDescarte++;
 						contadorIgualacion=0;
-						jugadoresParaApostarMas.clear();
 						posicionJugador =0;
 						editarRegistros(9, nombreJugador, -1, operacion);//Mensaje: Iniciar la segunda ronda de apuestas
 						//Mensaje para el usuario
@@ -533,6 +533,9 @@ public class ControlPoker {
 		manosJugadores.remove(4);
 		manosJugadores.add(manoJugadorHumano); // se agrega la mano nueva
 
+	}
+	public void setJugadoresEnjuego() {
+		this.jugadoresEnjuego--;
 	}
 
 	public void setApuestasJugadores(int indexJugador, int apuesta) {

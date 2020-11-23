@@ -87,6 +87,7 @@ public class JugadorSimulado implements Runnable {
  	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 				operacion = 2;
  	 				retirado = true;
+ 	 				controlPoker.setJugadoresEnjuego();
  	 				System.out.println("Run: Jugador " + nombre + " se retira");
  	 			}
  	 			enRondaDeApuestas = false;
@@ -110,6 +111,7 @@ public class JugadorSimulado implements Runnable {
  	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 				operacion = 2;
  	 				retirado = true;
+ 	 				controlPoker.setJugadoresEnjuego();
  	 			}
  	 			enRondaDeIgualacion = false;
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
