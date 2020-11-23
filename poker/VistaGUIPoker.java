@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
@@ -32,6 +33,7 @@ public class VistaGUIPoker extends JFrame {
 	
 	private Escucha escucha;
 	private ControlPoker controlPoker;
+
 	
 	public VistaGUIPoker(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores, ControlPoker controlPoker) {
 		this.apuestasJugadores = apuestasJugadores;
@@ -44,6 +46,7 @@ public class VistaGUIPoker extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 	}
 	
 	private void initGUI(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
@@ -150,12 +153,15 @@ public class VistaGUIPoker extends JFrame {
 			 * */
 			switch(operacion) {
 				case 0:
+					
 					panelRegistros.append("El jugador " + nombre + " igualó a $" + apuesta + ".\n");
 					break;
 				case 1:
+					
 					panelRegistros.append("El jugador " + nombre + " aumentó a $" + apuesta + ".\n");
 					break;
 				case 2:
+					
 					panelRegistros.append("El jugador " + nombre + " se retiró.\n");
 					break;
 			}
@@ -166,7 +172,7 @@ public class VistaGUIPoker extends JFrame {
 		} 
 		//Avisa que se deben igualar las apuestas
 		else if(fase == 3) {
-			panelRegistros.append("Para descartar, las apuestas deben estar igualadas.\n");
+			panelRegistros.append("\nPara descartar, las apuestas deben estar igualadas.\n");
 			panelRegistros.append("Comienza la ronda de igualación.\n");
 		}
 		//Ronda de igualación de apuestas
@@ -186,7 +192,8 @@ public class VistaGUIPoker extends JFrame {
 		}
 		//Comienza la ronda descarte
 		else if(fase == 5) {
-			panelRegistros.append("Comienza la ronda de descarte.\n");
+			mesaJuego.getJugadorHumano().activarEscuchas();
+			panelRegistros.append("\nComienza la ronda de descarte.\n");
 		}
 		//Mensaje a jugador humano en ronda de igualación
 		else if(fase == 6) {
@@ -200,6 +207,19 @@ public class VistaGUIPoker extends JFrame {
 		else if(fase == 8) {
 			panelRegistros.append("Es tu turno de descartar.\nHaz click en las cartas que quieres descartar y \nluego haz click en el botón Descartar.\n");
 			
+		}
+		//Mensaje para iniciar la segunda ronda de apuestas
+		else if(fase==9) {
+			mesaJuego.getJugadorHumano().desactivarEscuchas();
+			panelRegistros.append("\nInicia la segunda ronda de apuestas.\n");
+		}
+		//Mensaje para iniciar la revisión y determinar un ganador
+		else if(fase==10) {
+			panelRegistros.append("\nEl crupier revisará los mazos y determinará un ganador.\n");
+		}
+		//Mensaje para determinar un ganador
+		else if(fase==11) {
+			panelRegistros.append("\nEL GANADOR ES: "+apuesta+", con: "+operacion +" puntos");
 		}
 	}
 	

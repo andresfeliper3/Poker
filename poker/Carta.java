@@ -45,6 +45,16 @@ public class Carta extends JLabel{
 	 public String getPalo() {
 		 return palo;
 	 }
+	 
+	 public int getValorNumericoAlterno() {
+		 //Valor alterno de la carta As (14 0 1)
+		 if(valorNumerico==14) {
+			 return 1;
+		 }
+		 else {
+			 return valorNumerico;
+		 }
+	 }
 
 	 //Para visualizar la carta a manera de String para hacer un seguimiento
 	 public String toString() {

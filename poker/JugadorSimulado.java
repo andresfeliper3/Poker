@@ -26,6 +26,7 @@ public class JugadorSimulado implements Runnable {
 	private boolean enRondaDeApuestas = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	private boolean enRondaDeIgualacion = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	private boolean enRondaDeDescarte = true;
+	
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
 		this.turnoId = turnoId;
@@ -69,6 +70,7 @@ public class JugadorSimulado implements Runnable {
  	 		//Ronda de apuestas
  	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
  	 			//igualar
+ 	 			
  	 			if(probabilidad <= 50) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 				operacion = 0;
@@ -80,7 +82,7 @@ public class JugadorSimulado implements Runnable {
  	 				operacion = 1;
  	 			} 
  	 			//retirarse
- 	 			else {
+ 	 			else{
  	 				//SE RETIRA
  	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 				operacion = 2;
@@ -88,6 +90,7 @@ public class JugadorSimulado implements Runnable {
  	 				System.out.println("Run: Jugador " + nombre + " se retira");
  	 			}
  	 			enRondaDeApuestas = false;
+ 	 			enRondaDeIgualacion=true;
  	 			System.out.println("Antes de ejecutar turnos, jugador " + nombre);
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
  	 			System.out.println("Después de ejecutar turnos, jugador" + nombre);
@@ -123,6 +126,11 @@ public class JugadorSimulado implements Runnable {
  	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
  	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
  	 			System.out.println("Antes de llamar a turnos en RUN ronda 2");
+ 	 			enRondaDeApuestas=true;
+ 	 			enRondaDeDescarte=false;
+ 	 			
+ 	 		}
+ 	 		else if(controlPoker.getRonda() == 3) {
  	 			jugar = false;
  	 		}
  	 		
