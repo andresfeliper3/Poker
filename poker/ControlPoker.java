@@ -135,12 +135,11 @@ public class ControlPoker {
 		jugadoresSimulados[1] = jugador2;
 		jugadoresSimulados[2] = jugador3;
 		jugadoresSimulados[3] = jugador4;
-
+		actualizarRetiradosAuxiliar();
 		for (JugadorSimulado jugador : jugadoresSimulados) {
 			ejecutorHilos.execute(jugador);
 		}
 
-		actualizarRetiradosAuxiliar();
 		ejecutorHilos.shutdown();
 	}
 
