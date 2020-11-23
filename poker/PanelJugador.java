@@ -64,6 +64,7 @@ public class PanelJugador extends JPanel {
 			for(Carta carta : mano) {
 				carta.addMouseListener(escucha);
 			}	
+			desactivarEscuchas();
 			mensaje.setText("Inicias... ");
 		}
 		
