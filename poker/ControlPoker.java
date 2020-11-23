@@ -34,6 +34,7 @@ public class ControlPoker {
 	private int contadorTurnos = 0;
 	private int posicionJugador = 0;
 	private boolean variablePrueba = true;
+	private boolean [] jugadoresRetiradosAuxiliar = new boolean[TOTAL_JUGADORES];
 	//private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -138,12 +139,13 @@ public class ControlPoker {
 			ejecutorHilos.execute(jugador);
 		}
 
+		actualizarRetiradosAuxiliar();
 		ejecutorHilos.shutdown();
 	}
 
 	int contadorIgualacion = 0;
 	int contadorDescarte = 0;
-
+	
 	// Método sincronizador de turnos
 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado) {
 		// Si está en la ronda de apuestas
@@ -165,9 +167,12 @@ public class ControlPoker {
 				if (contadorTurnos < TOTAL_JUGADORES) {
 					int apuesta = calcularApuesta(idJugador, operacion);
 					System.out.println("Apuestas: Este es el idJugador " + idJugador);
-					setApuestasJugadores(idJugador - 1, apuesta);
-					editarPanelJugador(idJugador - 1, apuesta);
-					editarRegistros(1, nombreJugador, apuesta, operacion);
+					if(!jugadoresRetiradosAuxiliar[idJugador - 1]) {
+						setApuestasJugadores(idJugador - 1, apuesta);	
+						editarPanelJugador(idJugador - 1, apuesta);
+						editarRegistros(1, nombreJugador, apuesta, operacion);
+					}
+					
 					System.out.println("Turno: " + turno);
 					System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1)
 							+ " en total.");
@@ -298,6 +303,7 @@ public class ControlPoker {
 				
 					if(contadorDescarte == TOTAL_JUGADORES) {
 						System.out.println("Próximo a ejecutar darCartas");
+						actualizarRetiradosAuxiliar();
 						darCartas();
 						//Regresar a turno 0 para una segunda ronda de apuestas
 						turno = jugadorManoAleatorio;
@@ -365,6 +371,12 @@ public class ControlPoker {
 		vistaPoker.actualizarVistaPoker(manosJugadores, 0);
 	}
 
+	private void actualizarRetiradosAuxiliar() {
+		for(int i = 0; i < jugadoresSimulados.length; i++) {
+			jugadoresRetiradosAuxiliar[i] = jugadoresSimulados[i].getRetirado();
+		}
+		jugadoresRetiradosAuxiliar[4] = humanoRetirado;
+	}
 	// Funcion que determina el ganador
 	private	 void determinarGanador() {
 		// TODO Auto-generated method stub
