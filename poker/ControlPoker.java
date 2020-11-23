@@ -192,15 +192,9 @@ public class ControlPoker {
 						.println("Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
 				if (contadorTurnos == TOTAL_JUGADORES) {
-<<<<<<< HEAD
-					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
-						// Pasamos a la ronda para definir un ganador
-						editarRegistros(10, "", -1, -1);// Mensaje: el Crupier determinará el ganador
-=======
 					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
 						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
->>>>>>> e0b4d2c551ae8462deff820f2025b2c051c2ea47
 						variablePrueba = false;
 						ronda = 3;
 
@@ -446,7 +440,6 @@ public class ControlPoker {
 		//Editar registro
 		editarRegistros(11,"",posicionGanador,mayorPuntaje);
 		
->>>>>>> e0b4d2c551ae8462deff820f2025b2c051c2ea47
 	}
 
 	// Calcula cuántas cartas debe darle a cada jugador luego del descarte
