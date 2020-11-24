@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -231,7 +230,43 @@ public class VistaGUIPoker extends JFrame {
 		}
 		//Mensaje para determinar un ganador
 		else if(fase==11) {
-			panelRegistros.append("\nEL GANADOR ES: "+apuesta+", con: "+operacion +" puntos");
+			String mensaje = "";
+			if(apuesta == -1) {
+				panelRegistros.append("\nEL GANADOR ES: "+ nombre + ", por carta de mayor valor: "+operacion);
+			}else {
+				
+				switch(operacion) {
+				case 1:
+					mensaje = "ESCALERA REAL";
+					break;
+				case 2:
+					mensaje = "POKER";
+					break;
+				case 3:
+					mensaje = "ESCALERA COLOR";
+					break;
+				case 4:
+					mensaje = "FULL";
+					break;
+				case 5:
+					mensaje = "COLOR";
+					break;
+				case 6:
+					mensaje = "ESCALERA";
+					break;
+				case 7:
+					mensaje = "TRIO";
+					break;
+				case 8:
+					mensaje = "DOBLE PAREJA";
+					break;
+				case 9:
+					mensaje = "PAREJA";
+					break;
+				}
+				panelRegistros.append("\nEL GANADOR ES: "+ nombre + ", por: "+mensaje);
+			}
+			
 		}
 	}
 	

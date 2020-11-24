@@ -25,11 +25,17 @@ public class ControlPoker {
 	// Elementos del juego
 	private Baraja baraja;
 	private Crupier crupier;
+	private List<Integer> jugadoresADesempatar = new ArrayList<Integer>();// Serán agregados las posiciones de los
+																			// jugadores que estén empatados por la
+																			// victoria
 	private List<List<Carta>> manosJugadores;
 	private List<Integer> apuestasJugadores;
+	private List<Integer> valoresAComparar;
 	private List<Integer> jugadoresParaApostarMas; // Lista de posiciones de jugadores
 	private ArrayList<Integer> puntajesFinales; // Aquí se guardan los puntajes obtenidos por cada jugador para
 												// determinar un ganador
+	private ArrayList<Integer> valoresJugadas; // Lista que almacena los valores de las cartas máximas del valor de las
+												// jugadas que tengan en su mano de cartas
 	private int apuestaInicial = 500;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
@@ -37,6 +43,7 @@ public class ControlPoker {
 	private boolean variablePrueba = true;
 	private boolean[] jugadoresRetiradosAuxiliar = new boolean[TOTAL_JUGADORES];
 	private int jugadoresEnjuego = 5;
+
 	// private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -61,6 +68,8 @@ public class ControlPoker {
 		apuestasJugadores = new ArrayList<Integer>();
 		jugadoresParaApostarMas = new ArrayList<Integer>();
 		puntajesFinales = new ArrayList<Integer>();
+		valoresJugadas = new ArrayList<Integer>();
+		valoresAComparar = new ArrayList<Integer>();
 		colocarApuestaInicial();
 		repartirCartas();
 		escogerJugadorMano();
@@ -89,13 +98,13 @@ public class ControlPoker {
 		contadorIgualacion = 0;
 		contadorDescarte = 0;
 		colocarApuestaInicial();
-		repartirCartas();	
+		repartirCartas();
 		System.out.println("TURNO ES " + turno);
 		System.out.println("Antes del turnos que reinicia");
 		this.turnos(5, "Prueba", 10, null);
 		System.out.println("Después del turnos que reinicia");
 		escogerJugadorMano();
-		
+
 	}
 
 	// Reparte las cartas al inicio del juego
@@ -128,6 +137,7 @@ public class ControlPoker {
 
 	// Escoge al azar al jugador mano (inicial) escogiendo el turno
 	private void escogerJugadorMano() {
+		System.out.println("Entró a escogerJugadorMano");
 		random = new Random();
 		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
@@ -169,7 +179,8 @@ public class ControlPoker {
 		try {
 			// contadorTurno permite que solo 5 personas jueguen
 			if (ronda == 0 && contadorTurnos < TOTAL_JUGADORES) {
-				System.out.println("En apuestas entró " + nombreJugador + " con id " + idJugador + " y turno es " + turno);
+				System.out.println(
+						"En apuestas entró " + nombreJugador + " con id " + idJugador + " y turno es " + turno);
 				// Mientras el jugador que entre no sea el que correponda, se duerme
 				while (idJugador != turno) {
 					System.out.println(
@@ -193,17 +204,19 @@ public class ControlPoker {
 						System.out.println("Jugador " + nombreJugador + " apostó "
 								+ apuestasJugadores.get(idJugador - 1) + " en total.");
 						aumentarTurno();
-						
+
 					}
 					contadorTurnos++;
 					System.out.println("ContadorTurnos aumentó a " + contadorTurnos);
 				}
-				else {
+
+				esperarTurno.signalAll();
+
+				if (operacion == 10) {
 					System.out.println("Cambio ronda a 0 en apuestas");
 					ronda = 0;
+
 				}
-				
-				esperarTurno.signalAll();
 				// Turno de usuario y no está repitiendo turno adicional ilegal
 				if (turno == 5 && contadorTurnos < TOTAL_JUGADORES && operacion != 10) {
 					// humanoApuesta();
@@ -261,18 +274,21 @@ public class ControlPoker {
 						System.out
 								.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de "
 										+ apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
-						System.out.println("En igualacion el jugador " + nombreJugador + " pasa de largo");		
+						System.out.println("En igualacion el jugador " + nombreJugador + " pasa de largo");
 					}
 					aumentarTurno();
 					contadorIgualacion++;
 					System.out.println("contadorIgualacion llega a " + contadorIgualacion);
-				} 
-				else {
+				}
+
+				esperarIgualacion.signalAll();
+
+				if (operacion == 10) {
+
 					System.out.println("Cambio ronda a 0 en igualacion");
 					ronda = 0;
+
 				}
-				
-				esperarIgualacion.signalAll();
 
 				// Mostrar en registro que le toca al usuario
 				if (turno == 5 && contadorIgualacion < TOTAL_JUGADORES && operacion != 10) {
@@ -284,7 +300,7 @@ public class ControlPoker {
 				if (contadorIgualacion == TOTAL_JUGADORES && operacion != 10) {
 					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas "
 							+ jugadoresParaApostarMas.size());
-					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
+					if (revisarApuestasIguales() && contadorDescarte >= TOTAL_JUGADORES && variablePrueba) {
 						// Pasamos a la ronda para definir un ganador
 						editarRegistros(10, "", -1, -1);// Mensaje: el Crupier determinará el ganador
 						variablePrueba = false;
@@ -331,13 +347,16 @@ public class ControlPoker {
 					System.out.println("contadorDescarte aumentó a " + contadorDescarte);
 					aumentarTurno();
 				}
-				else {
+				System.out.println("En descarte, turno aumenta a " + turno);
+				esperarDescarte.signalAll();
+
+				if (operacion == 10) {
+
 					System.out.println("operacion " + operacion);
 					System.out.println("Cambio ronda a 0 en descartes");
 					ronda = 0;
+
 				}
-				System.out.println("En descarte, turno aumenta a " + turno);
-				esperarDescarte.signalAll();
 
 				// Mensaje al usuario indicándole que le toca descartar
 				if (turno == 5 && contadorDescarte < TOTAL_JUGADORES && operacion != 10) {
@@ -409,7 +428,6 @@ public class ControlPoker {
 		// Cartas para el jugador humano
 		asignarCartas(manosJugadores.get(4));
 
-		vistaPoker.actualizarVistaPoker(manosJugadores, 0);
 	}
 
 	private void actualizarRetiradosAuxiliar() {
@@ -419,70 +437,109 @@ public class ControlPoker {
 		jugadoresRetiradosAuxiliar[4] = humanoRetirado;
 	}
 
-	// Funcion que determina el ganador
+	// Funcion que determina el ganador del juego
 	private void determinarGanador() {
 		// TODO Auto-generated method stub
 		System.out.println("Entró a determinarGanador");
 		crupier = new Crupier();
-		int posicionGanador = 0;
-		int mayorPuntaje = 0;
-		int puntaje = 0;
-
-		for (int i = 0; i < TOTAL_JUGADORES; i++) {
-
+		int posicionGanador=0;
+		int mayorPuntaje=0;
+		int puntaje=0;
+		
+		for(int i=0;i<TOTAL_JUGADORES;i++) {
+			
 			puntaje = crupier.ejecutar(manosJugadores.get(i));
-
+			
 			puntajesFinales.add(puntaje);
-			System.out.println(
-					"PRIMERO, En la posición: " + i + ", el jugador tiene un puntaje de: " + puntajesFinales.get(i));
+			//guardar los valores de las cartas que le dieron el juego?
+			valoresJugadas.add(crupier.getValorMaxJugada());
+			System.out.println("VALORESJUGADAS POSICION "+i+", Valor: "+crupier.getValorMaxJugada());
+			System.out.println("PRIMERO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 		}
 
-		// imprimir en consola los puntajes de los jugadores
-		for (int i = 0; i < puntajesFinales.size(); i++) {
-			System.out.println("Puntos del jugador: " + i + ", " + puntajesFinales.get(i) + "\n");
+		//imprimir en consola los puntajes de los jugadores
+		for(int i=0;i<puntajesFinales.size();i++) {
+			System.out.println("Puntos del jugador: "+ i +", " + puntajesFinales.get(i) + "\n");
 		}
-
-		// Determina si hay que definir el ganador por puntaje de la carta más alta
+		
+		//Determina si hay que definir el ganador por puntaje de la carta más alta
 		boolean decisionPorCartaMasAlta = true;
-		for (int i = 0; i < puntajesFinales.size(); i++) {
-			if (puntajesFinales.get(i) != 10) {
+		for(int i=0;i<puntajesFinales.size();i++) {
+			if(puntajesFinales.get(i)!=10) {
 				decisionPorCartaMasAlta = false;
 				break;
 			}
 		}
-		// Analizar el ganador por puntaje mínimo no por carta más alta
-		if (!decisionPorCartaMasAlta) {
-			mayorPuntaje = Collections.min(puntajesFinales);
-			posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
-
+		//Analizar el ganador por puntaje mínimo no por carta más alta
+		if(!decisionPorCartaMasAlta) {
+			 mayorPuntaje = Collections.min(puntajesFinales);
+			 if(Collections.frequency(puntajesFinales, mayorPuntaje) == 1) {
+				 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+			 }
+			 else {
+				 	//puntajesFinales -> Tiene los valores de las jugadas de cada uno
+				 	//valoresJugadas ->Tiene los valores máximos de las jugadas (para desempate)
+				 	//jugadoresADesempatar ->Guarda los index de los jugadores que deben desempatar
+					
+					
+					for(int i =0;i<puntajesFinales.size();i++) {
+						if(puntajesFinales.get(i)==mayorPuntaje) {
+							jugadoresADesempatar.add(i);
+							System.out.println("Valor "+i+ ", de jugadoresADesempatar" + jugadoresADesempatar.size());
+						}
+					}
+					List<Integer> valoresAComparar = new ArrayList<Integer>();
+					System.out.println("tamaño jugadoresADesempatar: " + jugadoresADesempatar.size());
+					System.out.println("tamaño puntajesFinales: " + puntajesFinales.size());
+					System.out.println("tamaño valoresJugadas: " + valoresJugadas.size());
+					
+					for( Integer numero : jugadoresADesempatar) {
+						System.out.print(", " + numero);
+						}
+					for(int i=0;i<jugadoresADesempatar.size();i++) {
+						System.out.println("JUGADOR DE LA POSICIÓN: " + jugadoresADesempatar.get(i));
+						valoresAComparar.add(valoresJugadas.get(jugadoresADesempatar.get(i)));
+					}
+					posicionGanador = valoresJugadas.indexOf(Collections.max(valoresAComparar));
+					mayorPuntaje = puntajesFinales.get(posicionGanador);
+			 }
 		}
-		// Analizar quien tenga mejor juego
-		else if (decisionPorCartaMasAlta) {
+		//Analizar quien tenga mejor juego
+		else if(decisionPorCartaMasAlta) {
 			puntajesFinales.clear();
-
-			for (int i = 0; i < TOTAL_JUGADORES; i++) {
-				// Obtener los valores numéricos de los mazos de la posición i
+			
+			for(int i=0;i<TOTAL_JUGADORES;i++) {
+				//Obtener los valores numéricos de los mazos de la posición i
 				ArrayList<Integer> valoresCartasJugadores = new ArrayList<Integer>();
 				for (Carta carta : manosJugadores.get(i)) {
 					valoresCartasJugadores.add(carta.getValorNumerico());
 				}
-				// agregar a la lista de puntajesFinales los valores máximos de cada mazo de
-				// cada jugador
-				for (int j = 0; j < TOTAL_JUGADORES; j++) {
+				//agregar a la lista  de puntajesFinales los valores máximos de cada mazo de cada jugador
+				for(int j=0;j<TOTAL_JUGADORES;j++) {
 					puntaje = Collections.max(valoresCartasJugadores);
 					puntajesFinales.add(puntaje);
-					System.out.println("SEGUNDO, En la posición: " + i + ", el jugador tiene un puntaje de: "
-							+ puntajesFinales.get(i));
+					System.out.println("SEGUNDO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 				}
 			}
-
+			
 			mayorPuntaje = Collections.max(puntajesFinales);
 			posicionGanador = puntajesFinales.indexOf(mayorPuntaje);
 		}
-
-		// Editar registro
-		editarRegistros(11, "", posicionGanador, mayorPuntaje);
-
+		
+		//Editar registro
+		if(decisionPorCartaMasAlta) {
+			System.out.println("Ganador por carta más alta");
+			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],-1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}else if(posicionGanador == 4) {
+			System.out.println("Ganador usuario");
+			editarRegistros(11,"USUARIO",posicionGanador+1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}else {
+			System.out.println("Ganador simulado");
+			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],posicionGanador+1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}
 	}
 
 	// Calcula cuántas cartas debe darle a cada jugador luego del descarte
@@ -601,16 +658,6 @@ public class ControlPoker {
 		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
 		System.out.println("Turno aumentó a " + turno);
 	}
-
-	/*
-	 * private void aumentarTurno() { // Si turno es 4 o múltiplo de 4, se convierte
-	 * en 5. Si turno tiene otro valor, // aumenta en 1 pero sin sobrepasar al 5.
-	 * turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5; if(turno !=5) { for(int
-	 * i=turno-1;i<TOTAL_JUGADORES-1;i++) { if(!jugadoresSimulados[i].getRetirado())
-	 * { turno=i+1; break; } } }
-	 * System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Turno aumentó a " +
-	 * turno); }
-	 */
 
 	// Cambia la mano del jugador humano
 	public void descarteJugadorHumano(List<Carta> manoJugadorHumano) {

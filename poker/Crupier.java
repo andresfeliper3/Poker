@@ -103,7 +103,9 @@ public class Crupier {
 	        }
         }
 	     Collections.sort(valoresAlternos);
-	        for(int i=0;i<valoresAlternos.size();i++) {
+
+	        for(int i=0;i<valoresAlternos.size()-1;i++) {
+
 		        if(valoresAlternos.get(i)+1 != valoresAlternos.get(i+1)) {
 		            return false;
 		        }
@@ -134,16 +136,23 @@ public class Crupier {
 	//Doble pareja
     private boolean isDoblePareja(List<Carta> mazo){
     	System.out.println("Revisar si tiene DOBLE PAREJA");
-    	ArrayList<Carta> auxiliar = new ArrayList<Carta>();
+
+    	List<Carta> auxiliar = new ArrayList<Carta>();
+    	
     	if(isPareja(mazo)) {
     		for(Carta carta : mazo) {
-    			if(valorReferenciaPareja != carta.getValorNumerico()) {
-    				auxiliar.add(carta);
-    			}
-    			if(isPareja(auxiliar)) {
+			System.out.print("VALOR DE REFERENCIA ES: " + valorReferenciaPareja + "\n");
+	    			if(valorReferenciaPareja != carta.getValorNumerico()) {
+	    				auxiliar.add(carta);
+	    				System.out.println("++++++++++++LA CARTA ES: "+ carta.getValor());
+	    			}
 
-    				return true;
     			}
+			if(isPareja(auxiliar)) {
+				for( Carta cartita : auxiliar) {
+					System.out.print("AUXILIAR, " + cartita.getValor() + "\n");
+					}
+				return true;
     		}
     	}   
         return false;
@@ -151,6 +160,9 @@ public class Crupier {
     int valorReferenciaPareja;
   //Retorna true si la mano es un full
     public boolean isFull(List<Carta> mazo){
+
+    	System.out.println("Revisar si tiene FULL");
+
         ArrayList<Carta> auxiliar = new ArrayList<Carta>();
         if(isTrio(mazo)) {
             for(Carta carta : mazo) {
@@ -203,17 +215,19 @@ public class Crupier {
 	// Revisa si el mazo del jugador tiene una pareja, es decir; dos cartas con
 	// igual valor numérico
 	private boolean isPareja(List<Carta> mazo) {
-		System.out.println("Revisar si tiene PAREJA: " + mazo.size());
+		System.out.println("Revisar si tiene PAREJA");
 		int cant_cartasIguales = 0;
-		for (int i = 0; i < mazo.size(); i++) {
-			estaCarta = mazo.get(i);
+		for (int carta = 0; carta < mazo.size(); carta++) {
+			valorReferenciaPareja = mazo.get(carta).getValorNumerico();
 			cant_cartasIguales = 0;
-			for (int j = 0; j < mazo.size(); j++) {
-				if (estaCarta.getValorNumerico() == mazo.get(j).getValorNumerico()) {
+			for (int cartaComparar = 0; cartaComparar < mazo.size(); cartaComparar++) {
+				if (valorReferenciaPareja == mazo.get(cartaComparar).getValorNumerico()) {
 					cant_cartasIguales++;
 				}
 				if (cant_cartasIguales == 2) {
-					valorJugada = estaCarta.getValorNumerico();
+
+					valorJugada = valorReferenciaPareja;
+
 					return true;
 				}
 			}
@@ -239,6 +253,8 @@ public class Crupier {
 	}
 
 	public int ejecutar(List<Carta> mazoJugador) {
+		valorReferenciaTrio=0;
+		valorReferenciaPareja=0;
 		
 		//Guardamos cada uno de los mazos en una lista de mazos
 		this.manosJugadores.add(mazoJugador);
