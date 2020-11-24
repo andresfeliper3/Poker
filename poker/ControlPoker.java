@@ -414,12 +414,8 @@ public class ControlPoker {
 		//Analizar el ganador por puntaje mínimo no por carta más alta
 		if(!decisionPorCartaMasAlta) {
 			 mayorPuntaje = Collections.min(puntajesFinales);
-			 if(Collections.frequency(puntajesFinales, mayorPuntaje) == 1) {
-				 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
-			 }
-			 else {
-				 //REVISAR LA EL ARRAYLIST DADO POR CRUPIER CON VALORES NUMÉRICOS QUE HACEN QUE EL MAZO DE CADA JUGADOR TENGA UNA JUGADA ESPECIAL
-			 }
+			 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+			 
 		}
 		//Analizar quien tenga mejor juego
 		else if(decisionPorCartaMasAlta) {
