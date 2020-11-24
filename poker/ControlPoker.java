@@ -25,11 +25,14 @@ public class ControlPoker {
 	// Elementos del juego
 	private Baraja baraja;
 	private Crupier crupier;
+	private List<Integer> jugadoresADesempatar = new ArrayList<Integer>();//Serán agregados las posiciones de los jugadores que estén empatados por la victoria
 	private List<List<Carta>> manosJugadores;
 	private List<Integer> apuestasJugadores;
+	private List<Integer> valoresAComparar;
 	private List<Integer> jugadoresParaApostarMas; // Lista de posiciones de jugadores
 	private ArrayList<Integer> puntajesFinales; // Aquí se guardan los puntajes obtenidos por cada jugador para
 												// determinar un ganador
+	private ArrayList<Integer> valoresJugadas; //Lista que almacena los valores de las cartas máximas del valor de las jugadas que tengan en su mano de cartas
 	private int apuestaInicial = 500;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
@@ -37,6 +40,7 @@ public class ControlPoker {
 	private boolean variablePrueba = true;
 	private boolean[] jugadoresRetiradosAuxiliar = new boolean[TOTAL_JUGADORES];
 	private int jugadoresEnjuego = 5;
+	
 	// private boolean modoIgualacion = false;
 	/*
 	 * Ronda 0: ronda de apuestas 1: ronda de igualación 2: ronda de descarte 3:
@@ -61,6 +65,8 @@ public class ControlPoker {
 		apuestasJugadores = new ArrayList<Integer>();
 		jugadoresParaApostarMas = new ArrayList<Integer>();
 		puntajesFinales = new ArrayList<Integer>();
+		valoresJugadas = new ArrayList<Integer>();
+		valoresAComparar = new ArrayList<Integer>();
 		colocarApuestaInicial();
 		repartirCartas();
 		escogerJugadorMano();
@@ -371,7 +377,6 @@ public class ControlPoker {
 		// Cartas para el jugador humano
 		asignarCartas(manosJugadores.get(4));
 
-		vistaPoker.actualizarVistaPoker(manosJugadores, 0);
 	}
 
 	private void actualizarRetiradosAuxiliar() {
@@ -395,6 +400,9 @@ public class ControlPoker {
 			puntaje = crupier.ejecutar(manosJugadores.get(i));
 			
 			puntajesFinales.add(puntaje);
+			//guardar los valores de las cartas que le dieron el juego?
+			valoresJugadas.add(crupier.getValorMaxJugada());
+			System.out.println("VALORESJUGADAS POSICION "+i+", Valor: "+crupier.getValorMaxJugada());
 			System.out.println("PRIMERO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 		}
 
@@ -418,7 +426,31 @@ public class ControlPoker {
 				 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
 			 }
 			 else {
-				 //REVISAR LA EL ARRAYLIST DADO POR CRUPIER CON VALORES NUMÉRICOS QUE HACEN QUE EL MAZO DE CADA JUGADOR TENGA UNA JUGADA ESPECIAL
+				 	//puntajesFinales -> Tiene los valores de las jugadas de cada uno
+				 	//valoresJugadas ->Tiene los valores máximos de las jugadas (para desempate)
+				 	//jugadoresADesempatar ->Guarda los index de los jugadores que deben desempatar
+					
+					
+					for(int i =0;i<puntajesFinales.size();i++) {
+						if(puntajesFinales.get(i)==mayorPuntaje) {
+							jugadoresADesempatar.add(i);
+							System.out.println("Valor "+i+ ", de jugadoresADesempatar" + jugadoresADesempatar.size());
+						}
+					}
+					List<Integer> valoresAComparar = new ArrayList<Integer>();
+					System.out.println("tamaño jugadoresADesempatar: " + jugadoresADesempatar.size());
+					System.out.println("tamaño puntajesFinales: " + puntajesFinales.size());
+					System.out.println("tamaño valoresJugadas: " + valoresJugadas.size());
+					
+					for( Integer numero : jugadoresADesempatar) {
+						System.out.print(", " + numero);
+						}
+					for(int i=0;i<jugadoresADesempatar.size();i++) {
+						System.out.println("JUGADOR DE LA POSICIÓN: " + jugadoresADesempatar.get(i));
+						valoresAComparar.add(valoresJugadas.get(jugadoresADesempatar.get(i)));
+					}
+					posicionGanador = valoresJugadas.indexOf(Collections.max(valoresAComparar));
+					mayorPuntaje = puntajesFinales.get(posicionGanador);
 			 }
 		}
 		//Analizar quien tenga mejor juego
@@ -444,8 +476,16 @@ public class ControlPoker {
 		}
 		
 		//Editar registro
-		editarRegistros(11,"",posicionGanador,mayorPuntaje);
-		
+		if(decisionPorCartaMasAlta) {
+			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],-1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}else if(posicionGanador == 4) {
+			editarRegistros(11,"USUARIO",posicionGanador+1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}else {
+			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],posicionGanador+1,mayorPuntaje);
+			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
+		}
 	}
 
 	// Calcula cuántas cartas debe darle a cada jugador luego del descarte
@@ -564,16 +604,6 @@ public class ControlPoker {
 		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
 		System.out.println("Turno aumentó a " + turno);
 	}
-
-	/*
-	 * private void aumentarTurno() { // Si turno es 4 o múltiplo de 4, se convierte
-	 * en 5. Si turno tiene otro valor, // aumenta en 1 pero sin sobrepasar al 5.
-	 * turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5; if(turno !=5) { for(int
-	 * i=turno-1;i<TOTAL_JUGADORES-1;i++) { if(!jugadoresSimulados[i].getRetirado())
-	 * { turno=i+1; break; } } }
-	 * System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA Turno aumentó a " +
-	 * turno); }
-	 */
 
 	// Cambia la mano del jugador humano
 	public void descarteJugadorHumano(List<Carta> manoJugadorHumano) {

@@ -71,13 +71,13 @@ public class JugadorSimulado implements Runnable {
  	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
  	 			//igualar
  	 			
- 	 			if(probabilidad <= 50) {
+ 	 			if(probabilidad <= 90) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 				operacion = 0;
  	 				//AVISAR A CONTROL
  	 			}
  	 			//aumentar
- 	 			else if(probabilidad <= 90) {
+ 	 			else if(probabilidad <= 50) {
  	 				//cantidadApuesta = controlPoker.getMaximaApuesta() + (factorAumento * 500); //turnos 1-5
  	 				operacion = 1;
  	 			} 

@@ -70,7 +70,7 @@ public class MesaJuego extends JPanel {
 	}
 	//actualiza la mesa con el estado actual del juego
 		public void mesaActualizar(List<List<Carta>> manosJugadores, int ganador) {
-			//determinarResultado(manosJugadores);
+			//Actualizar la mesa de juego una vez ha ganado un jugador
 			if(ganador==0) {
 				jugador1.recibirCartas(manosJugadores.get(0),"Ganaste");
 				jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
