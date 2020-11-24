@@ -477,12 +477,15 @@ public class ControlPoker {
 		
 		//Editar registro
 		if(decisionPorCartaMasAlta) {
+			System.out.println("Ganador por carta más alta");
 			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],-1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
 		}else if(posicionGanador == 4) {
+			System.out.println("Ganador usuario");
 			editarRegistros(11,"USUARIO",posicionGanador+1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
 		}else {
+			System.out.println("Ganador simulado");
 			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],posicionGanador+1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador);
 		}
