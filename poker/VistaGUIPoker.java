@@ -296,15 +296,16 @@ public class VistaGUIPoker extends JFrame {
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
+					
 					controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {
 						//reiniciar juego
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
-						controlPoker.reiniciarJuego();
 						reiniciarVistaGUIPoker();
+						controlPoker.reiniciarJuego();		
+						//controlPoker.turnos(5, nombreJugadorHumano, 2, null);
 					}
 					else if(option == JOptionPane.NO_OPTION) {
 						System.exit(0);
@@ -337,7 +338,6 @@ public class VistaGUIPoker extends JFrame {
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
 					controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
@@ -346,6 +346,7 @@ public class VistaGUIPoker extends JFrame {
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
 						controlPoker.reiniciarJuego();
 						reiniciarVistaGUIPoker();
+						//controlPoker.turnos(5, nombreJugadorHumano, 2, null);
 					}
 					else if(option == JOptionPane.NO_OPTION) {
 						System.exit(0);

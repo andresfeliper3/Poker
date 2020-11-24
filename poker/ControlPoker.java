@@ -79,8 +79,6 @@ public class ControlPoker {
 			jugador.setRetirado(false);
 			jugador.setEnRondaDeApuestas(true);
 		}
-		//Despertar hilos
-		this.turnos(5, " Prueba", 2, null);
 		// Coloca condiciones iniciales
 		manosJugadores.clear();
 		apuestasJugadores.clear();
@@ -91,9 +89,13 @@ public class ControlPoker {
 		contadorIgualacion = 0;
 		contadorDescarte = 0;
 		colocarApuestaInicial();
-		repartirCartas();
+		repartirCartas();	
+		System.out.println("TURNO ES " + turno);
+		System.out.println("Antes del turnos que reinicia");
+		this.turnos(5, "Prueba", 10, null);
+		System.out.println("Después del turnos que reinicia");
 		escogerJugadorMano();
-		ronda = 0;
+		
 	}
 
 	// Reparte las cartas al inicio del juego
@@ -110,7 +112,7 @@ public class ControlPoker {
 			apuestasJugadores.add(apuestaInicial);
 		}
 		System.out.println("Apuesta inicial size: " + apuestasJugadores.size());
-		//Primer mensaje
+		// Primer mensaje
 		editarRegistros(0, "", -1, -1);
 	}
 
@@ -167,6 +169,7 @@ public class ControlPoker {
 		try {
 			// contadorTurno permite que solo 5 personas jueguen
 			if (ronda == 0 && contadorTurnos < TOTAL_JUGADORES) {
+				System.out.println("En apuestas entró " + nombreJugador + " con id " + idJugador + " y turno es " + turno);
 				// Mientras el jugador que entre no sea el que correponda, se duerme
 				while (idJugador != turno) {
 					System.out.println(
@@ -175,37 +178,44 @@ public class ControlPoker {
 					// Se vuelve a llamar al método run para que el jugador simulado tome su
 					// decisión con las apuestas recientes
 				}
+				if (operacion != 10) {
 
-				if (contadorTurnos < TOTAL_JUGADORES) {
-					int apuesta = calcularApuesta(idJugador, operacion);
-					System.out.println("Apuestas: Este es el idJugador " + idJugador);
-					if (!jugadoresRetiradosAuxiliar[idJugador - 1]) {
-						setApuestasJugadores(idJugador - 1, apuesta);
-						editarPanelJugador(idJugador - 1, apuesta);
-						editarRegistros(1, nombreJugador, apuesta, operacion);
+					if (contadorTurnos < TOTAL_JUGADORES) {
+						int apuesta = calcularApuesta(idJugador, operacion);
+						System.out.println("Apuestas: Este es el idJugador " + idJugador);
+						if (!jugadoresRetiradosAuxiliar[idJugador - 1]) {
+							setApuestasJugadores(idJugador - 1, apuesta);
+							editarPanelJugador(idJugador - 1, apuesta);
+							editarRegistros(1, nombreJugador, apuesta, operacion);
+						}
+
+						System.out.println("Turno: " + turno);
+						System.out.println("Jugador " + nombreJugador + " apostó "
+								+ apuestasJugadores.get(idJugador - 1) + " en total.");
+						aumentarTurno();
+						
 					}
-
-					System.out.println("Turno: " + turno);
-					System.out.println("Jugador " + nombreJugador + " apostó " + apuestasJugadores.get(idJugador - 1)
-							+ " en total.");
-					aumentarTurno();
-
+					contadorTurnos++;
+					System.out.println("ContadorTurnos aumentó a " + contadorTurnos);
 				}
-				contadorTurnos++;
-				System.out.println("ContadorTurnos aumentó a " + contadorTurnos);
+				else {
+					System.out.println("Cambio ronda a 0 en apuestas");
+					ronda = 0;
+				}
+				
 				esperarTurno.signalAll();
 				// Turno de usuario y no está repitiendo turno adicional ilegal
-				if (turno == 5 && contadorTurnos < TOTAL_JUGADORES) {
+				if (turno == 5 && contadorTurnos < TOTAL_JUGADORES && operacion != 10) {
 					// humanoApuesta();
 					editarRegistros(2, "", -1, -1);
 				}
 				System.out
 						.println("Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
 				// Revisar si todos los jugadores apostaron
-				if (contadorTurnos == TOTAL_JUGADORES) {
-					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
-						//Pasamos a la ronda para definir un ganador
-						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinará el ganador
+				if (contadorTurnos == TOTAL_JUGADORES && operacion != 10) {
+					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
+						// Pasamos a la ronda para definir un ganador
+						editarRegistros(10, "", -1, -1);// Mensaje: el Crupier determinará el ganador
 						variablePrueba = false;
 						ronda = 3;
 
@@ -226,6 +236,7 @@ public class ControlPoker {
 						// Mostrar en registro que le toca al usuario
 						if (turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
 							// Avisar que puede igualar o retirarse
+							System.out.print("Editar registros fase 6. Parte 1");
 							editarRegistros(6, "", -1, -1);
 						}
 					}
@@ -240,28 +251,37 @@ public class ControlPoker {
 					System.out.println("IdJugador " + idJugador + ", turno " + turno);
 					esperarIgualacion.await();
 				}
-				if (jugadoresParaApostarMas.contains(idJugador - 1)) {
-					int apuesta = calcularApuesta(idJugador, operacion);
-					setApuestasJugadores(idJugador - 1, apuesta);
-					editarPanelJugador(idJugador - 1, apuesta);
-					editarRegistros(4, nombreJugador, apuesta, operacion);
+				if (operacion != 10) {
+					if (jugadoresParaApostarMas.contains(idJugador - 1)) {
+						int apuesta = calcularApuesta(idJugador, operacion);
+						setApuestasJugadores(idJugador - 1, apuesta);
+						editarPanelJugador(idJugador - 1, apuesta);
+						editarRegistros(4, nombreJugador, apuesta, operacion);
 
-					System.out.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de "
-							+ apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
+						System.out
+								.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de "
+										+ apuesta + " y debería ser de " + Collections.max(apuestasJugadores));
+						System.out.println("En igualacion el jugador " + nombreJugador + " pasa de largo");		
+					}
+					aumentarTurno();
+					contadorIgualacion++;
+					System.out.println("contadorIgualacion llega a " + contadorIgualacion);
+				} 
+				else {
+					System.out.println("Cambio ronda a 0 en igualacion");
+					ronda = 0;
 				}
-				System.out.println("En igualacion el jugador " + nombreJugador + " pasa de largo");
-				aumentarTurno();
-				contadorIgualacion++;
-				System.out.println("contadorIgualacion llega a " + contadorIgualacion);
+				
 				esperarIgualacion.signalAll();
 
 				// Mostrar en registro que le toca al usuario
-				if (turno == 5 && contadorIgualacion < TOTAL_JUGADORES) {
+				if (turno == 5 && contadorIgualacion < TOTAL_JUGADORES && operacion != 10) {
 					// Avisar que puede igualar o retirarse
+					System.out.print("Editar registros fase 6. Parte 2");
 					editarRegistros(6, "", -1, -1);
 				}
 				// Si todos los que debían igualar, ya igualaron
-				if (contadorIgualacion == TOTAL_JUGADORES) {
+				if (contadorIgualacion == TOTAL_JUGADORES && operacion != 10) {
 					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas "
 							+ jugadoresParaApostarMas.size());
 					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
@@ -297,27 +317,34 @@ public class ControlPoker {
 							.println("En descarte jugador " + nombreJugador + " intenta entrar y es mandado a MIMIRRR");
 					esperarDescarte.await();
 				}
+				if (operacion != 10) {
 
-				if (!jugadoresRetirados[idJugador - 1]) {
-					System.out.println(
-							"Soy " + nombreJugador + " voy a descartar " + operacion + ", es el turno: " + turno);
-					descarte[idJugador - 1] = operacion; // operación = cartas pedidas
+					if (!jugadoresRetirados[idJugador - 1]) {
+						System.out.println(
+								"Soy " + nombreJugador + " voy a descartar " + operacion + ", es el turno: " + turno);
+						descarte[idJugador - 1] = operacion; // operación = cartas pedidas
 
-					editarRegistros(7, nombreJugador, -1, operacion);
+						editarRegistros(7, nombreJugador, -1, operacion);
 
+					}
+					contadorDescarte++;
+					System.out.println("contadorDescarte aumentó a " + contadorDescarte);
+					aumentarTurno();
 				}
-				contadorDescarte++;
-				System.out.println("contadorDescarte aumentó a " + contadorDescarte);
-				aumentarTurno();
+				else {
+					System.out.println("operacion " + operacion);
+					System.out.println("Cambio ronda a 0 en descartes");
+					ronda = 0;
+				}
 				System.out.println("En descarte, turno aumenta a " + turno);
 				esperarDescarte.signalAll();
 
 				// Mensaje al usuario indicándole que le toca descartar
-				if (turno == 5 && contadorDescarte < TOTAL_JUGADORES) {
+				if (turno == 5 && contadorDescarte < TOTAL_JUGADORES && operacion != 10) {
 					System.out.println("le toca a YOLAS DESCARTAR ");
 					editarRegistros(8, "", -1, -1);
 				}
-				if (contadorDescarte == TOTAL_JUGADORES) {
+				if (contadorDescarte == TOTAL_JUGADORES && operacion != 10) {
 					System.out.println("Próximo a ejecutar darCartas");
 					actualizarRetiradosAuxiliar();
 					darCartas();
@@ -367,12 +394,12 @@ public class ControlPoker {
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 2) {
-	
+
 				manosJugadores.get(i).remove(0);
 				manosJugadores.get(i).remove(0);
 
 			} else if (descarte[i] == 1) {
-	
+
 				manosJugadores.get(i).remove(0);
 				;
 			}
@@ -397,62 +424,65 @@ public class ControlPoker {
 		// TODO Auto-generated method stub
 		System.out.println("Entró a determinarGanador");
 		crupier = new Crupier();
-		int posicionGanador=0;
-		int mayorPuntaje=0;
-		int puntaje=0;
-		
-		for(int i=0;i<TOTAL_JUGADORES;i++) {
-			
+		int posicionGanador = 0;
+		int mayorPuntaje = 0;
+		int puntaje = 0;
+
+		for (int i = 0; i < TOTAL_JUGADORES; i++) {
+
 			puntaje = crupier.ejecutar(manosJugadores.get(i));
-			
+
 			puntajesFinales.add(puntaje);
-			System.out.println("PRIMERO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
+			System.out.println(
+					"PRIMERO, En la posición: " + i + ", el jugador tiene un puntaje de: " + puntajesFinales.get(i));
 		}
 
-		//imprimir en consola los puntajes de los jugadores
-		for(int i=0;i<puntajesFinales.size();i++) {
-			System.out.println("Puntos del jugador: "+ i +", " + puntajesFinales.get(i) + "\n");
+		// imprimir en consola los puntajes de los jugadores
+		for (int i = 0; i < puntajesFinales.size(); i++) {
+			System.out.println("Puntos del jugador: " + i + ", " + puntajesFinales.get(i) + "\n");
 		}
-		
-		//Determina si hay que definir el ganador por puntaje de la carta más alta
+
+		// Determina si hay que definir el ganador por puntaje de la carta más alta
 		boolean decisionPorCartaMasAlta = true;
-		for(int i=0;i<puntajesFinales.size();i++) {
-			if(puntajesFinales.get(i)!=10) {
+		for (int i = 0; i < puntajesFinales.size(); i++) {
+			if (puntajesFinales.get(i) != 10) {
 				decisionPorCartaMasAlta = false;
 				break;
 			}
 		}
-		//Analizar el ganador por puntaje mínimo no por carta más alta
-		if(!decisionPorCartaMasAlta) {
-			 mayorPuntaje = Collections.min(puntajesFinales);
-			 posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
-			 
+		// Analizar el ganador por puntaje mínimo no por carta más alta
+		if (!decisionPorCartaMasAlta) {
+			mayorPuntaje = Collections.min(puntajesFinales);
+			posicionGanador = puntajesFinales.indexOf(Collections.min(puntajesFinales));
+
 		}
-		//Analizar quien tenga mejor juego
-		else if(decisionPorCartaMasAlta) {
+		// Analizar quien tenga mejor juego
+		else if (decisionPorCartaMasAlta) {
 			puntajesFinales.clear();
-			
-			for(int i=0;i<TOTAL_JUGADORES;i++) {
-				//Obtener los valores numéricos de los mazos de la posición i
+
+			for (int i = 0; i < TOTAL_JUGADORES; i++) {
+				// Obtener los valores numéricos de los mazos de la posición i
 				ArrayList<Integer> valoresCartasJugadores = new ArrayList<Integer>();
 				for (Carta carta : manosJugadores.get(i)) {
 					valoresCartasJugadores.add(carta.getValorNumerico());
 				}
-				//agregar a la lista  de puntajesFinales los valores máximos de cada mazo de cada jugador
-				for(int j=0;j<TOTAL_JUGADORES;j++) {
+				// agregar a la lista de puntajesFinales los valores máximos de cada mazo de
+				// cada jugador
+				for (int j = 0; j < TOTAL_JUGADORES; j++) {
 					puntaje = Collections.max(valoresCartasJugadores);
 					puntajesFinales.add(puntaje);
-					System.out.println("SEGUNDO, En la posición: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
+					System.out.println("SEGUNDO, En la posición: " + i + ", el jugador tiene un puntaje de: "
+							+ puntajesFinales.get(i));
 				}
 			}
-			
+
 			mayorPuntaje = Collections.max(puntajesFinales);
 			posicionGanador = puntajesFinales.indexOf(mayorPuntaje);
 		}
-		
-		//Editar registro
-		editarRegistros(11,"",posicionGanador,mayorPuntaje);
-		
+
+		// Editar registro
+		editarRegistros(11, "", posicionGanador, mayorPuntaje);
+
 	}
 
 	// Calcula cuántas cartas debe darle a cada jugador luego del descarte

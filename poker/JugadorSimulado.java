@@ -127,8 +127,9 @@ public class JugadorSimulado implements Runnable {
  	 				controlPoker.setJugadoresEnjuego();
  	 			}
  	 			enRondaDeIgualacion = false;
+ 	 			System.out.println("Antes de llamar a turnos en run igualacion");
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
- 	 			
+ 	 			System.out.println("Después de llamar a turnos en run igualacion");
  	 		}
  	 		//Ronda de descartes
  	 		else if(controlPoker.getRonda() == 2 && enRondaDeDescarte) {
