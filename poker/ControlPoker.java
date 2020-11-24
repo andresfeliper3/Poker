@@ -72,19 +72,28 @@ public class ControlPoker {
 
 	// Reinicia el juego si el usuario así lo desea
 	public void reiniciarJuego() {
+		System.out.println("REINICIANDO JUEGO");
 		// Quita los retirados
 		humanoRetirado = false;
 		for (JugadorSimulado jugador : jugadoresSimulados) {
 			jugador.setRetirado(false);
+			jugador.setEnRondaDeApuestas(true);
 		}
+		//Despertar hilos
+		this.turnos(5, " Prueba", 2, null);
 		// Coloca condiciones iniciales
 		manosJugadores.clear();
 		apuestasJugadores.clear();
 		jugadoresParaApostarMas.clear();
+		puntajesFinales.clear();
+		posicionJugador = 0;
+		contadorTurnos = 0;
+		contadorIgualacion = 0;
+		contadorDescarte = 0;
 		colocarApuestaInicial();
 		repartirCartas();
 		escogerJugadorMano();
-
+		ronda = 0;
 	}
 
 	// Reparte las cartas al inicio del juego
@@ -101,6 +110,8 @@ public class ControlPoker {
 			apuestasJugadores.add(apuestaInicial);
 		}
 		System.out.println("Apuesta inicial size: " + apuestasJugadores.size());
+		//Primer mensaje
+		editarRegistros(0, "", -1, -1);
 	}
 
 	private ArrayList<Carta> seleccionarCartas() {

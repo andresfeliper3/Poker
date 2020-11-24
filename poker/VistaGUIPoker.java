@@ -114,8 +114,7 @@ public class VistaGUIPoker extends JFrame {
 		constraints.gridy = 1;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.VERTICAL;
-		//Primer mensaje
-		editarRegistros(0, "", -1, -1);
+		
 		add(scroll, constraints);
 		
 		//Panel de botones

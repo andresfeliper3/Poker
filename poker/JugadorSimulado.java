@@ -53,7 +53,20 @@ public class JugadorSimulado implements Runnable {
 	public void setRetirado(boolean retirado) {
 		this.retirado = retirado;
 	}
- 	@Override
+	
+ 	public void setEnRondaDeApuestas(boolean enRondaDeApuestas) {
+		this.enRondaDeApuestas = enRondaDeApuestas;
+	}
+
+	public void setEnRondaDeIgualacion(boolean enRondaDeIgualacion) {
+		this.enRondaDeIgualacion = enRondaDeIgualacion;
+	}
+
+	public void setEnRondaDeDescarte(boolean enRondaDeDescarte) {
+		this.enRondaDeDescarte = enRondaDeDescarte;
+	}
+
+	@Override
 	//Acción que realiza al ejecutarse el hilo
 	public void run() {
 		// TODO Auto-generated method stub
