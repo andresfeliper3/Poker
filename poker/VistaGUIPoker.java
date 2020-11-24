@@ -270,7 +270,7 @@ public class VistaGUIPoker extends JFrame {
 			
 		}
 	}
-	
+	//Método encargado de actualizar la vista del poker
 	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador) {
 		//debe llamarse cuanto el control tenga las nuevas manos y el resultado
 		mesaJuego.mesaActualizar(manosJugadores,ganador);
@@ -283,8 +283,7 @@ public class VistaGUIPoker extends JFrame {
 			}
 			
 		});
-		
-		
+
 	}
 	//Reinicia las condiciones iniciales de la vista GUI con los nuevos datos generados por el controlPoker
 	private void reiniciarVistaGUIPoker() { 
@@ -296,14 +295,15 @@ public class VistaGUIPoker extends JFrame {
 		//Vaciar panel de registros
 		panelRegistros.setText("");
 	}
-	
+	//Método encargado de hacer cambios en el panel del jugador
 	public void editarPanelJugador(int indexJugador, int apuesta) {
 		mesaJuego.setPanelJugador(indexJugador, apuesta);
 	}
-	
+	//Método que desactiva las escuchas de las cartas del jugador humano
 	public void desactivarEscucha(JButton boton) {
 		boton.removeActionListener(escucha);
 	}
+	//Método que activa las escuchas de las cartas del jugador humano
 	public void activarEscucha(JButton boton) {
 		boton.addActionListener(escucha);
 	}
@@ -333,7 +333,7 @@ public class VistaGUIPoker extends JFrame {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
 					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
-					controlPoker.setJugadoresEnjuego();
+					//controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {
@@ -350,17 +350,6 @@ public class VistaGUIPoker extends JFrame {
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Esta opción aún no está disponible.");
 				}
-				//Desactivar escuchas en ronda de apuestas 
-				if(controlPoker.getRonda() == 0) {
-					/*
-					desactivarEscucha(aumentar);
-					desactivarEscucha(igualar);
-					desactivarEscucha(retirarse);
-					*/
-				}
-				else if(controlPoker.getRonda() == 2) {
-					//Desactivar escuchas en ronda de descarte
-				}
 			}
 			//Ronda de igualación
 			else if(controlPoker.getRonda() == 1) {
@@ -374,7 +363,7 @@ public class VistaGUIPoker extends JFrame {
 					//El usuario se retira y pierde
 					controlPoker.setHumanoRetirado(true);
 					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
-					controlPoker.setJugadoresEnjuego();
+					//controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {

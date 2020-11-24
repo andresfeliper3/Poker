@@ -83,7 +83,7 @@ public class Baraja {
 		   mazo.remove(index); //elimina del mazo la carta usada
 		   return carta;
 	   }
-	   
+	   //Retorna el tamaño del mazo
 	   public int mazoSize() {
 		   return mazo.size();
 	   }

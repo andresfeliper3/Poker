@@ -45,11 +45,11 @@ public class JugadorSimulado implements Runnable {
 			} 
 		}
 	}
-	
+	//Retorna el estado del jugador si está retirado o no
 	public boolean getRetirado() {
 		return retirado;
 	}
-	
+	//Establece si un jugador se retira o no del juego
 	public void setRetirado(boolean retirado) {
 		this.retirado = retirado;
 	}
@@ -87,7 +87,6 @@ public class JugadorSimulado implements Runnable {
  	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 				operacion = 2;
  	 				retirado = true;
- 	 				controlPoker.setJugadoresEnjuego();
  	 				System.out.println("Run: Jugador " + nombre + " se retira");
  	 			}
  	 			enRondaDeApuestas = false;
@@ -111,7 +110,6 @@ public class JugadorSimulado implements Runnable {
  	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 				operacion = 2;
  	 				retirado = true;
- 	 				controlPoker.setJugadoresEnjuego();
  	 			}
  	 			enRondaDeIgualacion = false;
  	 			controlPoker.turnos(turnoId, nombre, operacion, this);
@@ -123,7 +121,6 @@ public class JugadorSimulado implements Runnable {
  	 			System.out.println("Run: Ronda 2 de jugador simulado " + nombre);
  	 			cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 			//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
- 	 			//escogerDescarte(cantidadDescarte);
  	 			enRondaDeDescarte = false;
  	 			System.out.println("Antes de llamar a turnos en RUN ronda 2 el jugador " + nombre);
  	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this);
@@ -133,7 +130,6 @@ public class JugadorSimulado implements Runnable {
  	 			
  	 		}
  	 		else if(controlPoker.getRonda() == 3) {
- 	 			System.out.println("MATANDOOOOO AL HILO " + nombre);
  	 			jugar = false;
  	 		}
  	 		

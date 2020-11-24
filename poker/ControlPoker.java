@@ -108,7 +108,7 @@ public class ControlPoker {
 		}
 		System.out.println("Apuesta inicial size: " + apuestasJugadores.size());
 	}
-
+	//Método que se encarga de seleccionar 5 cartas del mazo y pasarselas al jugador
 	private ArrayList<Carta> seleccionarCartas() {
 		// TODO Auto-generated method stub
 		ArrayList<Carta> manoJugador = new ArrayList<Carta>();
@@ -153,7 +153,7 @@ public class ControlPoker {
 	int contadorIgualacion = 0;
 	int contadorDescarte = 0;
 
-	// Método sincronizador de turnos
+	// Método sincronizador de turnos, se encarga de mover el motor del juego, a partir de los turnos del juego
 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado) {
 		// Si está en la ronda de apuestas
 		boolean[] jugadoresRetirados = { jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(),
@@ -337,7 +337,7 @@ public class ControlPoker {
 			bloqueo.unlock();
 		}
 	}
-
+	//Método que se encarga de repartir las cartas que les hace falta a cada uno de los mazos de los jugadores
 	private void darCartas() {
 		// TODO Auto-generated method stub
 		// Cartas para los jugadores Simulados
@@ -378,7 +378,7 @@ public class ControlPoker {
 		asignarCartas(manosJugadores.get(4));
 
 	}
-
+	//Método encargado de actualizar la lista de los jugadores que están retirados
 	private void actualizarRetiradosAuxiliar() {
 		for (int i = 0; i < jugadoresSimulados.length; i++) {
 			jugadoresRetiradosAuxiliar[i] = jugadoresSimulados[i].getRetirado();
@@ -386,7 +386,7 @@ public class ControlPoker {
 		jugadoresRetiradosAuxiliar[4] = humanoRetirado;
 	}
 
-	// Funcion que determina el ganador
+	// Funcion que determina el ganador del juego
 	private void determinarGanador() {
 		// TODO Auto-generated method stub
 		System.out.println("Entró a determinarGanador");
@@ -547,7 +547,7 @@ public class ControlPoker {
 			}
 		});
 	}
-
+	//Método encargado de enviar la orden de actualizar el panel del jugador cuando decide aumentar apuesta
 	private void editarPanelJugador(int jugador, int apuesta) {
 		// Sincronizar con hilo manejador de eventos
 		SwingUtilities.invokeLater(new Runnable() {
@@ -600,7 +600,7 @@ public class ControlPoker {
 		}
 		return iguales;
 	}
-
+	//Aumenta el turno, si el turno actual es 5, el siguiente será el turno 1
 	private void aumentarTurno() {
 		// Si turno es 4 o múltiplo de 4, se convierte en 5. Si turno tiene otro valor,
 		// aumenta en 1 pero sin sobrepasar al 5.
@@ -614,47 +614,43 @@ public class ControlPoker {
 		manosJugadores.add(manoJugadorHumano); // se agrega la mano nueva
 
 	}
-
-	public void setJugadoresEnjuego() {
-		this.jugadoresEnjuego--;
-	}
-
+	//establece las apuestas de los jugadores
 	public void setApuestasJugadores(int indexJugador, int apuesta) {
 		apuestasJugadores.set(indexJugador, apuesta);
 	}
-
+	//retorna una lista con las apuestas de todos los jugadores
 	public List<Integer> getApuestasJugadores() {
 		return apuestasJugadores;
 	}
-
+	//retorna una lista de listas con las manos de todos los jugadores
 	public List<List<Carta>> getManosJugadores() {
 		return manosJugadores;
 	}
-
+	//retorna la máxima apuesta actual
 	public int getMaximaApuesta() {
 		return Collections.max(apuestasJugadores);
 	}
-
+	//retorna el ID del jugador mano
 	public int getIdJugadorMano() {
 		return jugadorManoAleatorio;
 	}
-
+	//Establece la ronda actual
 	public void setRonda(int ronda) {
 		this.ronda = ronda;
 	}
-
+	//Retorna la ronda actual
 	public int getRonda() {
 		return ronda;
 	}
-
+	//Retorna el turno actual
 	public int getTurno() {
 		return turno;
 	}
-
+	//Retorna false si el jugador humano está retirado
 	public boolean isHumanoRetirado() {
 		return humanoRetirado;
 	}
-
+	//Método encargado de cambiar el estado activo del jugador humano
 	public void setHumanoRetirado(boolean humanoRetirado) {
 		this.humanoRetirado = humanoRetirado;
 	}

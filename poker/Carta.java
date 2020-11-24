@@ -33,19 +33,19 @@ public class Carta extends JLabel{
 			   break;
 		   } 
 	 }
-	
+	//retorna el valor numérico de la carta
 	 public int getValorNumerico() {
 		 return valorNumerico;
 	 }
-
+	 //retorna el valor de la carta en tipo String
 	 public String getValor() {
 		 return valor;
 	 }
-
+	 //Retorna el valor del Palo de la carta
 	 public String getPalo() {
 		 return palo;
 	 }
-	 
+	 //retorna el valor numérico alterno de la carta As
 	 public int getValorNumericoAlterno() {
 		 //Valor alterno de la carta As (14 0 1)
 		 if(valorNumerico==14) {
@@ -60,12 +60,12 @@ public class Carta extends JLabel{
 	 public String toString() {
 		 return valor+palo;
 	 }
-
+	 //Asigna la imagen de la carta
 	 public void setImagen(BufferedImage imagen) {
 		 this.imagen = imagen;
 		 setIcon(new ImageIcon(imagen));
 	 }
-	 
+	 //Retorna el bufferedImage conrrespondiente a la carta
 	 public BufferedImage getImagen() {
 		return imagen;
 	}

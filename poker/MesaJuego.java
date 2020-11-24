@@ -1,7 +1,6 @@
 package poker;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class MesaJuego extends JPanel {
 	private ArrayList<Integer>apuestasJugadores;
 	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
 		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestasJugadores);
-		//this.setPreferredSize(new Dimension(700, 600));
 		this.setBackground(Color.GREEN);
 		this.setBorder(new TitledBorder("Mesa"));	
 	}
@@ -106,6 +104,7 @@ public class MesaJuego extends JPanel {
 				}
 			}
 		}
+	//Retorna el panel del jugador humano
 	public PanelJugador getJugadorHumano() {
 		return jugador5;
 	}
@@ -115,13 +114,11 @@ public class MesaJuego extends JPanel {
 		
 		return jugador5.getMano();
 	}
-	
+	//método encargado de establecer en pantalla la apuesta del jugador
 	public void setPanelJugador(int jugador, int apuesta) {
-		System.out.println("Mesa de juego, JUGADOR NUMERO " + jugador);
-		//System.out.println("CON EL NOMBRE " + panelJugadores[jugador].getName());
 		panelJugadores[jugador].setValorApuesta(apuesta);
 	}
-	
+	//Método encargado de reiniciar todos los paneles de los jugadores
 	public void reiniciarPanelJugadores(List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
 		//Reiniciar todos los panelJugadores
 		for(int i = 0; i < panelJugadores.length; i++) {

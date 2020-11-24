@@ -90,6 +90,7 @@ public class PanelJugador extends JPanel {
 		panelApuesta.removeAll();
 		panelApuesta.add(apuesta);	
 	}
+	//recibe unas nuevas cartas y las pinta en el panel del jugador
 	  public void recibirCartas(List<Carta> nuevasCartas, String texto) {
 		  SwingUtilities.invokeLater(new Runnable() {
 
@@ -105,11 +106,11 @@ public class PanelJugador extends JPanel {
 			   
 		   });
 	   }
-
+	 //retorna la mano del jugador
 	public List<Carta> getMano() {
 		  return mano; 
 	}
-	
+	//Desactiva las escuchas de las cartas del jugador humano, para no descartar
 	public void desactivarEscuchas() {
 		   SwingUtilities.invokeLater(new Runnable() {
 
@@ -122,7 +123,7 @@ public class PanelJugador extends JPanel {
 			}		   
 		   });
 	   }
-	   
+	  //Activa las escuchas de las cartas del jugador humano, para descartar
 	 public void activarEscuchas() {
 		   SwingUtilities.invokeLater(new Runnable() {
 
@@ -135,10 +136,11 @@ public class PanelJugador extends JPanel {
 			}		   
 		   });   
 	   }
-	   
+	//retorna el nombre del jugador
 	public String getNombre() {
 		return nombre.getText();
 	}
+	//establece el valor de la apuesta en el panel del jugador
 	public void setValorApuesta(int valorApuesta) {
 		this.valorApuesta = valorApuesta;
 		apuesta.setText("$" + String.valueOf(valorApuesta));
