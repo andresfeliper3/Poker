@@ -76,6 +76,7 @@ public class Crupier {
 					cant_cartasIguales++;
 				}
 				if (cant_cartasIguales == 4) {
+					valorParaGanar = 0;
 					return true;
 				}
 			}
