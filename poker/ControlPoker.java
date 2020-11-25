@@ -27,6 +27,7 @@ public class ControlPoker {
 	private Crupier crupier;
 	private List<Integer> jugadoresADesempatar = new ArrayList<Integer>();//Serán agregados las posiciones de los jugadores que estén empatados por la victoria
 	private List<List<Carta>> manosJugadores;
+	private List<Integer> dineroJugadores;
 	private List<Integer> apuestasJugadores;
 	private List<Integer> valoresAComparar;
 	private List<Integer> jugadoresParaApostarMas; // Lista de posiciones de jugadores
@@ -34,6 +35,7 @@ public class ControlPoker {
 												// determinar un ganador
 	private ArrayList<Integer> valoresJugadas; //Lista que almacena los valores de las cartas máximas del valor de las jugadas que tengan en su mano de cartas
 	private int apuestaInicial = 500;
+	private int dineroInicial = 1000;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
 	private int posicionJugador = 0;
@@ -67,6 +69,7 @@ public class ControlPoker {
 		puntajesFinales = new ArrayList<Integer>();
 		valoresJugadas = new ArrayList<Integer>();
 		valoresAComparar = new ArrayList<Integer>();
+		dineroJugadores = new ArrayList<Integer>();
 		iniciarJuego();
 
 		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, apuestasJugadores, this);
@@ -132,11 +135,22 @@ public class ControlPoker {
 			manosJugadores.add(seleccionarCartas());
 		}
 	}
+	//Todos los jugadores inician con la misma cantidad de dinero (sin apostar)
+	private void inicializarDinero() {
+		for (int jugador = 0; jugador < TOTAL_JUGADORES; jugador++) {
+			dineroJugadores.add(dineroInicial);
+		}
+	}
 
 	// Todos inician con la misma apuesta
 	private void colocarApuestaInicial() {
+		//Llenar el dinero de los jugadores
+		inicializarDinero();
+		//Todos apuestan lo mismo
 		for (int jugador = 0; jugador < TOTAL_JUGADORES; jugador++) {
 			apuestasJugadores.add(apuestaInicial);
+			dineroJugadores.set(jugador, dineroJugadores.get(jugador) - apuestaInicial);
+			System.out.println("Jugador " + jugador + " queda con dinero " + dineroJugadores.get(jugador));
 		}
 		System.out.println("Apuesta inicial size: " + apuestasJugadores.size());
 	}
@@ -676,8 +690,13 @@ public class ControlPoker {
 
 	}
 	//establece las apuestas de los jugadores
-	public void setApuestasJugadores(int indexJugador, int apuesta) {
+	private void setApuestasJugadores(int indexJugador, int apuesta) {
 		apuestasJugadores.set(indexJugador, apuesta);
+		dineroJugadores.set(indexJugador, dineroJugadores.get(indexJugador) - apuesta);
+	}
+	
+	public List<Integer> getDineroJugadores() {
+		return dineroJugadores;
 	}
 	//retorna una lista con las apuestas de todos los jugadores
 	public List<Integer> getApuestasJugadores() {

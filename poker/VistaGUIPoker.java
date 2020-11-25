@@ -22,7 +22,7 @@ import java.util.List;
 
 public class VistaGUIPoker extends JFrame {
 	
-	private JPanel zonaJuego, zonaDinero, zonaApuesta, panelBotones;
+	private JPanel zonaJuego, zonaDinero, panelBotones;
 	private JTextArea panelRegistros;
 	private MesaJuego mesaJuego;
 	private Titulos titulo,apuestaEnJuego;
@@ -94,12 +94,7 @@ public class VistaGUIPoker extends JFrame {
 		//Mesa de juego (dentro de zonaJuego)
 		mesaJuego = new MesaJuego(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestasJugadores);
 		zonaJuego.add(mesaJuego, BorderLayout.CENTER);
-		//Zona apuesta (dentro de zonaJuego
-		zonaApuesta = new JPanel();
-		zonaApuesta.setBorder(new TitledBorder("Apuestas"));
-		zonaJuego.add(zonaApuesta, BorderLayout.SOUTH);
-		
-		
+	
 		
 		panelRegistros = new JTextArea();
 		panelRegistros.setBounds(20,20,600,400);
