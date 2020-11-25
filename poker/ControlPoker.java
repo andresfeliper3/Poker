@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package poker;
 
 import java.awt.EventQueue;
@@ -14,14 +17,26 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ControlPoker.
+ */
 public class ControlPoker {
+	
+	/** The Constant NUMERO_CARTAS_MANO. */
 	public static final int NUMERO_CARTAS_MANO = 5;
+	
+	/** The Constant TOTAL_JUGADORES. */
 	public static final int TOTAL_JUGADORES = 5;
-	public static final String[] NOMBRE_JUGADORES = { "Duque", "Uribe", "Petrosky", "Kaku" };
+	
+	/** The Constant NOMBRE_JUGADORES. */
+	public static final String[] NOMBRE_JUGADORES = { "Camila", "Laura", "Fernando","AndrÈs"};
 	private JugadorSimulado jugador1, jugador2, jugador3, jugador4;
 	private JugadorSimulado[] jugadoresSimulados = new JugadorSimulado[TOTAL_JUGADORES - 1];
 	// Vista GUI
 	private VistaGUIPoker vistaPoker;
+	
+	/** The baraja. */
 	// Elementos del juego
 	private Baraja baraja;
 	private Crupier crupier;
@@ -62,6 +77,9 @@ public class ControlPoker {
 	private ExecutorService ejecutorHilos = Executors.newCachedThreadPool(); // PROBAR OTRO
 	private Random random;
 
+	/**
+	 * Instantiates a new control poker.
+	 */
 	public ControlPoker() {
 		manosJugadores = new ArrayList<List<Carta>>();
 		apuestasJugadores = new ArrayList<Integer>();
@@ -74,8 +92,10 @@ public class ControlPoker {
 
 		vistaPoker = new VistaGUIPoker(NOMBRE_JUGADORES, manosJugadores, apuestasJugadores, this);
 
-	}
-	//MÈtodo encargado de iniciar el juego
+	}	
+	/**
+	 * MÈtodo encargado de iniciar el juego
+	 */
 	private void iniciarJuego() {
 		// TODO Auto-generated method stub
 		colocarApuestaInicial();
@@ -86,7 +106,9 @@ public class ControlPoker {
 		
 	}
 
-	// Reinicia el juego si el usuario asÌ lo desea
+	/**
+	 * Reinicia el juego si el usuario asÌ lo desea
+	 */
 	public void reiniciarJuego() {
 		// Quita los retirados
 		humanoRetirado = false;
@@ -94,7 +116,6 @@ public class ControlPoker {
 			jugador.setRetirado(false);
 		}
 		// Coloca condiciones iniciales
-		
 		manosJugadores.clear();
 		apuestasJugadores.clear();
 		jugadoresParaApostarMas.clear();
@@ -108,13 +129,12 @@ public class ControlPoker {
 		jugadoresADesempatar.clear();
 		valoresJugadas.clear();
 		humanoRetirado = false;
-		System.out.println("ANTES DE ACTIVAR LA RONDA 0 EN EL REINICIO");
+
 		colocarApuestaInicial();
 		repartirCartas();
 		escogerJugadorMano();
 		activarRonda0();
-		//vistaPoker.actualizarVistaPoker(manosJugadores, -1, 2);
-		System.out.println("REINICIANDO TODOS LOS HILOS Y JUGADOR MANO ES:" + turno);
+		
 		//Reestablecer los valores predeterminados de cada hilo 
 		jugador1.reiniciarHilo();
 		jugador2.reiniciarHilo();
@@ -122,32 +142,42 @@ public class ControlPoker {
 		jugador4.reiniciarHilo();
 		reiniciado = false;
 	}
-	//MÈtodo encargado de totalizar el valor de la apuesta en juego
+	
+	/**
+	 * Actualizar apuesta en juego.
+	 * MÈtodo encargado de totalizar el valor de la apuesta en juego
+	 * @return the int. Apuesta total en juego
+	 */
 	public int actualizarApuestaEnJuego() {
 		apuestaTotal = 0;
 		for(Integer integer : apuestasJugadores) {
-			System.out.println("ACTUALIZAR apuesta en juego: " + integer);
 			apuestaTotal += integer;
 		}
-		System.out.println("Apuesta total " + apuestaTotal);
 		return apuestaTotal;
 	}
-
-	// Reparte las cartas al inicio del juego
+	/**
+	 * repartir Cartas.
+	 * Reparte las cartas al inicio del juego
+	 */ 
 	private void repartirCartas() {
 		baraja = new Baraja();
 		for (int jugador = 0; jugador < TOTAL_JUGADORES; jugador++) {
 			manosJugadores.add(seleccionarCartas());
 		}
 	}
-	//Todos los jugadores inician con la misma cantidad de dinero (sin apostar)
+	/**
+	 * inicializar Dinero.
+	 * Todos los jugadores inician con la misma cantidad de dinero (sin apostar)
+	 */ 
 	private void inicializarDinero() {
 		for (int jugador = 0; jugador < TOTAL_JUGADORES; jugador++) {
 			dineroJugadores.add(dineroInicial);
 		}
 	}
-
-	// Todos inician con la misma apuesta
+	/**
+	 *  Colocar Apuesta Inicial.
+	 *  Todos inician con la misma apuesta
+	 */ 
 	private void colocarApuestaInicial() {
 		//Llenar el dinero de los jugadores
 		inicializarDinero();
@@ -155,11 +185,14 @@ public class ControlPoker {
 		for (int jugador = 0; jugador < TOTAL_JUGADORES; jugador++) {
 			apuestasJugadores.add(apuestaInicial);
 			dineroJugadores.set(jugador, dineroJugadores.get(jugador) - apuestaInicial);
-			System.out.println("Jugador " + jugador + " queda con dinero " + dineroJugadores.get(jugador));
+
 		}
-		System.out.println("Apuesta inicial size: " + apuestasJugadores.size());
 	}
-	//MÈtodo que se encarga de seleccionar 5 cartas del mazo y pasarselas al jugador
+	/**
+	 *  Seleccionar Cartas
+	 *  MÈtodo que se encarga de seleccionar 5 cartas del mazo y pasarselas al jugador
+	 *  @return ArrayList. Retorna la mano del jugador
+	 */ 
 	private ArrayList<Carta> seleccionarCartas() {
 		// TODO Auto-generated method stub
 		ArrayList<Carta> manoJugador = new ArrayList<Carta>();
@@ -169,8 +202,10 @@ public class ControlPoker {
 		}
 		return manoJugador;
 	}
-
-	// Escoge al azar al jugador mano (inicial) escogiendo el turno
+	/**
+	 * Escoger Jugador Mano
+	 *  Escoge al azar al jugador mano (inicial) escogiendo el turno
+	 */ 
 	private void escogerJugadorMano() {
 		random = new Random();
 		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
@@ -182,8 +217,10 @@ public class ControlPoker {
 			editarRegistros(2, "", -1, -1);
 		}
 	}
-
-	// Inicia los hilos de los jugadores simulados
+	/**
+	 *  Iniciar jugadores simulados
+	 *  Inicia los hilos de los jugadores simulados
+	 */ 
 	private void iniciarJugadoresSimulados() {
 		// Jugadores simulados
 		jugador1 = new JugadorSimulado(NOMBRE_JUGADORES[0], 1, this);
@@ -202,15 +239,21 @@ public class ControlPoker {
 		ejecutorHilos.shutdown();
 	}
 
+	/** The contador igualacion. */
 	int contadorIgualacion = 0;
+	
+	/** The contador descarte. */
 	int contadorDescarte = 0;
-
-	// MÈtodo sincronizador de turnos, se encarga de mover el motor del juego, a partir de los turnos del juego
+	/**
+	 * Turnos.
+	 *	MÈtodo sincronizador de turnos, se encarga de mover el motor del juego, a partir de los turnos del juego
+	 * @param idJugador the id jugador
+	 * @param nombreJugador the nombre jugador
+	 * @param operacion the operacion, acciÛn que va a realizar el jugador
+	 * @param jugadorSimulado the jugador simulado
+	 * @param estadoJugador the estado jugador, true si el jugador se ha retirado, false si no.
+	 */
 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado,boolean estadoJugador) {
-		// Si est· en la ronda de apuestas
-		System.out.println("TURNOS");
-		boolean[] jugadoresRetirados = { jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(),
-				jugador4.getRetirado(), humanoRetirado };
 		bloqueo.lock();
 		try {
 			// contadorTurno permite que solo 5 personas jueguen
@@ -225,9 +268,7 @@ public class ControlPoker {
 					System.out.println(
 							"En apuestas jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno en la ronda de apuestas");
 					esperarTurno.await();
-					System.out.println("ES EL TURNO: " + turno + ", "+nombreJugador+"DESPERT”””””””””””””””””””””””””””””””””””””””” EN LA RONDA DE APUESTAS");
-					// Se vuelve a llamar al mÈtodo run para que el jugador simulado tome su
-					// decisiÛn con las apuestas recientes
+					System.out.println(nombreJugador+", DespertÛ en la ronda de apuestas");
 				}
 				if(estadoJugador && !reiniciado) {
 					editarRegistros(1,nombreJugador,0,operacion);
@@ -235,62 +276,46 @@ public class ControlPoker {
 
 				if (contadorTurnos < TOTAL_JUGADORES && !reiniciado) {
 
-
+					//Jugador no debe estar retirado para poder apostar
 					if (!estadoJugador) {
 						int apuesta = calcularApuesta(idJugador, operacion);
 						apuestaTotal +=apuesta;
-						System.out.println("Apuestas: Este es el idJugador " + idJugador);
 						setApuestasJugadores(idJugador - 1, apuesta);
 						editarPanelJugador(idJugador - 1, apuesta);
 						editarRegistros(1, nombreJugador, apuesta, operacion);
-						System.out.println("Jugador " + nombreJugador + " apostÛ " + apuestasJugadores.get(idJugador - 1)
-						+ " en total.");
 					}
-
-					System.out.println("Turno: " + turno);
 					aumentarTurno();
-
 				}
 
 				// Turno de usuario y no est· repitiendo turno adicional ilegal
 				if (turno == 5 && contadorTurnos < TOTAL_JUGADORES && !reiniciado) {
-					// humanoApuesta();
 					editarRegistros(2, "", -1, -1);
 				}
-
 				contadorTurnos++;
-				System.out.println("ContadorTurnos aumentÛ a " + contadorTurnos);
 				esperarTurno.signalAll();
-				System.out
-						.println("Contador de turnos es " + contadorTurnos + " y totaljugadores es" + TOTAL_JUGADORES);
+				
 				// Revisar si todos los jugadores apostaron
 				if (contadorTurnos == TOTAL_JUGADORES && !reiniciado) {
 					if(revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						//Pasamos a la ronda para definir un ganador
-						editarRegistros(10,"",-1,-1);//Mensaje: el Crupier determinar· el ganador
+						editarRegistros(10,"",-1,-1);
 						variablePrueba = false;
 						activarRonda3();
-						//ronda = 3;
-
 						determinarGanador();
+						
 					} else if (revisarApuestasIguales() && contadorDescarte == 0) {
 						// PASAMOS A RONDA DE DESCARTE
-						System.out.println("pasamos a ronda de descarte");
 						editarRegistros(5, "", -1, -1);
 						activarRonda2();
-						//ronda = 2;
 					} else {
 						// REVISAR QUIENES SON DIFERENTES Y SEGUIR UNA RONDA DE APUESTAS CON ELLOS
 						// Comienza ronda igualaciÛn
-						System.out.println("REVISAR EDITAR: idJugador es " + idJugador);
 						editarRegistros(3, "", -1, -1);
 						// Paso a ronda de igualaciÛn
 						activarRonda1();
-						//ronda = 1;
-						// aumentarTurnosRondaIgualacion();
 						// Mostrar en registro que le toca al usuario
 						if (turno == 5 && contadorIgualacion < jugadoresParaApostarMas.size()) {
-							// Avisar que puede igualar o retirarse
+							//Avisar que puede igualar o retirarse
 							editarRegistros(6, "", -1, -1);
 						}
 					}
@@ -298,14 +323,11 @@ public class ControlPoker {
 			}
 			// Si estamos en la ronda de igualaciÛn de apuestas.
 			else if (ronda == 1 && contadorIgualacion < TOTAL_JUGADORES) {
-				System.out.println("Igualacion, Turno es " + turno);
-				System.out.println("igualacion, IdJugador es " + idJugador);
 
 				while (idJugador != turno && !reiniciado) {
-					System.out.println("En igualaciÛn " + nombreJugador + " intenta entrar pero se va a dormir en la ronda de igualaciÛn");
-					System.out.println("IdJugador " + idJugador + ", turno " + turno);
+					System.out.println("En igualaciÛn " + nombreJugador + " intenta entrar y es mandado a esperar turno en la ronda igualaciÛn");
 					esperarIgualacion.await();
-					System.out.println(" EL TURNO: " + turno + ", "+nombreJugador+"DESPERT”””””””””””””””””””””””””””””””””””””””” EN LA RONDA DE IGUALACI”N");
+					System.out.println(nombreJugador+", DespertÛ en la ronda de igualaciÛn");
 				}
 				if (!estadoJugador && !reiniciado) {
 					int apuesta = calcularApuesta(idJugador, operacion);
@@ -313,14 +335,9 @@ public class ControlPoker {
 					setApuestasJugadores(idJugador - 1, apuesta);
 					editarPanelJugador(idJugador - 1, apuesta);
 					editarRegistros(4, nombreJugador, apuesta, operacion);
-
-					System.out.println("En igualacion, el jugador " + nombreJugador + " realiza una apuesta total de "
-							+ apuesta + " y deberÌa ser de " + Collections.max(apuestasJugadores));
 				}
-				System.out.println("En igualacion el jugador " + nombreJugador + " pasa de largo");
 				aumentarTurno();
 				contadorIgualacion++;
-				System.out.println("contadorIgualacion llega a " + contadorIgualacion);
 				esperarIgualacion.signalAll();
 
 				// Mostrar en registro que le toca al usuario
@@ -330,27 +347,21 @@ public class ControlPoker {
 				}
 				// Si todos los que debÌan igualar, ya igualaron
 				if (contadorIgualacion == TOTAL_JUGADORES && !reiniciado) {
-					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas "
-							+ jugadoresParaApostarMas.size());
 					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
 						// Pasamos a la ronda para definir un ganador
-						editarRegistros(10, "", -1, -1);// Mensaje: el Crupier determinar· el ganador
+						editarRegistros(10, "", -1, -1);
 						variablePrueba = false;
 						activarRonda3();
-						//ronda = 3;
 						determinarGanador();
+						
 					} else if (revisarApuestasIguales() && contadorDescarte == 0) {
 						// PASAMOS A RONDA DE DESCARTE
 						editarRegistros(5, "", -1, -1);
-						// turno = jugadorManoAleatorio;
 						// Mensaje al usuario indic·ndole que le toca descartar
 						if (turno == 5) {
-							System.out.println("le toca a YOLAS DESCARTAR ");
 							editarRegistros(8, "", -1, -1);
 						}
 						activarRonda2();
-						//ronda = 2;
-						System.out.println("La ronda ahora es " + ronda + " y el turno es para " + turno);
 					} else {
 						JOptionPane.showMessageDialog(null,
 								"ERROR: Las apuestas deberÌan estar iguales y no lo est·n. Reinicie");
@@ -359,44 +370,33 @@ public class ControlPoker {
 			}
 			// Ronda Descartes
 			else if (ronda == 2 && contadorDescarte < TOTAL_JUGADORES && !reiniciado) {
-				System.out.println("Ronda de descartes");
-				System.out.println("Ronda 2: idJugador " + idJugador + " y turno " + turno);
 
 				while (idJugador != turno) {
 					System.out
-							.println("En descarte jugador " + nombreJugador + " intenta entrar y es mandado a MIMIRR en la ronda de Descartes");
+							.println("En descarte jugador " + nombreJugador + " intenta entrar y es mandado a esperar turno en la ronda Descartes");
 					esperarDescarte.await();
-					System.out.println("ES EL TURNO: " + turno + ", "+nombreJugador+"DESPERT”””””””””””””””””””””””””””””””””””””””” EN LA RONDA DE DESCARTESSSSSSSS");
+					System.out.println(nombreJugador+", DespertÛ en la ronda de descartes");
 				}
 
 				if (!estadoJugador) {
-					System.out.println(
-							"Soy " + nombreJugador + " voy a descartar " + operacion + ", es el turno: " + turno);
 					descarte[idJugador - 1] = operacion; // operaciÛn = cartas pedidas
-
 					editarRegistros(7, nombreJugador, -1, operacion);
 
 				}
 				contadorDescarte++;
-				System.out.println("contadorDescarte aumentÛ a " + contadorDescarte);
-				aumentarTurno();
-				System.out.println("En descarte, turno aumenta a " + turno);
 				esperarDescarte.signalAll();
 
 				// Mensaje al usuario indic·ndole que le toca descartar
 				if (turno == 5 && contadorDescarte < TOTAL_JUGADORES) {
-					System.out.println("le toca a YOLAS DESCARTAR ");
 					editarRegistros(8, "", -1, -1);
 				}
 				if (contadorDescarte == TOTAL_JUGADORES) {
-					System.out.println("PrÛximo a ejecutar darCartas");
 					actualizarRetiradosAuxiliar();
 					darCartas();
 					// Regresar a turno 0 para una segunda ronda de apuestas
 					turno = jugadorManoAleatorio;
 					contadorTurnos = 0;
 					activarRonda0();
-					//ronda = 0;
 					contadorDescarte++;
 					contadorIgualacion = 0;
 					posicionJugador = 0;
@@ -414,11 +414,14 @@ public class ControlPoker {
 			bloqueo.unlock();
 		}
 	}
-	//MÈtodo que se encarga de repartir las cartas que les hace falta a cada uno de los mazos de los jugadores
+	/**
+	 * Dar cartas.
+	 * MÈtodo que se encarga de repartir las cartas que les hace falta a cada uno de los mazos de los jugadores y actualizar la vista de la mesa con las cartas
+	 *	
+	 */
 	private void darCartas() {
 		// TODO Auto-generated method stub
 		// Cartas para los jugadores Simulados
-		System.out.println("EntrÛ a darCartas");
 		for (int i = 0; i < TOTAL_JUGADORES - 1; i++) {
 
 			if (descarte[i] == 5) {
@@ -453,22 +456,26 @@ public class ControlPoker {
 
 		// Cartas para el jugador humano
 		asignarCartas(manosJugadores.get(4));
-		
+		//Actualizar la vista Poker
 		vistaPoker.actualizarVistaPoker(manosJugadores, -1,ronda);
 
 	}
-	//MÈtodo encargado de actualizar la lista de los jugadores que est·n retirados
+	/**
+	 * Actualizar retirados auxiliar.
+	 * MÈtodo encargado de actualizar la lista de los jugadores que est·n retirados
+	 */
 	private void actualizarRetiradosAuxiliar() {
 		for (int i = 0; i < jugadoresSimulados.length; i++) {
 			jugadoresRetiradosAuxiliar[i] = jugadoresSimulados[i].getRetirado();
 		}
 		jugadoresRetiradosAuxiliar[4] = humanoRetirado;
 	}
-
-	// Funcion que determina el ganador del juego
+	/**
+	 * Determinar ganador
+	 * Funcion que determina el ganador del juego
+	 */
 	private void determinarGanador() {
 		// TODO Auto-generated method stub
-		System.out.println("EntrÛ a determinarGanador");
 		crupier = new Crupier();
 		int posicionGanador=0;
 		int mayorPuntaje=0;
@@ -477,17 +484,9 @@ public class ControlPoker {
 		for(int i=0;i<TOTAL_JUGADORES;i++) {
 			
 			puntaje = crupier.ejecutar(manosJugadores.get(i));
-			
 			puntajesFinales.add(puntaje);
-			//guardar los valores de las cartas que le dieron el juego?
+			//guardar los valores de las cartas que le dieron el juego
 			valoresJugadas.add(crupier.getValorMaxJugada());
-			System.out.println("VALORESJUGADAS POSICION "+i+", Valor: "+crupier.getValorMaxJugada());
-			System.out.println("PRIMERO, En la posiciÛn: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
-		}
-
-		//imprimir en consola los puntajes de los jugadores
-		for(int i=0;i<puntajesFinales.size();i++) {
-			System.out.println("Puntos del jugador: "+ i +", " + puntajesFinales.get(i) + "\n");
 		}
 		
 		//Determina si hay que definir el ganador por puntaje de la carta m·s alta
@@ -509,28 +508,20 @@ public class ControlPoker {
 				 	//valoresJugadas ->Tiene los valores m·ximos de las jugadas (para desempate)
 				 	//jugadoresADesempatar ->Guarda los index de los jugadores que deben desempatar
 					
-					
 					for(int i =0;i<puntajesFinales.size();i++) {
 						if(puntajesFinales.get(i)==mayorPuntaje) {
 							jugadoresADesempatar.add(i);
-							System.out.println("Valor "+i+ ", de jugadoresADesempatar" + jugadoresADesempatar.size());
 						}
 					}
-					System.out.println("tamaÒo jugadoresADesempatar: " + jugadoresADesempatar.size());
-					System.out.println("tamaÒo puntajesFinales: " + puntajesFinales.size());
-					System.out.println("tamaÒo valoresJugadas: " + valoresJugadas.size());
-					
-					for( Integer numero : jugadoresADesempatar) {
-						System.out.print(", " + numero);
-						}
 					for(int i=0;i<jugadoresADesempatar.size();i++) {
-						System.out.println("JUGADOR DE LA POSICI”N: " + jugadoresADesempatar.get(i));
+						
 						valoresAComparar.add(valoresJugadas.get(jugadoresADesempatar.get(i)));
 					}
 					posicionGanador = valoresJugadas.indexOf(Collections.max(valoresAComparar));
 					mayorPuntaje = puntajesFinales.get(posicionGanador);
 			 }
 		}
+		
 		//Analizar quien tenga mejor juego
 		else if(decisionPorCartaMasAlta) {
 			puntajesFinales.clear();
@@ -545,7 +536,6 @@ public class ControlPoker {
 				for(int j=0;j<TOTAL_JUGADORES;j++) {
 					puntaje = Collections.max(valoresCartasJugadores);
 					puntajesFinales.add(puntaje);
-					System.out.println("SEGUNDO, En la posiciÛn: "+i+ ", el jugador tiene un puntaje de: " +puntajesFinales.get(i));
 				}
 			}
 			
@@ -555,35 +545,37 @@ public class ControlPoker {
 		
 		//Editar registro
 		if(decisionPorCartaMasAlta) {
-			System.out.println("Ganador por carta m·s alta");
 			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],-1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador,ronda);
 		}else if(posicionGanador == 4) {
-			System.out.println("Ganador usuario");
 			editarRegistros(11,"USUARIO",posicionGanador+1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador,ronda);
 		}else {
-			System.out.println("Ganador simulado");
 			editarRegistros(11,NOMBRE_JUGADORES[posicionGanador],posicionGanador+1,mayorPuntaje);
 			vistaPoker.actualizarVistaPoker(manosJugadores, posicionGanador,ronda);
 		}
 	}
-
-	// Calcula cu·ntas cartas debe darle a cada jugador luego del descarte
+	/**
+	 * Asignar Cartas
+	 * Calcula cu·ntas cartas debe darle a cada jugador luego del descarte
+	 * @param manoJugador
+	 */
 	private void asignarCartas(List<Carta> manoJugador) {
 		// TODO Auto-generated method stub
 		// Si le faltan cartad
 		if (manoJugador.size() < 5) {
 			int numeroCartas = ControlPoker.NUMERO_CARTAS_MANO - manoJugador.size(); // N˙mero de cartas que debe pedir
-			System.out.println(" NECESITO " + numeroCartas + "PORQUE SOLO TENGO: " + manoJugador.size());
 			for (int i = 0; i < numeroCartas; i++) {
 				manoJugador.add(baraja.getCarta());
 			}
 		}
 	}
-
-	// Calcula el valor de la apuesta bas·ndose en la operaciÛn dada por el jugador
-	// con identificado idJugador
+	/**
+	 * Calcular apuesta
+	 * Calcula cu·ntas cartas debe darle a cada jugador luego del descarte
+	 * @param idJugador
+	 * @param operacion
+	 */
 	private int calcularApuesta(int idJugador, int operacion) {
 		// igualar
 		if (operacion == 0) {
@@ -601,185 +593,239 @@ public class ControlPoker {
 		// Error
 		return -1;
 	}
-
-	// FunciÛn para manejar los turnos en la ronda de igualaciÛn, donde solo
-	// participan los jugadores que deben igualar o retirarse.
-	private void aumentarTurnosRondaIgualacion() {
-		// Turno est· entre 1 y los jugadores que deben igualar o retirarse
-		turno = jugadoresParaApostarMas.get(posicionJugador) + 1;
-		if (posicionJugador < jugadoresParaApostarMas.size() - 1) {
-			posicionJugador++;
-		}
-		System.out.println("turno2 est· aumentado a " + turno);
-	}
-
-	// MÈtodo que sincroniza los cambios en componente gr·ficos con el hilo
-	// manejador de eventos
+	/**
+	 *  Editar registros.
+	 *  MÈtodo que sincroniza los cambios en componente gr·ficos con el hilo
+	 *  manejador de eventos
+	 * @param fase the fase
+	 * @param nombre the nombre
+	 * @param apuesta the apuesta
+	 * @param operacion the operacion
+	 */
 	public void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
 		// Sincronizar con hilo manejador de eventos
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				System.out.println("Editar Registros");
 				vistaPoker.editarRegistros(fase, nombre, apuesta, operacion);
 			}
 		});
 	}
-	//MÈtodo encargado de enviar la orden de actualizar el panel del jugador cuando decide aumentar apuesta
+	/**
+	 *  Editar panel del jugador.
+	 *  MÈtodo encargado de enviar la orden de actualizar el panel del jugador cuando decide aumentar apuesta
+	 *  manejador de eventos
+	 *  @param jugador
+	 *  @param apuesta
+	 */
 	private void editarPanelJugador(int jugador, int apuesta) {
 		// Sincronizar con hilo manejador de eventos
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				System.out.println("Editar PanelJugador");
 				vistaPoker.editarPanelJugador(jugador, apuesta);
 			}
 		});
 	}
-	// Revisar que todos los jugadores tengan las mismas apuestas. Retorna true si
-	// todas son iguales, false en caso contrario.
+	/**
+	 *  Revisar apuestas iguales.
+	 *  Revisar que todos los jugadores tengan las mismas apuestas. Retorna true si
+	 *	todas son iguales, false en caso contrario.
+	 */
 	private boolean revisarApuestasIguales() {
 		jugadoresParaApostarMas.clear();
 		boolean[] jugadoresRetirados = { jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(),
 				jugador4.getRetirado(), humanoRetirado };
 		boolean iguales = true;
-		for (int apuesta : apuestasJugadores) {
-			System.out.println("Apuesta en lista " + apuesta);
-		}
 		for (int jugadorIndex = 0; jugadorIndex < apuestasJugadores.size(); jugadorIndex++) {
 			// Si el jugador est· retirado no se toma en cuenta
-			System.out.println("1. El jugador " + jugadorIndex + " con apuesta " + apuestasJugadores.get(jugadorIndex)
-					+ " y apuesta max es " + Collections.max(apuestasJugadores));
-			System.out.println("Su retirado es " + jugadoresRetirados[jugadorIndex]);
 			if (!jugadoresRetirados[jugadorIndex]) {
-				System.out
-						.println("2. El jugador " + jugadorIndex + " con apuesta " + apuestasJugadores.get(jugadorIndex)
-								+ " y apuesta max es " + Collections.max(apuestasJugadores));
 				if (!apuestasJugadores.get(jugadorIndex).equals(Collections.max(apuestasJugadores))) {
-					// Se aÒade el Ìndice (n˙mero de jugador) de la apuesta en apuestasJugadores que
-					// es diferente
-					System.out.println("Se aÒade a jugadoresParaApostarMas a jugador " + jugadorIndex
-							+ ", con apuesta de " + apuestasJugadores.get(jugadorIndex) + " y max "
-							+ Collections.max(apuestasJugadores));
+					// Se aÒade el Ìndice (n˙mero de jugador) de la apuesta en apuestasJugadores que es diferente
 					jugadoresParaApostarMas.add(jugadorIndex);
 					iguales = false;
 				}
 			}
 		}
-		System.out.println("jugadoresParaApostarMas adquiere size de " + jugadoresParaApostarMas.size());
 		// Si cantidadJugadores nunca aumentÛ, todas las apuestas son iguales
-		if (iguales) {
-			System.out.println("Las apuestas est·n iguales");
-
-		} else {
-			System.out.println("Las apuestas NO est·n iguales");
-		}
 		return iguales;
 	}
-	//Aumenta el turno, si el turno actual es 5, el siguiente ser· el turno 1
+	/**
+	 *  Aumentar turno
+	 *  Aumenta el turno, si el turno actual es 5, el siguiente ser· el turno 1
+	 */
 	private void aumentarTurno() {
 		// Si turno es 4 o m˙ltiplo de 4, se convierte en 5. Si turno tiene otro valor,
 		// aumenta en 1 pero sin sobrepasar al 5.
 		turno = (turno % 4 != 0) ? (turno + 1) % 5 : 5;
-		System.out.println("Turno aumentÛ a " + turno);
-	}
 
-	// Cambia la mano del jugador humano
+	}
+	/**
+	 * Descarte jugador humano.
+	 *	Cambia la mano del jugador humano
+	 * @param manoJugadorHumano the mano jugador humano
+	 */ 
 	public void descarteJugadorHumano(List<Carta> manoJugadorHumano) {
 		manosJugadores.remove(4);
 		manosJugadores.add(manoJugadorHumano); // se agrega la mano nueva
 
 	}
-	//establece las apuestas de los jugadores
+	/**
+	 *  Set Apuestas Jugadores.
+	 *	Establece las apuestas de los jugadores
+	 * @param indexJugador
+	 * @param apuesta
+	 */ 
 	private void setApuestasJugadores(int indexJugador, int apuesta) {
 		apuestasJugadores.set(indexJugador, apuesta);
 		dineroJugadores.set(indexJugador, dineroJugadores.get(indexJugador) - apuesta);
 	}
 	
+	/**
+	 * Gets the dinero jugadores.
+	 *
+	 * @return the dinero jugadores
+	 */
 	public List<Integer> getDineroJugadores() {
 		return dineroJugadores;
 	}
-	//retorna una lista con las apuestas de todos los jugadores
+	
+	/**
+	 * Gets the apuestas jugadores.
+	 * retorna una lista con las apuestas de todos los jugadores
+	 * @return the apuestas jugadores
+	 */
 	public List<Integer> getApuestasJugadores() {
 		return apuestasJugadores;
 	}
-	//retorna una lista de listas con las manos de todos los jugadores
+	/**
+	 * Gets the manos jugadores.
+	 * retorna una lista de listas con las manos de todos los jugadores
+	 * @return the manos jugadores
+	 */
 	public List<List<Carta>> getManosJugadores() {
 		return manosJugadores;
 	}
-	//retorna la m·xima apuesta actual
+	/**
+	 * Gets the maxima apuesta.
+	 *
+	 * @return the maxima apuesta. retorna la m·xima apuesta actual
+	 */
+	//
 	public int getMaximaApuesta() {
 		return Collections.max(apuestasJugadores);
 	}
-	//retorna el ID del jugador mano
+	/**
+	 * Gets the id jugador mano.
+	 *
+	 * @return the id jugador mano. Retorna el ID del jugador mano
+	 */
 	public int getIdJugadorMano() {
 		return jugadorManoAleatorio;
 	}
-	//Establece la ronda actual
+	/**
+	 * Sets the ronda.
+	 * Establece la ronda actual
+	 * @param ronda the new ronda
+	 */
 	public void setRonda(int ronda) {
 		this.ronda = ronda;
 	}
-	//Retorna la ronda actual
+	/**
+	 * Gets the ronda.
+	 * Retorna la ronda actual
+	 * @return the ronda
+	 */
 	public int getRonda() {
 		return ronda;
 	}
-	//Retorna el turno actual
+	/**
+	 * Gets the turno.
+	 * Retorna el turno actual
+	 * @return the turno
+	 */
 	public int getTurno() {
 		return turno;
 	}
-	//Retorna false si el jugador humano est· retirado
+	/**
+	 * Checks if is humano retirado.
+	 * Retorna el turno actual
+	 * @return true, if is humano retirado
+	 */
 	public boolean isHumanoRetirado() {
 		return humanoRetirado;
 	}
-	//MÈtodo encargado de cambiar el estado activo del jugador humano
+	/**
+	 * Sets the humano retirado.
+	 * MÈtodo encargado de cambiar el estado activo del jugador humano
+	 * @param humanoRetirado the new humano retirado
+	 */
 	public void setHumanoRetirado(boolean humanoRetirado) {
 		this.humanoRetirado = humanoRetirado;
 	}
-	//Activa la ronda 0 de apuestas
+	/**
+	 * Activar ronda 0.
+	 * Activa la ronda 0 de apuestas
+	 */
 	public void activarRonda0() {
 		jugador1.activarRonda0();
 		jugador2.activarRonda0();
 		jugador3.activarRonda0();
 		jugador4.activarRonda0();
-		System.out.println("Se activa la ronda 0, Ronda de Apuestas");
 		ronda=0;
 	}
-	//Activa la ronda 1 de igualacion
+	
+	/**
+	 * Activar ronda 1.
+	 * Activa la ronda 1 de igualacion
+	 */
 	public void activarRonda1() {
 		jugador1.activarRonda1();
 		jugador2.activarRonda1();
 		jugador3.activarRonda1();
 		jugador4.activarRonda1();
-		System.out.println("Se activa la ronda 1, Ronda de Igualacion");
 		ronda=1;
 	}
-	//Activa la ronda 2 de Descartes
+	
+	/**
+	 * Activar ronda 2.
+	 * Activa la ronda 2 de Descartes
+	 */
 	public void activarRonda2() {
-		System.out.println("Se activa la ronda 2, Ronda de Descartes");
+
 		jugador1.activarRonda2();
 		jugador2.activarRonda2();
 		jugador3.activarRonda2();
 		jugador4.activarRonda2();
 		ronda=2;
 	}
-	//Activa la ronda 2 de determinar Ganador
+	
+	/**
+	 * Activar ronda 3.
+	 * Activa la ronda 2 de determinar Ganador
+	 */
 	public void activarRonda3() {
-		System.out.println("Se activa la ronda 3, Ronda para determinar Ganador");
 		jugador1.activarRonda3();
 		jugador2.activarRonda3();
 		jugador3.activarRonda3();
 		jugador4.activarRonda3();
 		ronda=3;
 	}
-	public void setReinicio() {
-		
+	
+	/**
+	 * Sets the reinicio.
+	 */
+	public void setReinicio() {	
 		reiniciado=true;
-		System.out.println("GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+reiniciado);
 	}
 
-	// MAIN - hilo principal
+	/**
+	 * The main method.
+	 *MAIN - hilo principal
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override

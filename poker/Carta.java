@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package poker;
 
 import java.awt.image.BufferedImage;
@@ -5,12 +8,22 @@ import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Carta.
+ */
 public class Carta extends JLabel{
 	 private String valor;
 	 private String palo;
 	 private BufferedImage imagen;
-	 private int valorNumerico; //para facilitar el cálculo
+	 private int valorNumerico;
 
+	/**
+	 * Instantiates a new carta.
+	 *
+	 * @param valor the valor
+	 * @param palo the palo
+	 */
 	public Carta(String valor, String palo) {
 		 this.valor = valor;
 		 this.palo = palo;
@@ -33,19 +46,39 @@ public class Carta extends JLabel{
 			   break;
 		   } 
 	 }
-	//retorna el valor numérico de la carta
+	
+	/**
+	 * Gets the valor numerico.
+	 *	retorna el valor numérico de la carta
+	 * @return the valor numerico
+	 */
 	 public int getValorNumerico() {
 		 return valorNumerico;
 	 }
-	 //retorna el valor de la carta en tipo String
+	 
+ 	/**
+ 	 * Gets the valor.
+ 	 * retorna el valor de la carta en tipo String
+ 	 * @return the valor
+ 	 */
 	 public String getValor() {
 		 return valor;
 	 }
-	 //Retorna el valor del Palo de la carta
+	 
+ 	/**
+ 	 * Gets the palo.
+ 	 * Retorna el valor del Palo de la carta
+ 	 * @return the palo
+ 	 */
 	 public String getPalo() {
 		 return palo;
 	 }
-	 //retorna el valor numérico alterno de la carta As
+	 
+ 	/**
+ 	 * Gets the valor numerico alterno.
+ 	 * retorna el valor numérico alterno de la carta As
+ 	 * @return the valor numerico alterno
+ 	 */
 	 public int getValorNumericoAlterno() {
 		 //Valor alterno de la carta As (14 0 1)
 		 if(valorNumerico==14) {
@@ -56,16 +89,30 @@ public class Carta extends JLabel{
 		 }
 	 }
 
-	 //Para visualizar la carta a manera de String para hacer un seguimiento
+	 /**
+ 	 * To string.
+ 	 * Para visualizar la carta a manera de String para hacer un seguimiento
+ 	 * @return the string
+ 	 */
 	 public String toString() {
 		 return valor+palo;
 	 }
-	 //Asigna la imagen de la carta
+	 
+ 	/**
+ 	 * Sets the imagen.
+ 	 * Asigna la imagen de la carta
+ 	 * @param imagen the new imagen
+ 	 */
 	 public void setImagen(BufferedImage imagen) {
 		 this.imagen = imagen;
 		 setIcon(new ImageIcon(imagen));
 	 }
-	 //Retorna el bufferedImage conrrespondiente a la carta
+	 
+ 	/**
+ 	 * Gets the imagen.
+ 	 * Retorna el bufferedImage conrrespondiente a la carta
+ 	 * @return the imagen
+ 	 */
 	 public BufferedImage getImagen() {
 		return imagen;
 	}

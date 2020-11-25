@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package poker;
 
 import java.awt.BorderLayout;
@@ -15,6 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PanelJugador.
+ */
 public class PanelJugador extends JPanel {
 	//Dimensiones del panel según el tamaño de las cartas
 	public static final int FONT_SIZE = 18;
@@ -24,7 +31,6 @@ public class PanelJugador extends JPanel {
 	private static final int WIDTH = Baraja.CARD_WIDTH * 5;
 	private static final int HEIGHT = Baraja.CARD_HEIGHT + FONT_SIZE * 7;
 	
-	
 	private List<Carta> mano = new ArrayList<Carta>();
 	private JLabel nombre, mensaje, apuesta;
 	private JPanel panelMano, panelApuesta;
@@ -33,6 +39,14 @@ public class PanelJugador extends JPanel {
 	
 	private Escucha escucha;
 	
+	/**
+	 * Instantiates a new panel jugador.
+	 *
+	 * @param nombre the nombre
+	 * @param cartas the cartas
+	 * @param valorApuesta the valor apuesta
+	 * @param isHuman the is human
+	 */
 	public PanelJugador(String nombre, List<Carta> cartas, Integer valorApuesta, boolean isHuman) {
 		//this.setBorder(new TitledBorder(nombre));
 		setLayout(new BorderLayout());
@@ -74,7 +88,10 @@ public class PanelJugador extends JPanel {
 		add(panelApuesta, BorderLayout.EAST);		
 	}
 	
-	//Actualiza el JPanel donde están las cartas del jugador 
+	/**
+	 * Actualizar panel mano.
+	 * Actualiza el JPanel donde están las cartas del jugador 
+	 */
 	public void actualizarPanelMano() {
 		panelMano.removeAll();
 		if(mano != null) {
@@ -85,12 +102,21 @@ public class PanelJugador extends JPanel {
 		}	
 	}	
 	
-	//Actualiza el JPanel donde está la apuesta del jugador
+	/**
+	 * Actualizar panel apuesta.
+	 * Actualiza el JPanel donde está la apuesta del jugador
+	 */
 	public void actualizarPanelApuesta() {
 		panelApuesta.removeAll();
 		panelApuesta.add(apuesta);	
 	}
-	//recibe unas nuevas cartas y las pinta en el panel del jugador
+	
+	/**
+	 * Recibir cartas.
+	 * recibe unas nuevas cartas y las pinta en el panel del jugador
+	 * @param nuevasCartas the nuevas cartas
+	 * @param texto the texto
+	 */
 	  public void recibirCartas(List<Carta> nuevasCartas, String texto) {
 		  SwingUtilities.invokeLater(new Runnable() {
 
@@ -106,11 +132,19 @@ public class PanelJugador extends JPanel {
 			   
 		   });
 	   }
-	 //retorna la mano del jugador
+	 
+ 	/**
+ 	 * Gets the mano.
+ 	 * retorna la mano del jugador
+ 	 * @return the mano
+ 	 */
 	public List<Carta> getMano() {
 		  return mano; 
 	}
-	//Desactiva las escuchas de las cartas del jugador humano, para no descartar
+	/**
+	 * Desactivar escuchas.
+	 * Desactiva las escuchas de las cartas del jugador humano, para no descartar
+	 */
 	public void desactivarEscuchas() {
 		   SwingUtilities.invokeLater(new Runnable() {
 
@@ -123,7 +157,11 @@ public class PanelJugador extends JPanel {
 			}		   
 		   });
 	   }
-	  //Activa las escuchas de las cartas del jugador humano, para descartar
+	  
+  	/**
+  	 * Activar escuchas.
+  	 * Activa las escuchas de las cartas del jugador humano, para descartar
+	 */
 	 public void activarEscuchas() {
 		   SwingUtilities.invokeLater(new Runnable() {
 
@@ -136,30 +174,53 @@ public class PanelJugador extends JPanel {
 			}		   
 		   });   
 	   }
-	//retorna el nombre del jugador
+	
+	/**
+	 * Gets the nombre.
+	 * retorna el nombre del jugador
+	 * @return the nombre
+	 */
 	public String getNombre() {
 		return nombre.getText();
 	}
-	//establece el valor de la apuesta en el panel del jugador
+	
+	/**
+	 * Sets the valor apuesta.
+	 * establece el valor de la apuesta en el panel del jugador
+	 * @param valorApuesta the new valor apuesta
+	 */
 	public void setValorApuesta(int valorApuesta) {
 		this.valorApuesta = valorApuesta;
 		apuesta.setText("$" + String.valueOf(valorApuesta));
 	}
-	//elimina de la mesa de juego, la carta seleccionada
+	
+	/**
+	 * Eliminar carta.
+	 * elimina de la mesa de juego, la carta seleccionada
+	 * @param cartaEliminar the carta eliminar
+	 */
 	   private void eliminarCarta(Carta cartaEliminar) { 
 		   mano = Collections.synchronizedList(mano);
 		   synchronized (mano){
 			   for(int i=0;i<mano.size();i++) {
 				 if(cartaEliminar.getValor()==mano.get(i).getValor() && cartaEliminar.getPalo()==mano.get(i).getPalo() ) {
 					 mano.remove(i);
-					 //System.out.println("Actualmente mi mazo es de tamaño: " + mano.size());
 				 }   
 			   }
 			   
 		   }
 	   }
- 	private class Escucha extends MouseAdapter {
+ 	
+	 /**
+	  * The Class Escucha.
+	  */
+	 private class Escucha extends MouseAdapter {
  		
+		/**
+		 * Mouse clicked.
+		 *
+		 * @param e the e
+		 */
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
