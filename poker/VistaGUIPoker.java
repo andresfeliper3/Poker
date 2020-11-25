@@ -105,10 +105,11 @@ public class VistaGUIPoker extends JFrame {
 		panelRegistros.setBounds(20,20,600,400);
 		panelRegistros.setEditable(false);
 		panelRegistros.setBorder(new LineBorder(Color.BLACK));
-		panelRegistros.setPreferredSize(new Dimension(300,450));
+		//panelRegistros.setPreferredSize(new Dimension(300,450));
 		//Panel de registros
 		scroll = new JScrollPane(panelRegistros);
 		//scroll.setBounds(20,20,600,400);
+		scroll.setPreferredSize(new Dimension(300,450));
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setBorder(new TitledBorder("Registros del juego"));
 		//scroll.getViewport().setBackground(Color.WHITE);
@@ -342,14 +343,15 @@ public class VistaGUIPoker extends JFrame {
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
-					controlPoker.setReinicio();
-					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null,true);
+
 					//controlPoker.setJugadoresEnjuego();
-					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
+					int option = JOptionPane.showConfirmDialog(mesaJuego, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {
 						//reiniciar juego
+						controlPoker.setReinicio();
+						controlPoker.setHumanoRetirado(true);
+						controlPoker.turnos(5, nombreJugadorHumano, 2, null,true);
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
 						controlPoker.reiniciarJuego();
 						reiniciarVistaGUIPoker();
@@ -373,13 +375,12 @@ public class VistaGUIPoker extends JFrame {
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
-					controlPoker.setReinicio();
-					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
-
-					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
+					int option = JOptionPane.showConfirmDialog(mesaJuego, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {
+						controlPoker.setReinicio();
+						controlPoker.setHumanoRetirado(true);
+						controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
 						//reiniciar juego
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
 						controlPoker.reiniciarJuego();
