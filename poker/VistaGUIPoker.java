@@ -63,7 +63,7 @@ public class VistaGUIPoker extends JFrame {
 		escucha = new Escucha();
 		
 		//Titulos
-		titulo = new Titulos("Póker Clásico", 40, Color.BLACK);
+		titulo = new Titulos("Póker Clásico", 40, Color.BLACK,Color.WHITE);
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		constraints.gridwidth = 2;
@@ -82,7 +82,7 @@ public class VistaGUIPoker extends JFrame {
 		add(zonaJuego, constraints);
 		
 		//Zona dinero (dentro de zonaJuego)
-		apuestaEnJuego = new Titulos("Apuesta en juego: " + apuestaTotal,40,Color.YELLOW);
+		apuestaEnJuego = new Titulos("Apuesta en juego: " + apuestaTotal,40,Color.YELLOW,Color.BLACK);
 		
 		zonaDinero = new JPanel();
 		
