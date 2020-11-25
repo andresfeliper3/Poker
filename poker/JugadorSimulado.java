@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /* Autores: Jose David Barona Hernández - 1727590
  *                  Andrés Felipe Rincón    - 1922840
  * Correos: jose.david.barona@correounivalle.edu.co 
@@ -8,11 +8,6 @@
  * 
  * */
 
-=======
-/*
- * 
- */
->>>>>>> e4a9c233700970820b9d7adf68cfe7eb6748d2a0
 package poker;
 
 import java.util.ArrayList;
@@ -142,7 +137,7 @@ public class JugadorSimulado implements Runnable {
  	 	 			enRondaDeApuestas = false;
  	 	 			enRondaDeIgualacion=true;
  	 	 			System.out.println("Antes de ejecutar turnos, jugador " + nombre);
- 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this,retirado);
+ 	 	 			controlPoker.turnos(turnoId, nombre, operacion, retirado);
  	 	 			System.out.println("Después de ejecutar turnos, jugador" + nombre);
  	 	
  	 	 		}
@@ -164,7 +159,7 @@ public class JugadorSimulado implements Runnable {
  	 	 				retirado = true;
  	 	 			}
  	 	 			enRondaDeIgualacion = false;
- 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this,retirado);
+ 	 	 			controlPoker.turnos(turnoId, nombre, operacion, retirado);
  	 	 			
  	 	 		}
  				break;	
@@ -176,7 +171,7 @@ public class JugadorSimulado implements Runnable {
  	 	 			//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  	 	 			enRondaDeDescarte = false;
  	 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2 el jugador " + nombre);
- 	 	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this,retirado);
+ 	 	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, retirado);
  	 	 			System.out.println("Después de llamar a turnos en RUN ronda 2 el jugador " + nombre);
  	 	 			enRondaDeApuestas=true;
  	 	 			enRondaDeDescarte=false;

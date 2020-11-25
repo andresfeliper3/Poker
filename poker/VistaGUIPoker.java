@@ -405,14 +405,14 @@ public class VistaGUIPoker extends JFrame {
 				if(e.getSource() == aumentar) {
 					//controlPoker.setApuestasJugadores(4, nuevaApuesta);			
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 1, null,false);
+					controlPoker.turnos(5, nombreJugadorHumano, 1, false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == igualar) {
 					//controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 0, null,false);
+					controlPoker.turnos(5, nombreJugadorHumano, 0, false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
@@ -426,8 +426,7 @@ public class VistaGUIPoker extends JFrame {
 						//reiniciar juego
 						controlPoker.setReinicio();
 						controlPoker.setHumanoRetirado(true);
-						controlPoker.turnos(5, nombreJugadorHumano, 2, null,true);
-						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
+						controlPoker.turnos(5, nombreJugadorHumano, 2, true);
 						controlPoker.reiniciarJuego();
 						reiniciarVistaGUIPoker();
 					}
@@ -444,7 +443,7 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 1) {
 				if(e.getSource() == igualar) {
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 0, null,false);
+					controlPoker.turnos(5, nombreJugadorHumano, 0, false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
@@ -455,7 +454,7 @@ public class VistaGUIPoker extends JFrame {
 					if(option == JOptionPane.YES_OPTION) {
 						controlPoker.setReinicio();
 						controlPoker.setHumanoRetirado(true);
-						controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
+						controlPoker.turnos(5, nombreJugadorHumano, 2, false);
 						//reiniciar juego
 						JOptionPane.showMessageDialog(panelBotones, "Reiniciando juego");
 						controlPoker.reiniciarJuego();
@@ -477,7 +476,7 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 2 && !controlPoker.isHumanoRetirado()) {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
-					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null,false);
+					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), false);
 				}
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está disponible");
