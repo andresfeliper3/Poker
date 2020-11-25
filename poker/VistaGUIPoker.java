@@ -1,5 +1,10 @@
 /*
- * 
+ * Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 3: Poker
+ * Fecha: 25/11/2020
  */
 package poker;
 
@@ -75,8 +80,7 @@ public class VistaGUIPoker extends JFrame {
 	 * @param apuestasJugadores the apuestas jugadores
 	 */
 	private void initGUI(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
-		//nombreJugadorHumano = JOptionPane.showInputDialog(this, "Escribe tu nombre");
-		nombreJugadorHumano = "yolas";
+		nombreJugadorHumano = "Usuario";
 		this.nombresJugadoresSimulados = nombresJugadoresSimulados;
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();

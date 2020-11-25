@@ -1,6 +1,11 @@
-/*
+/* Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 3: Poker
+ * Fecha: 25/11/2020
  * 
- */
+ * */
 package poker;
 
 import java.util.List;

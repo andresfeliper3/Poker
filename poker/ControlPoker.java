@@ -1,6 +1,11 @@
-/*
+/* Autores: Jose David Barona Hernández - 1727590
+ *                  Andrés Felipe Rincón    - 1922840
+ * Correos: jose.david.barona@correounivalle.edu.co 
+ *             andres.rincon.lopez@correounivalle.edu.co
+ * Mini proyecto 3: Poker
+ * Fecha: 25/11/2020
  * 
- */
+ * */
 package poker;
 
 import java.awt.EventQueue;
@@ -50,7 +55,7 @@ public class ControlPoker {
 												// determinar un ganador
 	private ArrayList<Integer> valoresJugadas; //Lista que almacena los valores de las cartas máximas del valor de las jugadas que tengan en su mano de cartas
 	private int apuestaInicial = 500;
-	private int dineroInicial = 1000;
+	private int dineroInicial = 10000;
 	private boolean humanoRetirado = false;
 	private int contadorTurnos = 0;
 	private int posicionJugador = 0;
