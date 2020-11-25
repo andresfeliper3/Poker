@@ -384,6 +384,7 @@ public class ControlPoker {
 
 				}
 				contadorDescarte++;
+				aumentarTurno();
 				esperarDescarte.signalAll();
 
 				// Mensaje al usuario indicándole que le toca descartar
