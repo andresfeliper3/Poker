@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
+// TODO: Auto-generated Javadoc
 //Simula un jugador, de acuerdo a su tipo indica si es arriesgado (elimina las 2 cartas) o mesurado (elimina 1 carta)
 //los hilos deben ejecutarse cuando les corresponda el turno
 
+/**
+ * The Class JugadorSimulado.
+ */
 public class JugadorSimulado implements Runnable {
 	
 	private String nombre;
@@ -27,6 +31,14 @@ public class JugadorSimulado implements Runnable {
 	private boolean enRondaDeIgualacion = true; //Controla que un jugador no entre dos veces seguidas a turnos.
 	private boolean enRondaDeDescarte = true;
 	private int ronda=0;
+	
+	/**
+	 * Instantiates a new jugador simulado.
+	 *
+	 * @param nombre the nombre
+	 * @param turnoId the turno id
+	 * @param controlPoker the control poker
+	 */
 	public JugadorSimulado(String nombre, int turnoId, ControlPoker controlPoker) {
 		this.nombre = nombre;
 		this.turnoId = turnoId;
@@ -35,6 +47,12 @@ public class JugadorSimulado implements Runnable {
 		random = new Random();
 		
 	}
+	
+	/**
+	 * Reiniciar hilo.
+	 * 
+	 * Ajusta las condiciones iniciales para el reinicio del hilo.
+	 */
 	public void reiniciarHilo() {
 		this.jugar=true;
 		this.enRondaDeApuestas=true;
@@ -43,54 +61,78 @@ public class JugadorSimulado implements Runnable {
 		this.cantidadDescarte=0;
 		this.retirado=false;
 	}
-
-	//Se encarga de asegurarse de que las posiciones aleatorias de las cartas a descartar de la mano de un jugador no se repitan.
-	private void escogerDescarte(int aleatoriosNecesarios) {
-		while(descarte.size() < aleatoriosNecesarios) {
-			int numeroAleatorio = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO); //0-4
-			if(descarte.indexOf(numeroAleatorio) == -1) {
-				descarte.add(numeroAleatorio);
-			} 
-		}
-	}
-	//Método encargado de anunciar retiro
-	public String estadoJugador() {
-		if(retirado) {
-			return "Jugador retirado";
-		}else {
-			return "Jugador en juego";
-		}
-	}
+	
+	/**
+	 * Gets the retirado.
+	 *
+	 * @return the retirado
+	 */
 	//Retorna el estado del jugador si está retirado o no
 	public boolean getRetirado() {
 		return retirado;
 	}
-	//Activa la ronda 0 de apuestas
+	
+	/**
+	 * Activar ronda 0.
+	 * 
+	 * Activa la ronda de apuesta
+	 */
+	
 	public void activarRonda0() {
 		
 		ronda=0;
 	}
-	//Activa la ronda 1 de igualacion
+	
+	/**
+	 * Activar ronda 1.
+	 * 
+	 * Activa la ronda de igualación
+	 * 
+	 */
 	public void activarRonda1() {
 		
 		ronda=1;
 	}
-	//Activa la ronda 2 de Descartes
+	
+	/**
+	 * Activar ronda 2.
+	 * 
+	 * Activa la ronda de descartes
+	 */
+	
 	public void activarRonda2() {
 		
 		ronda=2;
 	}
-	//Activa la ronda 2 de determinar Ganador
+	
+	/**
+	 * Activar ronda 3.
+	 * 
+	 * Activa la ronda de determinar ganador.
+	 */
 	public void activarRonda3() {
 		
 		ronda=3;
 	}
-	//Establece si un jugador se retira o no del juego
+	
+	/**
+	 * Sets the retirado.
+	 *
+	 * Establece si un jugador se retira o no del juego
+	 *
+	 * @param retirado the new retirado
+	 */
+	
 	public void setRetirado(boolean retirado) {
 		this.retirado = retirado;
 	}
- 	@Override
-	//Acción que realiza al ejecutarse el hilo
+ 	
+	 /**
+	  * Run.
+	  * 
+	  * Acciones que realiza al ejecutarse el hilo
+	  */
+	 @Override
 	public void run() {
 		// TODO Auto-generated method stub
  		
@@ -103,40 +145,27 @@ public class JugadorSimulado implements Runnable {
 
  	 	 		//Ronda de apuestas
  	 	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
- 	 	 			//igualar
- 	 	 			
+ 	 	 			//igualar: probabilidad del 50%		
  	 	 			if(probabilidad <= 50) {
- 	 	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 	 				operacion = 0;
- 	 	 				//AVISAR A CONTROL
  	 	 			}
- 	 	 			//aumentar
+ 	 	 			//aumentar: probabilidad del 40%
  	 	 			else if(probabilidad <= 90) {
- 	 	 				//cantidadApuesta = controlPoker.getMaximaApuesta() + (factorAumento * 500); //turnos 1-5
  	 	 				operacion = 1;
  	 	 			} 
- 	 	 			//retirarse
+ 	 	 			//retirarse: probabilidad del 10%
  	 	 			else{
- 	 	 				//SE RETIRA
- 	 	 				//cantidadApuesta = controlPoker.getApuestasJugadores().get(turnoId - 1);
  	 	 				operacion = 2;
  	 	 				retirado = true;
- 	 	 				System.out.println("Run: Jugador " + nombre + " se retira");
- 	 	 			}
- 	 	 			
+ 	 	 			}	
  	 	 			enRondaDeApuestas = false;
  	 	 			enRondaDeIgualacion=true;
- 	 	 			System.out.println("Antes de ejecutar turnos, jugador " + nombre);
- 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this,retirado);
- 	 	 			System.out.println("Después de ejecutar turnos, jugador" + nombre);
- 	 	
+ 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this,retirado); 	 	
  	 	 		}
  				break;
  			case 1://Ronda de Igualacion
  				int probabilidad1 = random.nextInt(100) + 1;
  				if(controlPoker.getRonda() == 1 && enRondaDeIgualacion) {
- 	 	 			System.out.println("Run: Entra a igualación del jugador " + nombre);
- 	 	 			System.out.println("ronda " + controlPoker.getRonda());
  	 	 			//igualar
  	 	 			if(probabilidad1 <= 90) {
  	 	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
@@ -149,25 +178,21 @@ public class JugadorSimulado implements Runnable {
  	 	 				retirado = true;
  	 	 			}
  	 	 			enRondaDeIgualacion = false;
- 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this,retirado);
- 	 	 			
+ 	 	 			controlPoker.turnos(turnoId, nombre, operacion, this, retirado);	
  	 	 		}
  				break;	
  			case 2://Ronda de Descartes
  	 	 		if(controlPoker.getRonda() == 2 && enRondaDeDescarte) {
  	 	 			//Escoge la cantidad de cartas que va a descartar
- 	 	 			System.out.println("Run: Ronda 2 de jugador simulado " + nombre);
  	 	 			cantidadDescarte = random.nextInt(ControlPoker.NUMERO_CARTAS_MANO + 1); //0-5
  	 	 			//Decarta aleatoriamente y sin repetir la cantidad de cartas escogida
  	 	 			enRondaDeDescarte = false;
- 	 	 			System.out.println("Antes de llamar a turnos en RUN ronda 2 el jugador " + nombre);
- 	 	 			controlPoker.turnos(turnoId, nombre, cantidadDescarte, this,retirado);
- 	 	 			System.out.println("Después de llamar a turnos en RUN ronda 2 el jugador " + nombre);
+ 	 	 	 		controlPoker.turnos(turnoId, nombre, cantidadDescarte, this,retirado);
  	 	 			enRondaDeApuestas=true;
  	 	 			enRondaDeDescarte=false;
  	 	 		}
  				break;
- 			case 3://Ronda de determinar ganador
+ 			case 3://Ronda para determinar ganador
  	 	 		if(controlPoker.getRonda() == 3) {
  	 	 			jugar = false;
  	 	 		}

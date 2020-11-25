@@ -6,6 +6,10 @@ import java.util.Collection;
 import java.util.Collections;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Crupier.
+ */
 public class Crupier {
 
 	public static final int ESCALERA_REAL = 1;
@@ -24,11 +28,15 @@ public class Crupier {
 	private Carta estaCarta;
 	private int valorJugada;
 
-	public Crupier() {
-		// Escalera real
-
-	}
-
+	/**
+	 * Valores numericos.
+	 * 
+	 * Le entra una lista con el mazo y retorna una lista con los valores numéricos
+	 * correspondientes a la cartas del mazo.
+	 *
+	 * @param mazo the mazo
+	 * @return the list
+	 */
 	private List<Integer> valoresNumericos(List<Carta> mazo) {
 		List<Integer> valores = new ArrayList<Integer>();
 		for (Carta carta : mazo) {
@@ -37,6 +45,14 @@ public class Crupier {
 		return valores;
 	}
 
+	/**
+	 * Mismo palo.
+	 * 
+	 * Retorna true si todas las cartas pertenencen al mismo palo, false en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if successful
+	 */
 	private boolean mismoPalo(List<Carta> mazo) {
 		String palo = mazo.get(0).getPalo();
 		for (Carta carta : mazo) {
@@ -48,10 +64,15 @@ public class Crupier {
 		return true;
 	}
 
-	// Retorna true si el mazo es una escalera real
+	/**
+	 * Checks if is escalera real.
+	 *
+	 *	Retorna true si el mazo es una escalera real, false en caso contrario.
+	 * @param mazo the mazo
+	 * @return true, if is escalera real
+	 */
 	private boolean isEscaleraReal(List<Carta> mazo) {
 		// Revisar que todas sean del mismo palo
-		System.out.println("Revisar si tiene ESCALERA REAL");
 		if (!mismoPalo(mazo))
 			return false;
 		List<Integer> valores = valoresNumericos(mazo);
@@ -61,16 +82,21 @@ public class Crupier {
 		return false;
 	}
 
-	// Revisa si el jugador tiene un Poker, recorriendo cada carta y revisando que
-	// tenga cuatro veces el mismo valor de una carta
+	
+	/**
+	 * Checks if is poker.
+	 *
+	 * Retorna true si el mazo es un poker, falso en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is poker
+	 */
 	private boolean isPoker(List<Carta> mazo) {
-		System.out.println("Revisar si tiene POKER");
 		int cant_cartasIguales = 0;
 		for (int i = 0; i < mazo.size(); i++) {
 			estaCarta = mazo.get(i);
 			cant_cartasIguales = 0;
 			for (int j = 0; j < mazo.size(); j++) {
-
 				if (estaCarta.getValorNumerico() == mazo.get(j).getValorNumerico()) {
 					cant_cartasIguales++;
 				}
@@ -82,18 +108,25 @@ public class Crupier {
 		}
 		return false;
 	}
-	//Revisa si el jugador posee una escalera en sus cartas, donde se cumple que si la carta de mayor valor menos la carta de menor valor es igual a 4, entonces posee una escalera
+	
+	/**
+	 * Checks if is escalera.
+	 * 
+	 * Revisa si el jugador posee una escalera en sus cartas, donde se cumple que si la carta de mayor 
+	 * valor menos la carta de menor valor es igual a 4, entonces posee una escalera
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is escalera
+	 */
+
     private boolean isEscalera(List<Carta> mazo) {
-    	System.out.println("Revisar si tiene ESCALERA");
         List<Integer> valores = new ArrayList<Integer>();
         List<Integer> valoresAlternos = new ArrayList<Integer>();
         for(Carta carta : mazo) {
             valores.add(carta.getValorNumerico());
-            System.out.println("Normal: " + carta.getValorNumerico());
         }
         for(Carta carta : mazo) {
             valoresAlternos.add(carta.getValorNumericoAlterno());
-            System.out.println("Alterno: " + carta.getValorNumericoAlterno());
         }
         
         Collections.sort(valores);
@@ -112,9 +145,18 @@ public class Crupier {
         return true;
 
     }
-	// Retorna true si el mazo es una escalera color
+	
+	/**
+	 * Checks if is escalera color.
+	 * 
+	 * Retorna true si el mazo es una escalera color, false en caso contrario.
+	 * La carta As puede forma escalera color con el rey o con el 2.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is escalera color
+	 */
+	
 	private boolean isEscaleraColor(List<Carta> mazo) {
-		System.out.println("Revisar si tiene ESCALERA COLOR");
 		if (!mismoPalo(mazo))
 			return false;
 		List<Integer> valores = valoresNumericos(mazo);
@@ -131,32 +173,39 @@ public class Crupier {
 		}
 		return false;
 	}
-	//Doble pareja
+	
+	/**
+	 * Checks if is doble pareja.
+	 * 
+	 * Retorna true si el mazo es una doble pareja, false en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is doble pareja
+	 */
     private boolean isDoblePareja(List<Carta> mazo){
-    	System.out.println("Revisar si tiene DOBLE PAREJA");
     	List<Carta> auxiliar = new ArrayList<Carta>();
-    	
     	if(isPareja(mazo)) {
     		for(Carta carta : mazo) {
-			System.out.print("VALOR DE REFERENCIA ES: " + valorReferenciaPareja + "\n");
 	    			if(valorReferenciaPareja != carta.getValorNumerico()) {
 	    				auxiliar.add(carta);
-	    				System.out.println("++++++++++++LA CARTA ES: "+ carta.getValor());
 	    			}
     			}
-			if(isPareja(auxiliar)) {
-				for( Carta cartita : auxiliar) {
-					System.out.print("AUXILIAR, " + cartita.getValor() + "\n");
-					}
+			if(isPareja(auxiliar)) 
 				return true;
-    		}
     	}   
         return false;
     }
     int valorReferenciaPareja;
-  //Retorna true si la mano es un full
+  
+  /**
+   * Checks if is full.
+   *
+   * Retirna true si el mazo es un full, false en caso contrario.
+   *
+   * @param mazo the mazo
+   * @return true, if is full
+   */
     public boolean isFull(List<Carta> mazo){
-    	System.out.println("Revisar si tiene FULL");
         ArrayList<Carta> auxiliar = new ArrayList<Carta>();
         if(isTrio(mazo)) {
             for(Carta carta : mazo) {
@@ -171,9 +220,16 @@ public class Crupier {
         }
         return false;
     }
-	// Retorna true si el mazo es un color
+	
+	/**
+	 * Checks if is color.
+	 *
+	 *	Retorna true si es un color, false en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is color
+	 */
 	private boolean isColor(List<Carta> mazo) {
-		System.out.println("Revisar si tiene COLOR");
 		String palo = mazo.get(0).getPalo();
 		
 		for (Carta carta : mazo) {
@@ -186,9 +242,16 @@ public class Crupier {
 	}
 
 	int valorReferenciaTrio;
-	// Retorna true si el mazo es un trío
+	
+	/**
+	 * Checks if is trio.
+	 * 
+	 * Retorna true si el mazo es un trio, false en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is trio
+	 */
 	private boolean isTrio(List<Carta> mazo) {
-		System.out.println("Revisar si tiene TRIO");
 		int cartasIguales = 0;
 		for (int carta = 0; carta < mazo.size(); carta++) {
 			valorReferenciaTrio = mazo.get(carta).getValorNumerico();
@@ -206,10 +269,16 @@ public class Crupier {
 		return false;
 	}
 
-	// Revisa si el mazo del jugador tiene una pareja, es decir; dos cartas con
-	// igual valor numérico
+	
+	/**
+	 * Checks if is pareja.
+	 * 
+	 * Retorna true si el mazo es una pareja, false en caso contrario.
+	 *
+	 * @param mazo the mazo
+	 * @return true, if is pareja
+	 */
 	private boolean isPareja(List<Carta> mazo) {
-		System.out.println("Revisar si tiene PAREJA");
 		int cant_cartasIguales = 0;
 		for (int carta = 0; carta < mazo.size(); carta++) {
 			valorReferenciaPareja = mazo.get(carta).getValorNumerico();
@@ -227,10 +296,16 @@ public class Crupier {
 		return false;
 	}
 
+	/**
+	 * Carta mas alta.
+	 * 
+	 * Retorna el valor numérico de la carta mas alta del mazo.
+	 *
+	 * @param mazo the mazo
+	 * @return the int
+	 */
 	private int cartaMasAlta(List<Carta> mazo) {
-
 		int valor_cartaMasAlta = 0;
-
 		List<Integer> valores = new ArrayList<Integer>();
 		for (Carta carta : mazo) {
 			valores.add(carta.getValorNumerico());
@@ -239,11 +314,24 @@ public class Crupier {
 		return valor_cartaMasAlta;
 	}
 	
+	/**
+	 * Gets the valor max jugada.
+	 *
+	 * @return the valor max jugada
+	 */
 	public int getValorMaxJugada() {
 		
 		return valorJugada;
 	}
 
+	/**
+	 * Ejecutar.
+	 *
+	 *	Recibe un mazo y retorna la constante de clase correspondiente a la jugada que tiene.
+	 *
+	 * @param mazoJugador the mazo jugador
+	 * @return the int
+	 */
 	public int ejecutar(List<Carta> mazoJugador) {
 		valorReferenciaTrio=0;
 		valorReferenciaPareja=0;
@@ -280,7 +368,6 @@ public class Crupier {
 			return PAREJA;
 		}else {
 			puntajes.add(10);
-			System.out.println("NO TIENE JUEGO, SU VALOR DE JUEGO ES POR SU CARTA MÁS ALTA: "+cartaMasAlta(mazoJugador) );
 			return cartaMasAlta(mazoJugador);
 		}
 	}

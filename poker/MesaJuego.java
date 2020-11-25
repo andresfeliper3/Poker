@@ -11,18 +11,39 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MesaJuego.
+ */
 public class MesaJuego extends JPanel {
 	public static final String RUTA_CARTA_TAPADA = "/resources/cardBack.png";
 	private PanelJugador jugador1, jugador2, jugador3, jugador4, jugador5;
 	private PanelJugador[] panelJugadores = new PanelJugador[5];
 	private JLabel cartaTapada;
 	private ArrayList<Integer>apuestasJugadores;
+	
+	/**
+	 * Instantiates a new mesa juego.
+	 *
+	 * @param nombreJugadorHumano the nombre jugador humano
+	 * @param nombresJugadoresSimulados the nombres jugadores simulados
+	 * @param manosJugadores the manos jugadores
+	 * @param apuestasJugadores the apuestas jugadores
+	 */
 	public MesaJuego(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
 		initGUI(nombreJugadorHumano, nombresJugadoresSimulados, manosJugadores, apuestasJugadores);
 		this.setBackground(Color.GREEN);
 		this.setBorder(new TitledBorder("Mesa"));	
 	}
 	
+	/**
+	 * Inits the GUI.
+	 *
+	 * @param nombreJugadorHumano the nombre jugador humano
+	 * @param nombresJugadoresSimulados the nombres jugadores simulados
+	 * @param manosJugadores the manos jugadores
+	 * @param apuestasJugadores the apuestas jugadores
+	 */
 	private void initGUI(String nombreJugadorHumano, String[] nombresJugadoresSimulados, List<List<Carta>>manosJugadores, List<Integer> apuestasJugadores) {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -66,7 +87,16 @@ public class MesaJuego extends JPanel {
 		
 		
 	}
-	//actualiza la mesa con el estado actual del juego
+	
+	/**
+	 * Mesa actualizar.
+	 * 
+	 * Actualiza la mesa con el estado actual del juego.
+	 *
+	 * @param manosJugadores the manos jugadores
+	 * @param ganador the ganador
+	 * @param ronda the ronda
+	 */
 		public void mesaActualizar(List<List<Carta>> manosJugadores, int ganador,int ronda) {
 			//Actualizar la mesa de juego una vez ha ganado un jugador
 			if(ronda==2) {
@@ -114,21 +144,49 @@ public class MesaJuego extends JPanel {
 				}
 			}
 		}
-	//Retorna el panel del jugador humano
+	
+	/**
+	 * Gets the jugador humano.
+	 * 
+	 * Retorna el panelJugador del jugador humano.
+	 *
+	 * @return the jugador humano
+	 */
 	public PanelJugador getJugadorHumano() {
 		return jugador5;
 	}
 	
-	//Retorna la mano del jugador usuario
+	/**
+	 * Gets the mano humano.
+	 *
+	 * @return the mano humano
+	 */
 	public List<Carta> getManoHumano(){
 		
 		return jugador5.getMano();
 	}
-	//método encargado de establecer en pantalla la apuesta del jugador
+	
+	/**
+	 * Sets the panel jugador.
+	 * 
+	 * Se encarga de establecer en pantalla la apuesta del jugador.
+	 *
+	 * @param jugador the jugador
+	 * @param apuesta the apuesta
+	 */
+	
 	public void setPanelJugador(int jugador, int apuesta) {
 		panelJugadores[jugador].setValorApuesta(apuesta);
 	}
-	//Método encargado de reiniciar todos los paneles de los jugadores
+	
+	/**
+	 * Reiniciar panel jugadores.
+	 *
+	 * Se encarga de reiniciar todos los paneles de los jugadores
+	 *
+	 * @param manosJugadores the manos jugadores
+	 * @param apuestasJugadores the apuestas jugadores
+	 */
 	public void reiniciarPanelJugadores(List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
 		//Reiniciar todos los panelJugadores
 		for(int i = 0; i < panelJugadores.length; i++) {

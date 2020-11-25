@@ -20,6 +20,10 @@ import javax.swing.border.TitledBorder;
 
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VistaGUIPoker.
+ */
 public class VistaGUIPoker extends JFrame {
 	
 	private JPanel zonaJuego, zonaDinero, panelBotones;
@@ -38,6 +42,14 @@ public class VistaGUIPoker extends JFrame {
 	private ControlPoker controlPoker;
 
 	
+	/**
+	 * Instantiates a new vista GUI poker.
+	 *
+	 * @param nombresJugadoresSimulados the nombres jugadores simulados
+	 * @param manosJugadores the manos jugadores
+	 * @param apuestasJugadores the apuestas jugadores
+	 * @param controlPoker the control poker
+	 */
 	public VistaGUIPoker(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores, ControlPoker controlPoker) {
 		this.apuestasJugadores = apuestasJugadores;
 		this.manosJugadores = manosJugadores;
@@ -52,8 +64,15 @@ public class VistaGUIPoker extends JFrame {
 		
 	}
 	
+	/**
+	 * Inits the GUI.
+	 *
+	 * @param nombresJugadoresSimulados the nombres jugadores simulados
+	 * @param manosJugadores the manos jugadores
+	 * @param apuestasJugadores the apuestas jugadores
+	 */
 	private void initGUI(String[] nombresJugadoresSimulados, List<List<Carta>> manosJugadores, List<Integer> apuestasJugadores) {
-		//String nombreJugadorHumano = JOptionPane.showInputDialog(this, "Escribe tu nombre");
+		//nombreJugadorHumano = JOptionPane.showInputDialog(this, "Escribe tu nombre");
 		nombreJugadorHumano = "yolas";
 		this.nombresJugadoresSimulados = nombresJugadoresSimulados;
 		this.setLayout(new GridBagLayout());
@@ -142,6 +161,18 @@ public class VistaGUIPoker extends JFrame {
 		
 	}
 	
+	/**
+	 * Editar registros.
+	 * 
+	 * Actualiza los registros del juego para mostrar lo que ocurre durante la partida. 
+	 * Las fases representan los diferentes tipos de mensajes durante el juego.
+	 * También actualiza la apuesta en juego visible.
+	 *
+	 * @param fase the fase
+	 * @param nombre the nombre
+	 * @param apuesta the apuesta
+	 * @param operacion the operacion
+	 */
 	public void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
 		apuestaTotal = controlPoker.actualizarApuestaEnJuego();
 		apuestaEnJuego.setText("Apuesta en juego: "+apuestaTotal);
@@ -181,9 +212,7 @@ public class VistaGUIPoker extends JFrame {
 					
 					panelRegistros.append("El jugador " + nombre + " se retiró.\n");
 					break;
-			}
-			System.out.println("APUESTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-			
+			}	
 		}
 		//Avisa que es el turno del usuario en la ronda de Descartes
 		else if(fase == 2) {
@@ -273,26 +302,40 @@ public class VistaGUIPoker extends JFrame {
 					break;
 				}
 				panelRegistros.append("\nEL GANADOR ES: "+ nombre + ", por: "+mensaje);
-			}
-			
+			}	
 		}
-	}
-	//Método encargado de actualizar la vista del poker
+	}	
+	/**
+	 * Actualizar vista poker.
+	 * 
+	 * Actualiza la mesa de juego
+	 *
+	 * @param manosJugadores the manos jugadores
+	 * @param ganador the ganador
+	 * @param ronda the ronda
+	 */
+	
 	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador, int ronda) {
 		//debe llamarse cuanto el control tenga las nuevas manos y el resultado
-		mesaJuego.mesaActualizar(manosJugadores,ganador,ronda);
+		
 		SwingUtilities.invokeLater(new Runnable() {
-
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				//otraRonda.setVisible(true);
+				mesaJuego.mesaActualizar(manosJugadores,ganador,ronda);
 			}
 			
 		});
-
 	}
-	//Reinicia las condiciones iniciales de la vista GUI con los nuevos datos generados por el controlPoker
+	
+	/**
+	 * Reiniciar vista GUI poker.
+	 * 
+	 * Coloca los componentes gráficos en las condicionales iniciales de juego.
+	 * //Reinicia las condiciones iniciales de la vista GUI con los nuevos datos generados por el control.
+	 */
+	
 	private void reiniciarVistaGUIPoker() { 
 		//Cambiar apuestas y manos
 		apuestasJugadores = controlPoker.getApuestasJugadores();
@@ -302,21 +345,51 @@ public class VistaGUIPoker extends JFrame {
 		//Vaciar panel de registros
 		panelRegistros.setText("");
 	}
-	//Método encargado de hacer cambios en el panel del jugador
+	
+	/**
+	 * Editar panel jugador.
+	 *
+	 * Actualiza el panelJugador durante el transcurso del juego.
+	 *
+	 * @param indexJugador the index jugador
+	 * @param apuesta the apuesta
+	 */
 	public void editarPanelJugador(int indexJugador, int apuesta) {
 		mesaJuego.setPanelJugador(indexJugador, apuesta);
 	}
-	//Método que desactiva las escuchas de las cartas del jugador humano
+	
+	/**
+	 * Desactivar escucha.
+	 *
+	 * Desactiva la escucha del botón ingresado.
+	 *
+	 * @param boton the boton
+	 */
 	public void desactivarEscucha(JButton boton) {
 		boton.removeActionListener(escucha);
 	}
-	//Método que activa las escuchas de las cartas del jugador humano
+	
+	/**
+	 * Activar escucha.
+	 * 
+	 * Activa la escucha del botón ingresado.
+	 *
+	 * @param boton the boton
+	 */
 	public void activarEscucha(JButton boton) {
 		boton.addActionListener(escucha);
 	}
 	
- 	private class Escucha implements ActionListener {
+ 	/**
+	  * The Class Escucha.
+	  */
+	 private class Escucha implements ActionListener {
 
+		/**
+		 * Action performed.
+		 *
+		 * @param e the e
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
@@ -397,7 +470,6 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 2 && !controlPoker.isHumanoRetirado()) {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
-					System.out.println(nombreJugadorHumano + " llama a turnos desde botón descarte y quiere descartar" + ControlPoker.NUMERO_CARTAS_MANO + " " +mesaJuego.getManoHumano().size() );
 					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null,false);
 				}
 				else {
