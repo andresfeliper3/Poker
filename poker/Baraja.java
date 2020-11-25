@@ -1,9 +1,16 @@
+/*
+ * 
+ */
 package poker;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Baraja.
+ */
 public class Baraja {
 	   public static final String RUTA_FILE = "/resources/cards.png";
 	   public static final int CARD_WIDTH = 45;
@@ -14,10 +21,12 @@ public class Baraja {
 	   //El ArrayList no es seguro para trabajar con hilos
 	   
 	   private ArrayList<Carta> mazo;
-	 
 	   private Random random;
 	   
-	   public Baraja() {
+	/**
+   	 * Instantiates a new baraja.
+   	 */
+   	public Baraja() {
 		   random = new Random();
 		   mazo = new ArrayList<Carta>();
 		   String valor;
@@ -60,7 +69,10 @@ public class Baraja {
 		   asignarImagen();
 	   }
 	   
-	   //Asigna las porciones de la imagen a cada carta según su respectivo palo y valor
+	   /**
+   	 * Asignar imagen.
+   	 * Asigna las porciones de la imagen a cada carta según su respectivo palo y valor
+   	 */
 	   private void asignarImagen() {   	   
 		   BufferedImage cardsImage = FileIO.readImageFile(this, RUTA_FILE);
 		   //Índice del mazo
@@ -76,14 +88,24 @@ public class Baraja {
 		      } 
 		     }		    
 	  }
-	   //Saca carta aleatoria del mazo
+	   
+   	/**
+   	 * Gets the carta.
+   	 * Saca carta aleatoria del mazo
+   	 * @return the carta
+   	 */
 	   public Carta getCarta() {
 		   int index = random.nextInt(mazoSize());
 		   Carta carta = mazo.get(index);
 		   mazo.remove(index); //elimina del mazo la carta usada
 		   return carta;
 	   }
-	   //Retorna el tamaño del mazo
+	   
+   	/**
+   	 * Mazo size.
+   	 * Retorna el tamaño del mazo
+   	 * @return the int
+   	 */
 	   public int mazoSize() {
 		   return mazo.size();
 	   }
