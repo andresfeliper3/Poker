@@ -96,7 +96,7 @@ public class JugadorSimulado implements Runnable {
  		
  		//Mientras la ronda de descarte no haya iniciado, esto sirve para hacer pruebas. Debe ir "mientras el jugador no se haya retirado".
  		while(jugar) {
- 			//System.out.println(nombre);
+ 			
  			switch(ronda) {
  			case 0://Ronda de apuestas
  	 			int probabilidad = random.nextInt(100) + 1;
@@ -105,13 +105,13 @@ public class JugadorSimulado implements Runnable {
  	 	 		if(controlPoker.getRonda() == 0 && enRondaDeApuestas) {	
  	 	 			//igualar
  	 	 			
- 	 	 			if(probabilidad <= 90) {
+ 	 	 			if(probabilidad <= 50) {
  	 	 				//cantidadApuesta = controlPoker.getMaximaApuesta();
  	 	 				operacion = 0;
  	 	 				//AVISAR A CONTROL
  	 	 			}
  	 	 			//aumentar
- 	 	 			else if(probabilidad <= 50) {
+ 	 	 			else if(probabilidad <= 90) {
  	 	 				//cantidadApuesta = controlPoker.getMaximaApuesta() + (factorAumento * 500); //turnos 1-5
  	 	 				operacion = 1;
  	 	 			} 

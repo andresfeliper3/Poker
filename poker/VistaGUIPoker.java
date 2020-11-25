@@ -120,7 +120,7 @@ public class VistaGUIPoker extends JFrame {
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.VERTICAL;
 		//Primer mensaje
-		editarRegistros(0, "", -1, -1);
+		
 		add(scroll, constraints);
 		
 		//Panel de botones
@@ -304,7 +304,7 @@ public class VistaGUIPoker extends JFrame {
 		//Pasar apuestasJugadores y manosJugadores a mesaJuego
 		mesaJuego.reiniciarPanelJugadores(manosJugadores, apuestasJugadores);
 		//Vaciar panel de registros
-		panelRegistros.setText("REINICIADO");
+		panelRegistros.setText("");
 	}
 	//Método encargado de hacer cambios en el panel del jugador
 	public void editarPanelJugador(int indexJugador, int apuesta) {
@@ -344,7 +344,7 @@ public class VistaGUIPoker extends JFrame {
 					//El usuario se retira y pierde
 					controlPoker.setReinicio();
 					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
+					controlPoker.turnos(5, nombreJugadorHumano, 2, null,true);
 					//controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando

@@ -99,7 +99,6 @@ public class ControlPoker {
 		posicionJugador=0;
 		contadorIgualacion=0;
 		contadorDescarte=0;
-		variablePrueba = true;
 		apuestaTotal=2500;
 		puntajesFinales.clear();
 		valoresAComparar.clear();
@@ -155,8 +154,9 @@ public class ControlPoker {
 	// Escoge al azar al jugador mano (inicial) escogiendo el turno
 	private void escogerJugadorMano() {
 		random = new Random();
-		jugadorManoAleatorio = random.nextInt(TOTAL_JUGADORES) + 1;
+		jugadorManoAleatorio = 5;//random.nextInt(TOTAL_JUGADORES) + 1;
 		turno = jugadorManoAleatorio;
+		editarRegistros(0, "", -1, -1);
 
 		// Decirle al jugador lo que debe hacer si es el jugador mano
 		if (turno == 5) {
@@ -189,6 +189,7 @@ public class ControlPoker {
 	// Método sincronizador de turnos, se encarga de mover el motor del juego, a partir de los turnos del juego
 	public void turnos(int idJugador, String nombreJugador, int operacion, JugadorSimulado jugadorSimulado,boolean estadoJugador) {
 		// Si está en la ronda de apuestas
+		System.out.println("TURNOS");
 		boolean[] jugadoresRetirados = { jugador1.getRetirado(), jugador2.getRetirado(), jugador3.getRetirado(),
 				jugador4.getRetirado(), humanoRetirado };
 		bloqueo.lock();
@@ -280,18 +281,14 @@ public class ControlPoker {
 			else if (ronda == 1 && contadorIgualacion < TOTAL_JUGADORES) {
 				System.out.println("Igualacion, Turno es " + turno);
 				System.out.println("igualacion, IdJugador es " + idJugador);
-				if(turno==5 && reiniciado) {
-					aumentarTurno();
-					contadorIgualacion++;
-					esperarIgualacion.signalAll();
-				}
+
 				while (idJugador != turno && !reiniciado) {
 					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir en la ronda de igualación");
 					System.out.println("IdJugador " + idJugador + ", turno " + turno);
 					esperarIgualacion.await();
 					System.out.println("ES EL TURNO: " + turno + ", "+nombreJugador+"DESPERTÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓ EN LA RONDA DE IGUALACIÓN");
 				}
-				if (!estadoJugador) {
+				if (!estadoJugador && !reiniciado) {
 					int apuesta = calcularApuesta(idJugador, operacion);
 					apuestaTotal +=apuesta;
 					setApuestasJugadores(idJugador - 1, apuesta);
@@ -313,7 +310,7 @@ public class ControlPoker {
 					editarRegistros(6, "", -1, -1);
 				}
 				// Si todos los que debían igualar, ya igualaron
-				if (contadorIgualacion == TOTAL_JUGADORES) {
+				if (contadorIgualacion == TOTAL_JUGADORES && !reiniciado) {
 					System.out.println("Contador igualacion " + contadorIgualacion + " y jugadoresParaApostarMas "
 							+ jugadoresParaApostarMas.size());
 					if (revisarApuestasIguales() && contadorDescarte > TOTAL_JUGADORES && variablePrueba) {
