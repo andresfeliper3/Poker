@@ -582,13 +582,17 @@ public class ControlPoker {
 	private int calcularApuesta(int idJugador, int operacion) {
 		// igualar
 		if (operacion == 0) {
-
-			return getMaximaApuesta();
+			if(dineroJugadores.get(idJugador - 1) >= (getMaximaApuesta() - dineroJugadores.get(idJugador - 1))) {
+				return getMaximaApuesta();
+			}
+			//Debe retirarse;
+			return 3;
 		}
 		// aumentar
 		else if (operacion == 1) {
-			
-			return getMaximaApuesta() + 500;
+			if(dineroJugadores.get(idJugador - 1) >= getMaximaApuesta() + 500) {
+				return getMaximaApuesta() + 500;
+			}
 		}
 		// retirarse
 		else if (operacion == 2) {
