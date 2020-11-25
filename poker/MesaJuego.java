@@ -67,40 +67,50 @@ public class MesaJuego extends JPanel {
 		
 	}
 	//actualiza la mesa con el estado actual del juego
-		public void mesaActualizar(List<List<Carta>> manosJugadores, int ganador) {
+		public void mesaActualizar(List<List<Carta>> manosJugadores, int ganador,int ronda) {
 			//Actualizar la mesa de juego una vez ha ganado un jugador
-			if(ganador==0) {
-				jugador1.recibirCartas(manosJugadores.get(0),"Ganaste");
-				jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
-				jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
-				jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
-				jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+			if(ronda==2) {
+				
+					jugador1.recibirCartas(manosJugadores.get(0),"");
+					jugador2.recibirCartas(manosJugadores.get(1),"");
+					jugador3.recibirCartas(manosJugadores.get(2),"");
+					jugador4.recibirCartas(manosJugadores.get(3),"");
+					jugador5.recibirCartas(manosJugadores.get(4),"");
+
 			}else {
-				if(ganador==1) {
-					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
-					jugador2.recibirCartas(manosJugadores.get(1),"Ganaste");
+				if(ganador==0) {
+					jugador1.recibirCartas(manosJugadores.get(0),"Ganaste");
+					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
 					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
 					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
 					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
-				}else  if(ganador==2){
-					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
-					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
-					jugador3.recibirCartas(manosJugadores.get(2),"Ganaste");
-					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
-					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
-				}else if(ganador==3) {
-					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
-					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
-					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
-					jugador4.recibirCartas(manosJugadores.get(3),"Ganaste");
-					jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
-					
 				}else {
-					jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
-					jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
-					jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
-					jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
-					jugador5.recibirCartas(manosJugadores.get(4),"Ganaste");
+					if(ganador==1) {
+						jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+						jugador2.recibirCartas(manosJugadores.get(1),"Ganaste");
+						jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+						jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+						jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+					}else  if(ganador==2){
+						jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+						jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+						jugador3.recibirCartas(manosJugadores.get(2),"Ganaste");
+						jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+						jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+					}else if(ganador==3) {
+						jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+						jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+						jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+						jugador4.recibirCartas(manosJugadores.get(3),"Ganaste");
+						jugador5.recibirCartas(manosJugadores.get(4),"Perdiste");
+						
+					}else {
+						jugador1.recibirCartas(manosJugadores.get(0),"Perdiste");
+						jugador2.recibirCartas(manosJugadores.get(1),"Perdiste");
+						jugador3.recibirCartas(manosJugadores.get(2),"Perdiste");
+						jugador4.recibirCartas(manosJugadores.get(3),"Perdiste");
+						jugador5.recibirCartas(manosJugadores.get(4),"Ganaste");
+					}
 				}
 			}
 		}

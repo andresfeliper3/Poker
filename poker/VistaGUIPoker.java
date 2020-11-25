@@ -25,13 +25,14 @@ public class VistaGUIPoker extends JFrame {
 	private JPanel zonaJuego, zonaDinero, zonaApuesta, panelBotones;
 	private JTextArea panelRegistros;
 	private MesaJuego mesaJuego;
-	private Titulos titulo;
+	private Titulos titulo,apuestaEnJuego;
 	private JButton descartar, aumentar, igualar, retirarse;
 	private List<Integer> apuestasJugadores;
 	private List<List<Carta>> manosJugadores;
 	private String nombreJugadorHumano;
 	private String[] nombresJugadoresSimulados;
 	private JScrollPane scroll;
+	private int apuestaTotal=2500;
 	
 	private Escucha escucha;
 	private ControlPoker controlPoker;
@@ -79,8 +80,13 @@ public class VistaGUIPoker extends JFrame {
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		add(zonaJuego, constraints);
+		
 		//Zona dinero (dentro de zonaJuego)
+		apuestaEnJuego = new Titulos("Apuesta en juego: " + apuestaTotal,40,Color.YELLOW);
+		
 		zonaDinero = new JPanel();
+		
+		zonaDinero.add(apuestaEnJuego);
 		//zonaDinero.setPreferredSize(new Dimension(100,100));
 		zonaDinero.setBorder(new TitledBorder("Dinero"));
 		zonaDinero.setBackground(Color.yellow);
@@ -141,6 +147,7 @@ public class VistaGUIPoker extends JFrame {
 	}
 	
 	public void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
+
 		if(fase == 0) {
 		//Apuesta inicial y se escoge el jugador mano 
 	
@@ -167,6 +174,7 @@ public class VistaGUIPoker extends JFrame {
 				case 0:
 					
 					panelRegistros.append("El jugador " + nombre + " igualó a $" + apuesta + ".\n");
+					
 					break;
 				case 1:
 					
@@ -177,6 +185,9 @@ public class VistaGUIPoker extends JFrame {
 					panelRegistros.append("El jugador " + nombre + " se retiró.\n");
 					break;
 			}
+			System.out.println("APUESTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+			apuestaTotal = controlPoker.actualizarApuestaEnJuego();
+			apuestaEnJuego.setText("Apuesta en juego: "+apuestaTotal);
 		}
 		//Avisa que es el turno del usuario en la ronda de Descartes
 		else if(fase == 2) {
@@ -271,9 +282,9 @@ public class VistaGUIPoker extends JFrame {
 		}
 	}
 	//Método encargado de actualizar la vista del poker
-	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador) {
+	public void actualizarVistaPoker(List<List<Carta>> manosJugadores,int ganador, int ronda) {
 		//debe llamarse cuanto el control tenga las nuevas manos y el resultado
-		mesaJuego.mesaActualizar(manosJugadores,ganador);
+		mesaJuego.mesaActualizar(manosJugadores,ganador,ronda);
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -293,7 +304,7 @@ public class VistaGUIPoker extends JFrame {
 		//Pasar apuestasJugadores y manosJugadores a mesaJuego
 		mesaJuego.reiniciarPanelJugadores(manosJugadores, apuestasJugadores);
 		//Vaciar panel de registros
-		panelRegistros.setText("");
+		panelRegistros.setText("REINICIADO");
 	}
 	//Método encargado de hacer cambios en el panel del jugador
 	public void editarPanelJugador(int indexJugador, int apuesta) {
@@ -318,21 +329,22 @@ public class VistaGUIPoker extends JFrame {
 				if(e.getSource() == aumentar) {
 					//controlPoker.setApuestasJugadores(4, nuevaApuesta);			
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 1, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 1, null,false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == igualar) {
 					//controlPoker.setApuestasJugadores(4, controlPoker.getMaximaApuesta());
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 0, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 0, null,false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
+					controlPoker.setReinicio();
 					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
 					//controlPoker.setJugadoresEnjuego();
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
@@ -355,15 +367,16 @@ public class VistaGUIPoker extends JFrame {
 			else if(controlPoker.getRonda() == 1) {
 				if(e.getSource() == igualar) {
 					//Despertar hilos
-					controlPoker.turnos(5, nombreJugadorHumano, 0, null);
+					controlPoker.turnos(5, nombreJugadorHumano, 0, null,false);
 					//Pintar
 					mesaJuego.getJugadorHumano().setValorApuesta(controlPoker.getApuestasJugadores().get(4));
 				}
 				else if(e.getSource() == retirarse) {
 					//El usuario se retira y pierde
+					controlPoker.setReinicio();
 					controlPoker.setHumanoRetirado(true);
-					controlPoker.turnos(5, nombreJugadorHumano, 2, null);
-					//controlPoker.setJugadoresEnjuego();
+					controlPoker.turnos(5, nombreJugadorHumano, 2, null,false);
+
 					int option = JOptionPane.showConfirmDialog(panelBotones, "¿Deseas jugar otra vez?", "Te retiraste", JOptionPane.YES_NO_CANCEL_OPTION);	
 					//Pregunta si el usuario quiere seguir jugando
 					if(option == JOptionPane.YES_OPTION) {
@@ -389,7 +402,7 @@ public class VistaGUIPoker extends JFrame {
 				if(e.getSource() == descartar) {
 					controlPoker.descarteJugadorHumano(mesaJuego.getManoHumano());
 					System.out.println(nombreJugadorHumano + " llama a turnos desde botón descarte y quiere descartar" + ControlPoker.NUMERO_CARTAS_MANO + " " +mesaJuego.getManoHumano().size() );
-					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null);
+					controlPoker.turnos(5, nombreJugadorHumano, ControlPoker.NUMERO_CARTAS_MANO - mesaJuego.getManoHumano().size(), null,false);
 				}
 				else {
 					JOptionPane.showMessageDialog(panelBotones, "Ronda " + controlPoker.getRonda() + ", Esta opción ya no está disponible");
