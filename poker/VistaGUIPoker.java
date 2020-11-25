@@ -143,7 +143,8 @@ public class VistaGUIPoker extends JFrame {
 	}
 	
 	public void editarRegistros(int fase, String nombre, int apuesta, int operacion) {
-
+		apuestaTotal = controlPoker.actualizarApuestaEnJuego();
+		apuestaEnJuego.setText("Apuesta en juego: "+apuestaTotal);
 		if(fase == 0) {
 		//Apuesta inicial y se escoge el jugador mano 
 	
@@ -182,8 +183,7 @@ public class VistaGUIPoker extends JFrame {
 					break;
 			}
 			System.out.println("APUESTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-			apuestaTotal = controlPoker.actualizarApuestaEnJuego();
-			apuestaEnJuego.setText("Apuesta en juego: "+apuestaTotal);
+			
 		}
 		//Avisa que es el turno del usuario en la ronda de Descartes
 		else if(fase == 2) {

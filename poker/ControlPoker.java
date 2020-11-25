@@ -124,7 +124,12 @@ public class ControlPoker {
 	}
 	//Método encargado de totalizar el valor de la apuesta en juego
 	public int actualizarApuestaEnJuego() {
-		
+		apuestaTotal = 0;
+		for(Integer integer : apuestasJugadores) {
+			System.out.println("ACTUALIZAR apuesta en juego: " + integer);
+			apuestaTotal += integer;
+		}
+		System.out.println("Apuesta total " + apuestaTotal);
 		return apuestaTotal;
 	}
 
@@ -300,7 +305,7 @@ public class ControlPoker {
 					System.out.println("En igualación " + nombreJugador + " intenta entrar pero se va a dormir en la ronda de igualación");
 					System.out.println("IdJugador " + idJugador + ", turno " + turno);
 					esperarIgualacion.await();
-					System.out.println("ES EL TURNO: " + turno + ", "+nombreJugador+"DESPERTÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓ EN LA RONDA DE IGUALACIÓN");
+					System.out.println(" EL TURNO: " + turno + ", "+nombreJugador+"DESPERTÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓ EN LA RONDA DE IGUALACIÓN");
 				}
 				if (!estadoJugador && !reiniciado) {
 					int apuesta = calcularApuesta(idJugador, operacion);
@@ -582,21 +587,15 @@ public class ControlPoker {
 	private int calcularApuesta(int idJugador, int operacion) {
 		// igualar
 		if (operacion == 0) {
-			if(dineroJugadores.get(idJugador - 1) >= (getMaximaApuesta() - dineroJugadores.get(idJugador - 1))) {
-				return getMaximaApuesta();
-			}
-			//Debe retirarse;
-			return 3;
+				return getMaximaApuesta();	
 		}
 		// aumentar
 		else if (operacion == 1) {
-			if(dineroJugadores.get(idJugador - 1) >= getMaximaApuesta() + 500) {
+		
 				return getMaximaApuesta() + 500;
-			}
 		}
 		// retirarse
 		else if (operacion == 2) {
-
 			return apuestasJugadores.get(idJugador - 1);
 		}
 		// Error
